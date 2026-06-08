@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurant Management System — OOD</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0d0d0d;
+    --surface: #141414;
+    --surface2: #1c1c1c;
+    --border: #2a2a2a;
+    --accent: #c8963e;
+    --accent2: #e8b96a;
+    --red: #c0392b;
+    --green: #27ae60;
+    --blue: #2980b9;
+    --purple: #8e44ad;
+    --text: #e8e0d4;
+    --muted: #7a7068;
+    --font-serif: 'DM Serif Display', serif;
+    --font-sans: 'Outfit', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+    font-size: 14px;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #1a1208 0%, #0d0d0d 60%);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px 16px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  header h1 {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    color: var(--accent2);
+    letter-spacing: 0.02em;
+  }
+  header p { color: var(--muted); font-size: 12px; margin-top: 2px; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 12px 18px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent2); border-bottom-color: var(--accent); }
+
+  /* PANELS */
+  .panel { display: none; padding: 20px 16px; max-width: 900px; margin: 0 auto; }
+  .panel.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    color: var(--accent2);
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title .icon { font-size: 16px; }
+
+  /* UML DIAGRAM */
+  .uml-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .uml-class {
+    background: var(--surface2);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .uml-class-header {
+    padding: 8px 12px;
+    font-weight: 600;
+    font-size: 12px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .uml-class-header.abstract { font-style: italic; }
+  .uml-section {
+    padding: 8px 12px;
+    border-top: 1px solid var(--border);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.8;
+    color: #a09880;
+  }
+  .uml-section .field { color: #7ab8d4; }
+  .uml-section .method { color: #a8d48a; }
+  .uml-section .visibility { color: var(--muted); }
+  .uml-rel {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 2;
+  }
+  .rel-line { display: flex; align-items: center; gap: 8px; }
+  .rel-from { color: #7ab8d4; }
+  .rel-arrow { color: var(--accent); }
+  .rel-to { color: #a8d48a; }
+  .rel-label { color: var(--muted); font-size: 10px; }
+
+  /* COLOR BADGES */
+  .badge-receptionist { background: #3d2b00; color: #e8963e; }
+  .badge-waiter       { background: #1a3020; color: #5dba7a; }
+  .badge-manager      { background: #2b1a35; color: #b06ad4; }
+  .badge-chef         { background: #1a2535; color: #5b9bd5; }
+  .badge-system       { background: #2a2a2a; color: #c8c0b4; }
+  .badge-enum         { background: #2a1a1a; color: #d47a5b; }
+
+  /* INTERACTIVE DEMO */
+  .role-selector {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .role-btn {
+    padding: 10px 8px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+  }
+  .role-btn:hover { border-color: var(--accent); color: var(--text); }
+  .role-btn.active { border-color: var(--accent); color: var(--accent2); background: #1f1508; }
+  .role-btn .role-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+
+  .actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .action-btn {
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    cursor: pointer;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    color: var(--text);
+    transition: all 0.15s;
+    text-align: left;
+  }
+  .action-btn:hover { background: #222; border-color: var(--accent); }
+  .action-btn .method-name { color: var(--accent2); font-family: var(--font-mono); font-size: 11px; display: block; margin-bottom: 2px; }
+
+  /* LOG */
+  .log-box {
+    background: #080808;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.8;
+    min-height: 200px;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  .log-entry { padding: 2px 0; animation: fadeIn 0.3s ease; }
+  .log-entry.system { color: var(--muted); }
+  .log-entry.success { color: #5dba7a; }
+  .log-entry.info    { color: #5b9bd5; }
+  .log-entry.warn    { color: var(--accent2); }
+  .log-entry.error   { color: #e05555; }
+  .log-entry.receipt { color: #c8c0b4; border-left: 2px solid var(--accent); padding-left: 8px; }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; } }
+
+  /* STATE VIEW */
+  .state-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .state-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .state-box h4 { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 8px; }
+  .state-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid #1a1a1a;
+    font-size: 12px;
+  }
+  .state-item:last-child { border-bottom: none; }
+  .status-pill {
+    padding: 2px 8px; border-radius: 99px; font-size: 10px; font-weight: 600;
+  }
+  .pill-available { background: #1a3020; color: #5dba7a; }
+  .pill-occupied  { background: #3d1a1a; color: #e05555; }
+  .pill-reserved  { background: #3d2b00; color: var(--accent2); }
+  .pill-pending   { background: #2a2a3d; color: #8888ee; }
+  .pill-kitchen   { background: #3d2b00; color: var(--accent2); }
+  .pill-ready     { background: #1a3020; color: #5dba7a; }
+  .pill-served    { background: #1a1a1a; color: var(--muted); }
+
+  /* INPUT FORM */
+  .form-row { display: flex; gap: 8px; margin-bottom: 8px; }
+  .form-input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text);
+    outline: none;
+  }
+  .form-input:focus { border-color: var(--accent); }
+  .form-select {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: var(--text);
+    outline: none;
+    cursor: pointer;
+  }
+  .btn-run {
+    padding: 8px 16px;
+    background: var(--accent);
+    color: #0d0d0d;
+    border: none;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: var(--font-sans);
+    transition: background 0.2s;
+  }
+  .btn-run:hover { background: var(--accent2); }
+
+  /* JAVA CODE VIEW */
+  .code-block {
+    background: #080808;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.9;
+    overflow-x: auto;
+    white-space: pre;
+    color: #c8c0b4;
+  }
+  .kw  { color: #cc99cd; }
+  .cls { color: #7ab8d4; }
+  .str { color: #7ec699; }
+  .cmt { color: #5a5a5a; font-style: italic; }
+  .num { color: #f08d49; }
+  .fn  { color: #e8c96e; }
+
+  .section-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    margin-top: 16px;
+  }
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 16px 0;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Restaurant Management System</h1>
+  <p>Object-Oriented Design · UML + Java + Interactive Demo</p>
+</header>
+
+<nav class="tabs">
+  <div class="tab active" onclick="showTab('uml')">📐 UML Diagram</div>
+  <div class="tab" onclick="showTab('demo')">🎮 Live Demo</div>
+  <div class="tab" onclick="showTab('java')">☕ Java Code</div>
+</nav>
+
+<!-- =================== UML TAB =================== -->
+<div id="tab-uml" class="panel active">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🏛</span> System Actors</div>
+    <div class="uml-grid">
+
+      <div class="uml-class">
+        <div class="uml-class-header abstract badge-system">«abstract» Employee</div>
+        <div class="uml-section">
+          <div><span class="visibility">—</span> <span class="field">employeeId: String</span></div>
+          <div><span class="visibility">—</span> <span class="field">name: String</span></div>
+          <div><span class="visibility">—</span> <span class="field">role: String</span></div>
+        </div>
+        <div class="uml-section">
+          <div><span class="visibility">+</span> <span class="method">getId(): String</span></div>
+          <div><span class="visibility">+</span> <span class="method">getName(): String</span></div>
+        </div>
+      </div>
+
+      <div class="uml-class">
+        <div class="uml-class-header badge-receptionist">Receptionist</div>
+        <div class="uml-section">
+          <div><span class="visibility">—</span> <span class="field">system: RestaurantSystem</span></div>
+        </div>
+        <div class="uml-section">
+          <div><span class="visibility">+</span> <span class="method">addTable(id, cap)</span></div>
+          <div><span class="visibility">+</span> <span class="method">createReservation(…)</span></div>
+          <div><span class="visibility">+</span> <span class="method">cancelReservation(id)</span></div>
+          <div><span class="visibility">+</span> <span class="method">searchAvailableTables(min)</span></div>
+        </div>
+      </div>
+
+      <div class="uml-class">
+        <div class="uml-class-header badge-waiter">Waiter</div>
+        <div class="uml-section">
+          <div><span class="visibility">—</span> <span class="field">system: RestaurantSystem</span></div>
+        </div>
+        <div class="uml-section">
+          <div><span class="visibility">+</span> <span class="method">takeOrder(tableId)</span></div>
+          <div><span class="visibility">+</span> <span class="method">addItemToOrder(…)</span></div>
+          <div><span class="visibility">+</span> <span class="method">modifyOrder(…)</span></div>
+          <div><span class="visibility">+</span> <span class="method">submitToKitchen(orderId)</span></div>
+          <div><span class="visibility">+</span> <span class="method">serveMealToTable(orderId)</span></div>
+        </div>
+      </div>
+
+      <div class="uml-class">
+        <div class="uml-class-header badge-chef">Chef</div>
+        <div class="uml-section">
+          <div><span class="visibility">—</span> <span class="field">system: RestaurantSystem</span></div>
+        </div>
+        <div class="uml-section">
+          <div><span class="visibility">+</span> <span class="method">viewIncomingOrders()</span></div>
+          <div><span class="visibility">+</span> <span class="method">prepareMeal(orderId)</span></div>
+          <div><span class="visibility">+</span> <span class="method">markOrderReady(orderId)</span></div>
+          <div><span class="visibility">+</span> <span class="method">manageKitchen()</span></div>
+        </div>
+      </div>
+
+      <div class="uml-class">
+        <div class="uml-class-header badge-manager">Manager</div>
+        <div class="uml-section">
+          <div><span class="visibility">—</span> <span class="field">system: RestaurantSystem</span></div>
+        </div>
+        <div class="uml-section">
+          <div><span class="visibility">+</span> <span class="method">addWorker(id, name, role)</span></div>
+          <div><span class="visibility">+</span> <span class="method">addMenuItem(…)</span></div>
+          <div><span class="visibility">+</span> <span class="method">modifyMenuItem(…)</span></div>
+          <div><span class="visibility">+</span> <span class="method">overseeOperations()</span></div>
+          <div><span class="visibility">+</span> <span class="method">manageBranch(name)</span></div>
+        </div>
+      </div>
+
+      <div class="uml-class">
+        <div class="uml-class-header badge-system">RestaurantSystem</div>
+        <div class="uml-section">
+          <div><span class="visibility">—</span> <span class="field">tables: Map&lt;String, Table&gt;</span></div>
+          <div><span class="visibility">—</span> <span class="field">menu: Map&lt;String, MenuItem&gt;</span></div>
+          <div><span class="visibility">—</span> <span class="field">orders: Map&lt;String, Order&gt;</span></div>
+          <div><span class="visibility">—</span> <span class="field">reservations: Map&lt;…&gt;</span></div>
+        </div>
+        <div class="uml-section">
+          <div><span class="visibility">+</span> <span class="method">createOrder(…): Order</span></div>
+          <div><span class="visibility">+</span> <span class="method">updateOrderStatus(…)</span></div>
+          <div><span class="visibility">+</span> <span class="method">createReservation(…)</span></div>
+          <div><span class="visibility">+</span> <span class="method">printStatus()</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📦</span> Domain Models</div>
+    <div class="uml-grid">
+
+      <div class="uml-class">
+        <div class="uml-class-header badge-system">Order</div>
+        <div class="uml-section">
+          <div><span class="field">orderId: String</span></div>
+          <div><span class="field">tableId: String</span></div>
+          <div><span class="field">waiterId: String</span></div>
+          <div><span class="field">items: List&lt;OrderItem&gt;</span></div>
+          <div><span class="field">status: OrderStatus</span></div>
+          <div><span class="field">createdAt: LocalDateTime</span></div>
+        </div>
+        <div class="uml-section">
+          <div><span class="method">addItem(item, qty, instr)</span></div>
+          <div><span class="method">removeItem(menuItemId)</span></div>
+          <div><span class="method">getTotal(): double</span></div>
+          <div><span class="method">printReceipt()</span></div>
+        </div>
+      </div>
+
+      <div class="uml-class">
+        <div class="uml-class-header badge-system">OrderItem</div>
+        <div class="uml-section">
+          <div><span class="field">menuItem: MenuItem</span></div>
+          <div><span class="field">quantity: int</span></div>
+          <div><span class="field">specialInstructions: String</span></div>
+        </div>
+        <div class="uml-section">
+          <div><span class="method">getSubtotal(): double</span></div>
+        </div>
+      </div>
+
+      <div class="uml-class">
+        <div class="uml-class-header badge-system">MenuItem</div>
+        <div class="uml-section">
+          <div><span class="field">id: String</span></div>
+          <div><span class="field">name: String</span></div>
+          <div><span class="field">price: double</span></div>
+          <div><span class="field">category: String</span></div>
+          <div><span class="field">available: boolean</span></div>
+        </div>
+      </div>
+
+      <div class="uml-class">
+        <div class="uml-class-header badge-system">Table</div>
+        <div class="uml-section">
+          <div><span class="field">tableId: String</span></div>
+          <div><span class="field">capacity: int</span></div>
+          <div><span class="field">status: TableStatus</span></div>
+          <div><span class="field">currentOrderId: String</span></div>
+        </div>
+      </div>
+
+      <div class="uml-class">
+        <div class="uml-class-header badge-system">Reservation</div>
+        <div class="uml-section">
+          <div><span class="field">reservationId: String</span></div>
+          <div><span class="field">customerName: String</span></div>
+          <div><span class="field">tableId: String</span></div>
+          <div><span class="field">reservationTime: LocalDateTime</span></div>
+          <div><span class="field">partySize: int</span></div>
+          <div><span class="field">status: ReservationStatus</span></div>
+        </div>
+      </div>
+
+      <div class="uml-class">
+        <div class="uml-class-header badge-enum">«enums»</div>
+        <div class="uml-section">
+          <div style="color:#d47a5b">OrderStatus:</div>
+          <div style="padding-left:8px;color:#a09880">PENDING · IN_KITCHEN · READY · SERVED · CANCELLED</div>
+          <div style="color:#d47a5b;margin-top:4px">TableStatus:</div>
+          <div style="padding-left:8px;color:#a09880">AVAILABLE · OCCUPIED · RESERVED</div>
+          <div style="color:#d47a5b;margin-top:4px">ReservationStatus:</div>
+          <div style="padding-left:8px;color:#a09880">CONFIRMED · CANCELLED · COMPLETED</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🔗</span> Relationships</div>
+    <div class="uml-rel">
+      <div class="rel-line"><span class="rel-from">Receptionist</span><span class="rel-arrow">──extends──▶</span><span class="rel-to">Employee</span><span class="rel-label">inheritance</span></div>
+      <div class="rel-line"><span class="rel-from">Waiter</span><span class="rel-arrow">──extends──▶</span><span class="rel-to">Employee</span><span class="rel-label">inheritance</span></div>
+      <div class="rel-line"><span class="rel-from">Chef</span><span class="rel-arrow">──extends──▶</span><span class="rel-to">Employee</span><span class="rel-label">inheritance</span></div>
+      <div class="rel-line"><span class="rel-from">Manager</span><span class="rel-arrow">──extends──▶</span><span class="rel-to">Employee</span><span class="rel-label">inheritance</span></div>
+      <div class="rel-line"><span class="rel-from">Order</span><span class="rel-arrow">──contains──▶</span><span class="rel-to">OrderItem (1..*)</span><span class="rel-label">composition</span></div>
+      <div class="rel-line"><span class="rel-from">OrderItem</span><span class="rel-arrow">──references──▶</span><span class="rel-to">MenuItem</span><span class="rel-label">association</span></div>
+      <div class="rel-line"><span class="rel-from">Reservation</span><span class="rel-arrow">──linked to──▶</span><span class="rel-to">Table</span><span class="rel-label">association</span></div>
+      <div class="rel-line"><span class="rel-from">All Actors</span><span class="rel-arrow">──use──▶</span><span class="rel-to">RestaurantSystem</span><span class="rel-label">dependency</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- =================== DEMO TAB =================== -->
+<div id="tab-demo" class="panel">
+
+  <div class="card">
+    <div class="card-title"><span class="icon">👥</span> Select Your Role</div>
+    <div class="role-selector">
+      <div class="role-btn active" onclick="selectRole('receptionist')" id="btn-receptionist">
+        <span class="role-icon">🛎</span>Receptionist
+      </div>
+      <div class="role-btn" onclick="selectRole('waiter')" id="btn-waiter">
+        <span class="role-icon">🍽</span>Waiter
+      </div>
+      <div class="role-btn" onclick="selectRole('chef')" id="btn-chef">
+        <span class="role-icon">👨‍🍳</span>Chef
+      </div>
+      <div class="role-btn" onclick="selectRole('manager')" id="btn-manager">
+        <span class="role-icon">📊</span>Manager
+      </div>
+    </div>
+
+    <div id="actions-panel"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">📋</span> System Log</div>
+    <div class="log-box" id="log-box">
+      <div class="log-entry system">// Restaurant Management System initialized</div>
+      <div class="log-entry system">// Menu loaded: 6 items · Tables: 4 · Staff: 4</div>
+      <div class="log-entry system">// Select a role and perform actions...</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title"><span class="icon">🏪</span> Live State</div>
+    <div class="state-grid" id="state-view"></div>
+  </div>
+
+</div>
+
+<!-- =================== JAVA CODE TAB =================== -->
+<div id="tab-java" class="panel">
+  <div class="card">
+    <div class="card-title"><span class="icon">☕</span> Key Classes Overview</div>
+
+    <div class="section-label">Employee Hierarchy</div>
+    <div class="code-block"><span class="kw">abstract class</span> <span class="cls">Employee</span> {
+  <span class="kw">protected</span> <span class="cls">String</span> employeeId, name, role;
+  <span class="kw">public</span> <span class="cls">Employee</span>(<span class="cls">String</span> id, <span class="cls">String</span> name, <span class="cls">String</span> role) { ... }
+}
+
+<span class="kw">class</span> <span class="cls">Waiter</span> <span class="kw">extends</span> <span class="cls">Employee</span> {
+  <span class="kw">private</span> <span class="cls">RestaurantSystem</span> system;
+
+  <span class="kw">public</span> <span class="cls">Order</span> <span class="fn">takeOrder</span>(<span class="cls">String</span> tableId) {
+    <span class="kw">return</span> system.<span class="fn">createOrder</span>(tableId, employeeId);
+  }
+  <span class="kw">public void</span> <span class="fn">submitToKitchen</span>(<span class="cls">String</span> orderId) {
+    system.<span class="fn">updateOrderStatus</span>(orderId, <span class="cls">OrderStatus</span>.IN_KITCHEN);
+  }
+  <span class="kw">public void</span> <span class="fn">serveMealToTable</span>(<span class="cls">String</span> orderId) {
+    system.<span class="fn">updateOrderStatus</span>(orderId, <span class="cls">OrderStatus</span>.SERVED);
+  }
+}</div>
+
+    <div class="section-label">Order & OrderItem</div>
+    <div class="code-block"><span class="kw">class</span> <span class="cls">Order</span> {
+  <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">OrderItem</span>&gt; items = <span class="kw">new</span> <span class="cls">ArrayList</span>&lt;&gt;();
+  <span class="kw">private</span> <span class="cls">OrderStatus</span> status = <span class="cls">OrderStatus</span>.PENDING;
+
+  <span class="kw">public void</span> <span class="fn">addItem</span>(<span class="cls">MenuItem</span> item, <span class="kw">int</span> qty, <span class="cls">String</span> instr) {
+    <span class="cmt">// Merge if item already exists in order</span>
+    <span class="kw">for</span> (<span class="cls">OrderItem</span> oi : items) {
+      <span class="kw">if</span> (oi.<span class="fn">getMenuItem</span>().<span class="fn">getId</span>().<span class="fn">equals</span>(item.<span class="fn">getId</span>())) {
+        oi.<span class="fn">setQuantity</span>(oi.<span class="fn">getQuantity</span>() + qty); <span class="kw">return</span>;
+      }
+    }
+    items.<span class="fn">add</span>(<span class="kw">new</span> <span class="cls">OrderItem</span>(item, qty, instr));
+  }
+
+  <span class="kw">public double</span> <span class="fn">getTotal</span>() {
+    <span class="kw">return</span> items.<span class="fn">stream</span>().<span class="fn">mapToDouble</span>(<span class="cls">OrderItem</span>::getSubtotal).<span class="fn">sum</span>();
+  }
+}</div>
+
+    <div class="section-label">Restaurant System Core</div>
+    <div class="code-block"><span class="kw">class</span> <span class="cls">RestaurantSystem</span> {
+  <span class="kw">private</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Table</span>&gt; tables = <span class="kw">new</span> <span class="cls">LinkedHashMap</span>&lt;&gt;();
+  <span class="kw">private</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">MenuItem</span>&gt; menu = <span class="kw">new</span> <span class="cls">LinkedHashMap</span>&lt;&gt;();
+  <span class="kw">private</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Order</span>&gt; orders = <span class="kw">new</span> <span class="cls">LinkedHashMap</span>&lt;&gt;();
+
+  <span class="kw">public</span> <span class="cls">Order</span> <span class="fn">createOrder</span>(<span class="cls">String</span> tableId, <span class="cls">String</span> waiterId) {
+    <span class="cls">String</span> orderId = <span class="str">"ORD"</span> + <span class="cls">String</span>.<span class="fn">format</span>(<span class="str">"%03d"</span>, orderCounter++);
+    <span class="cls">Order</span> order = <span class="kw">new</span> <span class="cls">Order</span>(orderId, tableId, waiterId);
+    orders.<span class="fn">put</span>(orderId, order);
+    tables.<span class="fn">get</span>(tableId).<span class="fn">setStatus</span>(<span class="cls">TableStatus</span>.OCCUPIED);
+    <span class="kw">return</span> order;
+  }
+
+  <span class="kw">public void</span> <span class="fn">updateOrderStatus</span>(<span class="cls">String</span> orderId, <span class="cls">OrderStatus</span> status) {
+    <span class="cls">Order</span> o = orders.<span class="fn">get</span>(orderId);
+    <span class="kw">if</span> (o != <span class="kw">null</span>) {
+      o.<span class="fn">setStatus</span>(status);
+      <span class="kw">if</span> (status == <span class="cls">OrderStatus</span>.SERVED)
+        tables.<span class="fn">get</span>(o.<span class="fn">getTableId</span>()).<span class="fn">setStatus</span>(<span class="cls">TableStatus</span>.AVAILABLE);
+    }
+  }
+}</div>
+
+    <div class="section-label">Main Demo Snippet</div>
+    <div class="code-block"><span class="cls">RestaurantSystem</span> system = <span class="kw">new</span> <span class="cls">RestaurantSystem</span>(<span class="str">"La Bella Italia"</span>);
+<span class="cls">Manager</span> manager = <span class="kw">new</span> <span class="cls">Manager</span>(<span class="str">"M001"</span>, <span class="str">"Sofia Romano"</span>, system);
+<span class="cls">Waiter</span> waiter = <span class="kw">new</span> <span class="cls">Waiter</span>(<span class="str">"W001"</span>, <span class="str">"James Park"</span>, system);
+<span class="cls">Chef</span> chef = <span class="kw">new</span> <span class="cls">Chef</span>(<span class="str">"C001"</span>, <span class="str">"Marco Rossi"</span>, system);
+
+manager.<span class="fn">addMenuItem</span>(<span class="str">"P001"</span>, <span class="str">"Margherita Pizza"</span>, <span class="num">12.99</span>, <span class="str">"Pizza"</span>);
+
+<span class="cls">Order</span> order = waiter.<span class="fn">takeOrder</span>(<span class="str">"T2"</span>);
+waiter.<span class="fn">addItemToOrder</span>(order.<span class="fn">getOrderId</span>(), <span class="str">"P001"</span>, <span class="num">2</span>, <span class="str">"extra cheese"</span>);
+waiter.<span class="fn">submitToKitchen</span>(order.<span class="fn">getOrderId</span>());
+
+chef.<span class="fn">markOrderReady</span>(order.<span class="fn">getOrderId</span>());
+waiter.<span class="fn">serveMealToTable</span>(order.<span class="fn">getOrderId</span>());
+order.<span class="fn">printReceipt</span>(); <span class="cmt">// Total: $25.98</span></div>
+  </div>
+</div>
+
+<script>
+// ============== STATE ==============
+const state = {
+  tables: {
+    T1: { cap: 2, status: 'AVAILABLE', orderId: null },
+    T2: { cap: 4, status: 'AVAILABLE', orderId: null },
+    T3: { cap: 6, status: 'AVAILABLE', orderId: null },
+    T4: { cap: 4, status: 'AVAILABLE', orderId: null },
+  },
+  menu: [
+    { id: 'P001', name: 'Margherita Pizza',    price: 12.99, cat: 'Pizza',    avail: true },
+    { id: 'P002', name: 'Pepperoni Pizza',     price: 14.99, cat: 'Pizza',    avail: true },
+    { id: 'PA01', name: 'Spaghetti Carbonara', price: 13.99, cat: 'Pasta',    avail: true },
+    { id: 'PA02', name: 'Fettuccine Alfredo',  price: 12.99, cat: 'Pasta',    avail: true },
+    { id: 'D001', name: 'Tiramisu',            price:  6.99, cat: 'Dessert',  avail: true },
+    { id: 'B001', name: 'Sparkling Water',     price:  2.99, cat: 'Beverage', avail: true },
+  ],
+  orders: {},
+  reservations: {},
+  orderCounter: 1,
+  resCounter: 1,
+  currentRole: 'receptionist',
+};
+
+// ============== TABS ==============
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+  if (name === 'demo') renderState();
+}
+
+// ============== ROLE ==============
+function selectRole(role) {
+  state.currentRole = role;
+  document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + role).classList.add('active');
+  renderActions(role);
+}
+
+function renderActions(role) {
+  const panel = document.getElementById('actions-panel');
+  const actions = {
+    receptionist: [
+      { name: 'addTable()', desc: 'Add a new table', fn: 'actionAddTable' },
+      { name: 'createReservation()', desc: 'Book a table', fn: 'actionCreateReservation' },
+      { name: 'cancelReservation()', desc: 'Cancel booking', fn: 'actionCancelReservation' },
+      { name: 'searchAvailableTables()', desc: 'Find free tables', fn: 'actionSearchTables' },
+    ],
+    waiter: [
+      { name: 'takeOrder()', desc: 'Start new order for table', fn: 'actionTakeOrder' },
+      { name: 'addItemToOrder()', desc: 'Add dish to order', fn: 'actionAddItem' },
+      { name: 'submitToKitchen()', desc: 'Send order to chef', fn: 'actionSubmitKitchen' },
+      { name: 'serveMealToTable()', desc: 'Mark order served', fn: 'actionServe' },
+    ],
+    chef: [
+      { name: 'viewIncomingOrders()', desc: 'See kitchen queue', fn: 'actionViewKitchen' },
+      { name: 'prepareMeal()', desc: 'Start preparing order', fn: 'actionPrepare' },
+      { name: 'markOrderReady()', desc: 'Mark food ready', fn: 'actionMarkReady' },
+      { name: 'manageKitchen()', desc: 'Kitchen overview', fn: 'actionManageKitchen' },
+    ],
+    manager: [
+      { name: 'addMenuItem()', desc: 'Add dish to menu', fn: 'actionAddMenuItem' },
+      { name: 'modifyMenuItem()', desc: 'Update price/availability', fn: 'actionModifyMenu' },
+      { name: 'addWorker()', desc: 'Hire new employee', fn: 'actionAddWorker' },
+      { name: 'overseeOperations()', desc: 'Full system snapshot', fn: 'actionOverview' },
+    ],
+  };
+
+  panel.innerHTML = `<div class="actions-grid">${
+    actions[role].map(a => `
+      <div class="action-btn" onclick="${a.fn}()">
+        <span class="method-name">${a.name}</span>
+        ${a.desc}
+      </div>
+    `).join('')
+  }</div>`;
+}
+
+// ============== LOG ==============
+function log(msg, type = 'info') {
+  const box = document.getElementById('log-box');
+  const el = document.createElement('div');
+  el.className = 'log-entry ' + type;
+  const time = new Date().toLocaleTimeString('en', { hour12: false });
+  el.textContent = `[${time}] ${msg}`;
+  box.appendChild(el);
+  box.scrollTop = box.scrollHeight;
+}
+
+// ============== STATE RENDER ==============
+function renderState() {
+  const view = document.getElementById('state-view');
+
+  // Tables
+  const tableHTML = Object.entries(state.tables).map(([id, t]) => {
+    const cls = { AVAILABLE: 'pill-available', OCCUPIED: 'pill-occupied', RESERVED: 'pill-reserved' }[t.status];
+    return `<div class="state-item"><span>Table ${id} (${t.cap})</span><span class="status-pill ${cls}">${t.status}</span></div>`;
+  }).join('');
+
+  // Active orders
+  const orderHTML = Object.entries(state.orders).filter(([,o]) => o.status !== 'SERVED').map(([id, o]) => {
+    const cls = { PENDING: 'pill-pending', IN_KITCHEN: 'pill-kitchen', READY: 'pill-ready', SERVED: 'pill-served' }[o.status];
+    return `<div class="state-item"><span>${id}</span><span class="status-pill ${cls}">${o.status}</span></div>`;
+  }).join('') || '<div class="state-item" style="color:var(--muted)">No active orders</div>';
+
+  // Reservations
+  const resHTML = Object.entries(state.reservations).filter(([,r]) => r.status === 'CONFIRMED').map(([id, r]) => {
+    return `<div class="state-item"><span>${r.customer} (T${r.tableId})</span><span class="status-pill pill-available">CONFIRMED</span></div>`;
+  }).join('') || '<div class="state-item" style="color:var(--muted)">No reservations</div>';
+
+  view.innerHTML = `
+    <div class="state-box"><h4>Tables</h4>${tableHTML}</div>
+    <div class="state-box"><h4>Active Orders</h4>${orderHTML}</div>
+    <div class="state-box" style="grid-column:1/-1"><h4>Reservations</h4>${resHTML}</div>
+  `;
+}
+
+// ============== ACTIONS ==============
+function actionAddTable() {
+  const id = 'T' + (Object.keys(state.tables).length + 1);
+  const cap = [2, 4, 6][Math.floor(Math.random() * 3)];
+  state.tables[id] = { cap, status: 'AVAILABLE', orderId: null };
+  log(`Receptionist → addTable("${id}", ${cap}) → Table added`, 'success');
+  renderState();
+}
+
+function actionCreateReservation() {
+  const available = Object.entries(state.tables).filter(([,t]) => t.status === 'AVAILABLE');
+  if (!available.length) { log('No available tables for reservation', 'error'); return; }
+  const [tid] = available[Math.floor(Math.random() * available.length)];
+  const names = ['Alice Johnson', 'Bob Martinez', 'Carol White', 'David Kim'];
+  const name = names[Math.floor(Math.random() * names.length)];
+  const id = 'RES' + String(state.resCounter++).padStart(3, '0');
+  state.reservations[id] = { customer: name, tableId: tid, status: 'CONFIRMED' };
+  state.tables[tid].status = 'RESERVED';
+  log(`Receptionist → createReservation("${name}", table ${tid}) → ${id} confirmed`, 'success');
+  renderState();
+}
+
+function actionCancelReservation() {
+  const confirmed = Object.entries(state.reservations).filter(([,r]) => r.status === 'CONFIRMED');
+  if (!confirmed.length) { log('No active reservations to cancel', 'warn'); return; }
+  const [rid, res] = confirmed[0];
+  res.status = 'CANCELLED';
+  state.tables[res.tableId].status = 'AVAILABLE';
+  log(`Receptionist → cancelReservation("${rid}") → Reservation cancelled, table freed`, 'warn');
+  renderState();
+}
+
+function actionSearchTables() {
+  const avail = Object.entries(state.tables).filter(([,t]) => t.status === 'AVAILABLE');
+  log(`Receptionist → searchAvailableTables() → ${avail.length} table(s) available: ${avail.map(([id])=>id).join(', ')}`, 'info');
+}
+
+function actionTakeOrder() {
+  const available = Object.entries(state.tables).filter(([,t]) => t.status === 'AVAILABLE');
+  if (!available.length) { log('No available tables to start order', 'error'); return; }
+  const [tid] = available[0];
+  const ordId = 'ORD' + String(state.orderCounter++).padStart(3, '0');
+  state.orders[ordId] = { tableId: tid, status: 'PENDING', items: [] };
+  state.tables[tid].status = 'OCCUPIED';
+  state.tables[tid].orderId = ordId;
+  log(`Waiter → takeOrder("${tid}") → Order ${ordId} created`, 'success');
+  renderState();
+}
+
+function actionAddItem() {
+  const pending = Object.entries(state.orders).filter(([,o]) => o.status === 'PENDING');
+  if (!pending.length) { log('No pending orders. Take an order first!', 'warn'); return; }
+  const [oid, order] = pending[0];
+  const item = state.menu[Math.floor(Math.random() * state.menu.length)];
+  const qty = Math.floor(Math.random() * 2) + 1;
+  order.items.push({ name: item.name, price: item.price, qty });
+  log(`Waiter → addItemToOrder("${oid}", "${item.name}" x${qty}) → Item added`, 'success');
+}
+
+function actionSubmitKitchen() {
+  const pending = Object.entries(state.orders).filter(([,o]) => o.status === 'PENDING');
+  if (!pending.length) { log('No pending orders to submit', 'warn'); return; }
+  const [oid, order] = pending[0];
+  if (!order.items.length) {
+    order.items.push({ name: 'Margherita Pizza', price: 12.99, qty: 1 });
+    log(`Waiter → auto-added 1 item before submitting`, 'system');
+  }
+  order.status = 'IN_KITCHEN';
+  log(`Waiter → submitToKitchen("${oid}") → Sent to kitchen 🔥`, 'warn');
+  renderState();
+}
+
+function actionServe() {
+  const ready = Object.entries(state.orders).filter(([,o]) => o.status === 'READY');
+  if (!ready.length) { log('No ready orders to serve. Mark order as ready first!', 'warn'); return; }
+  const [oid, order] = ready[0];
+  order.status = 'SERVED';
+  state.tables[order.tableId].status = 'AVAILABLE';
+  const total = order.items.reduce((s, i) => s + i.price * i.qty, 0);
+  log(`Waiter → serveMealToTable("${oid}") → Served! Table freed`, 'success');
+  log(`  Receipt: ${order.items.map(i=>`${i.name} x${i.qty}`).join(', ')} | Total: $${total.toFixed(2)}`, 'receipt');
+  renderState();
+}
+
+function actionViewKitchen() {
+  const inKitchen = Object.entries(state.orders).filter(([,o]) => o.status === 'IN_KITCHEN');
+  if (!inKitchen.length) { log('Chef → viewIncomingOrders() → Kitchen queue empty', 'info'); return; }
+  log(`Chef → viewIncomingOrders() → ${inKitchen.length} order(s) in queue: ${inKitchen.map(([id])=>id).join(', ')}`, 'info');
+}
+
+function actionPrepare() {
+  const inKitchen = Object.entries(state.orders).filter(([,o]) => o.status === 'IN_KITCHEN');
+  if (!inKitchen.length) { log('No orders in kitchen to prepare', 'warn'); return; }
+  const [oid] = inKitchen[0];
+  log(`Chef → prepareMeal("${oid}") → 🍳 Cooking in progress...`, 'warn');
+}
+
+function actionMarkReady() {
+  const inKitchen = Object.entries(state.orders).filter(([,o]) => o.status === 'IN_KITCHEN');
+  if (!inKitchen.length) { log('No orders in kitchen queue', 'warn'); return; }
+  const [oid, order] = inKitchen[0];
+  order.status = 'READY';
+  log(`Chef → markOrderReady("${oid}") → ✅ Order ready for pickup`, 'success');
+  renderState();
+}
+
+function actionManageKitchen() {
+  const inK = Object.values(state.orders).filter(o => o.status === 'IN_KITCHEN').length;
+  const ready = Object.values(state.orders).filter(o => o.status === 'READY').length;
+  log(`Chef → manageKitchen() → Kitchen: ${inK} cooking, ${ready} ready to serve`, 'info');
+}
+
+function actionAddMenuItem() {
+  const items = ['Lasagna', 'Bruschetta', 'Cannoli', 'Risotto', 'Panna Cotta'];
+  const name = items[Math.floor(Math.random() * items.length)];
+  const price = (Math.random() * 10 + 8).toFixed(2);
+  state.menu.push({ id: 'NEW' + state.menu.length, name, price: parseFloat(price), cat: 'Special', avail: true });
+  log(`Manager → addMenuItem("${name}", $${price}) → Added to menu`, 'success');
+}
+
+function actionModifyMenu() {
+  const item = state.menu[Math.floor(Math.random() * state.menu.length)];
+  const oldPrice = item.price;
+  item.price = parseFloat((item.price * 1.1).toFixed(2));
+  log(`Manager → modifyMenuItem("${item.id}") → Price: $${oldPrice} → $${item.price}`, 'warn');
+}
+
+function actionAddWorker() {
+  const roles = ['Waiter', 'Chef', 'Receptionist'];
+  const names = ['Lucas Brown', 'Mia Davis', 'Ethan Wilson', 'Ava Garcia'];
+  const role = roles[Math.floor(Math.random() * roles.length)];
+  const name = names[Math.floor(Math.random() * names.length)];
+  log(`Manager → addWorker("${name}", "${role}") → Employee added to staff`, 'success');
+}
+
+function actionOverview() {
+  const avail = Object.values(state.tables).filter(t => t.status === 'AVAILABLE').length;
+  const occupied = Object.values(state.tables).filter(t => t.status === 'OCCUPIED').length;
+  const activeOrders = Object.values(state.orders).filter(o => o.status !== 'SERVED').length;
+  log(`Manager → overseeOperations()`, 'info');
+  log(`  Tables: ${avail} available, ${occupied} occupied, ${Object.keys(state.tables).length} total`, 'system');
+  log(`  Active orders: ${activeOrders} | Menu items: ${state.menu.length}`, 'system');
+  log(`  Reservations: ${Object.values(state.reservations).filter(r => r.status === 'CONFIRMED').length} confirmed`, 'system');
+}
+
+// ============== INIT ==============
+selectRole('receptionist');
+renderState();
+</script>
+</body>
+</html>
