@@ -1,5 +1,5 @@
 /**
- * Plateable Eats — Main Script
+ * Plateable Eats — Main Script with Dynamic Basket Integration
  * Architecture: Module pattern with explicit init
  * No jQuery, no unnecessary deps. Vanilla ES6+.
  */
@@ -24,15 +24,14 @@ const Loader = {
       }, 800);
     };
 
-    // If the local server loaded the page instantly already, run hide immediately!
     if (document.readyState === 'complete') {
       performHide();
     } else {
-      // Otherwise, wait for the standard browser load event
       window.addEventListener('load', performHide);
     }
   }
 };
+
 /* =====================================================
    2. HEADER — scroll shadow + active link tracking
 ===================================================== */
@@ -113,12 +112,11 @@ const SearchOverlay = {
   input:   document.getElementById('search-input'),
   suggestions: document.getElementById('search-suggestions'),
 
-  menuData: [], // Will be populated by the Spring Boot backend
+  menuData: [],
 
   async init() {
     if (!this.overlay) return;
 
-    // Fetch the live menu in the background when the page loads
     await this.fetchLiveMenu();
 
     this.openBtn?.addEventListener('click', () => this.open());
@@ -169,7 +167,6 @@ const SearchOverlay = {
     const q = this.input.value.trim().toLowerCase();
     if (!q) { this.suggestions.innerHTML = ''; return; }
 
-    // Filter against live API data
     const matches = this.menuData.filter(item => item.name.toLowerCase().includes(q));
 
     if (matches.length === 0) {
@@ -177,7 +174,6 @@ const SearchOverlay = {
       return;
     }
 
-    // Render matches formatting price in Rands
     this.suggestions.innerHTML = matches
         .map(m => `
         <a href="#order" style="display:flex; justify-content: space-between; padding:.8rem 0; color:#fff; font-size:1.6rem; border-bottom:1px solid rgba(255,255,255,.08); text-decoration: none;">
@@ -242,19 +238,121 @@ const CartToast = {
 };
 
 /* =====================================================
-   7. ADD TO ORDER BUTTONS
+   7. BACKEND INTEGRATED SHOPPING BASKET SYSTEM
 ===================================================== */
-const AddButtons = {
+const ShoppingBasket = {
+  items: [], // Global reactive runtime state
+  badge: document.getElementById('cart-badge'),
+  drawer: document.getElementById('cart-drawer'),
+  toggleBtn: document.getElementById('cart-toggle-btn'),
+  closeBtn: document.getElementById('cart-drawer-close-btn'),
+  overlay: document.getElementById('cart-drawer-overlay'),
+  container: document.getElementById('cart-drawer-items-list'),
+  subtotalEl: document.getElementById('cart-drawer-subtotal-value'),
+  checkoutBtn: document.getElementById('cart-drawer-checkout-action-btn'),
+  formSubmitBtn: document.getElementById('submit-btn'),
+
   init() {
+    // Connect click events to add buttons across cards
     document.querySelectorAll('.dish-card__add, .btn--sm').forEach(btn => {
       btn.addEventListener('click', () => {
         const card = btn.closest('.dish-card, .dessert-card');
-        const name = card?.querySelector('h3')?.textContent || 'Item';
-        CartToast.show(`${name} added to your order`);
+        if (!card) return;
+
+        const name = card.querySelector('h3').textContent.trim();
+        const priceText = card.querySelector('.dish-card__price, .price').textContent;
+        const price = parseFloat(priceText.replace('R', '')) || 0;
+
+        this.addItem(name, price);
+
         btn.style.transform = 'scale(0.85)';
         setTimeout(() => (btn.style.transform = ''), 200);
       });
     });
+
+    // Drawer visibility bindings
+    this.toggleBtn?.addEventListener('click', () => (this.drawer.hidden = false));
+    this.closeBtn?.addEventListener('click', () => (this.drawer.hidden = true));
+    this.overlay?.addEventListener('click', () => (this.drawer.hidden = true));
+    this.checkoutBtn?.addEventListener('click', () => (this.drawer.hidden = true));
+  },
+
+  addItem(name, price) {
+    const existing = this.items.find(item => item.name === name);
+    if (existing) {
+      existing.quantity += 1;
+    } else {
+      this.items.push({ name, price, quantity: 1 });
+    }
+    CartToast.show(`${name} added to basket`);
+    this.render();
+  },
+
+  changeQuantity(name, amount) {
+    const item = this.items.find(item => item.name === name);
+    if (!item) return;
+
+    item.quantity += amount;
+    if (item.quantity <= 0) {
+      this.items = this.items.filter(i => i.name !== name);
+    }
+    this.render();
+  },
+
+  render() {
+    // Update total counter counts
+    const totalCount = this.items.reduce((sum, item) => sum + item.quantity, 0);
+    if (this.badge) this.badge.textContent = totalCount;
+
+    // Scale animation pulse trigger on layout changes
+    if (this.badge) {
+      this.badge.style.transform = 'scale(1.3)';
+      setTimeout(() => (this.badge.style.transform = ''), 200);
+    }
+
+    if (this.items.length === 0) {
+      this.container.innerHTML = `<p class="cart-drawer-empty-placeholder">Your basket is completely empty.</p>`;
+      if (this.subtotalEl) this.subtotalEl.textContent = 'R0.00';
+      if (this.formSubmitBtn) {
+        this.formSubmitBtn.disabled = true;
+        this.formSubmitBtn.querySelector('.btn__text').textContent = 'Add Items From Basket First';
+      }
+      return;
+    }
+
+    // Populate lines item elements
+    this.container.innerHTML = this.items
+        .map(item => `
+        <div class="cart-drawer-item">
+          <div class="cart-drawer-item-details">
+            <span class="cart-drawer-item-name">${item.name}</span>
+            <span class="cart-drawer-item-price">R${(item.price * item.quantity).toFixed(2)}</span>
+          </div>
+          <div class="cart-drawer-item-controls">
+            <button class="cart-qty-adjust-btn minus" data-name="${item.name}">&minus;</button>
+            <span class="cart-qty-value">${item.quantity}</span>
+            <button class="cart-qty-adjust-btn plus" data-name="${item.name}">&plus;</button>
+          </div>
+        </div>
+      `).join('');
+
+    // Attach listeners to active controls inside container panel
+    this.container.querySelectorAll('.cart-qty-adjust-btn.plus').forEach(btn => {
+      btn.addEventListener('click', () => this.changeQuantity(btn.dataset.name, 1));
+    });
+    this.container.querySelectorAll('.cart-qty-adjust-btn.minus').forEach(btn => {
+      btn.addEventListener('click', () => this.changeQuantity(btn.dataset.name, -1));
+    });
+
+    // Compute live prices subtotal tracking metrics
+    const subtotal = this.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    if (this.subtotalEl) this.subtotalEl.textContent = `R${subtotal.toFixed(2)}`;
+
+    // Enable validation form submissions layers
+    if (this.formSubmitBtn) {
+      this.formSubmitBtn.disabled = false;
+      this.formSubmitBtn.querySelector('.btn__text').textContent = 'Confirm Order Fulfillment';
+    }
   }
 };
 
@@ -287,7 +385,7 @@ const HeroSlider = {
 };
 
 /* =====================================================
-   9. ORDER FORM VALIDATION & FETCH API
+   9. ORDER FORM VALIDATION & FETCH API DISPATCHER
 ===================================================== */
 const OrderForm = {
   form: document.getElementById('order-form'),
@@ -296,7 +394,6 @@ const OrderForm = {
   validators: {
     name:    v => v.trim().length >= 2 ? null : 'Please enter your full name',
     contact: v => /^[\d\s\+\-()]{7,15}$/.test(v.trim()) ? null : 'Enter a valid contact number',
-    food:    v => v ? null : 'Please select a dish',
     address: v => v.trim().length >= 8 ? null : 'Please enter a delivery address',
   },
 
@@ -330,7 +427,6 @@ const OrderForm = {
   },
 
   async _onSubmit(e) {
-    // Intercept default form behavior
     e.preventDefault();
 
     const allValid = Object.keys(this.validators).every(name => {
@@ -344,43 +440,45 @@ const OrderForm = {
       return;
     }
 
-    // Capture frontend data
+    if (ShoppingBasket.items.length === 0) {
+      CartToast.show('Your basket is empty. Add menu items first!');
+      return;
+    }
+
     const customerName = this.form.elements['name'].value;
-    const mainDish = this.form.elements['food'].value;
+    // Map items list names string cleanly to pass parameters summary
+    const dishSummary = ShoppingBasket.items.map(i => `${i.name} (x${i.quantity})`).join(', ');
 
     if (this.submitBtn) {
       const btnText = this.submitBtn.querySelector('.btn__text');
-      if (btnText) btnText.textContent = 'Sending to Kitchen…';
+      if (btnText) btnText.textContent = 'Transmitting Transaction…';
       this.submitBtn.disabled = true;
     }
 
     try {
-      // POST the order to the Spring Boot Backend
+      // POST structural request down to running Spring container mappings context
       const orderResponse = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Assigning to T2 as a default web-order proxy
         body: JSON.stringify({ tableId: "T2", waiterId: "WEB_ORDER" })
       });
 
-      if (!orderResponse.ok) throw new Error('Server rejected order');
+      if (!orderResponse.ok) throw new Error('Server transaction registration rejected');
       const orderData = await orderResponse.json();
 
-      CartToast.show('Order successfully transmitted!');
+      CartToast.show('Fulfillment synchronized successfully!');
 
-      // Redirect to the success screen with the new database ID
       setTimeout(() => {
-        window.location.href = `/results.html?name=${encodeURIComponent(customerName)}&orderId=${orderData.orderId}&dish=${encodeURIComponent(mainDish)}`;
+        window.location.href = `/results.html?name=${encodeURIComponent(customerName)}&orderId=${orderData.orderId}&dish=${encodeURIComponent(dishSummary)}`;
       }, 1500);
 
     } catch (error) {
-      console.error('Network Error:', error);
+      console.error('Network Pipeline Error:', error);
       CartToast.show('Could not connect to the restaurant. Please try again.');
 
-      // Reset button state on failure
       if (this.submitBtn) {
         const btnText = this.submitBtn.querySelector('.btn__text');
-        if (btnText) btnText.textContent = 'Place Order';
+        if (btnText) btnText.textContent = 'Confirm Order Fulfillment';
         this.submitBtn.disabled = false;
       }
     }
@@ -430,7 +528,7 @@ const yearEl = document.getElementById('copyright-year');
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 /* =====================================================
-   12. INIT
+   12. INIT APPLICATION CONTEXT EXECUTION
 ===================================================== */
 document.addEventListener('DOMContentLoaded', () => {
   Loader.hide();
@@ -438,7 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
   MobileNav.init();
   SearchOverlay.init();
   DishFilter.init();
-  AddButtons.init();
+  ShoppingBasket.init(); // Mount basket array tracking logic controls
   HeroSlider.init();
   OrderForm.init();
   ScrollReveal.init();

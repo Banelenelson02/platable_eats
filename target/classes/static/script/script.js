@@ -24,15 +24,15 @@ const Loader = {
       }, 800);
     };
 
-    // If the local server loaded the page instantly already, run hide immediately!
+    // If local server loaded pages instantly inside workspace environment, drop overlay immediately
     if (document.readyState === 'complete') {
       performHide();
     } else {
-      // Otherwise, wait for the standard browser load event
       window.addEventListener('load', performHide);
     }
   }
 };
+
 /* =====================================================
    2. HEADER — scroll shadow + active link tracking
 ===================================================== */
@@ -113,12 +113,11 @@ const SearchOverlay = {
   input:   document.getElementById('search-input'),
   suggestions: document.getElementById('search-suggestions'),
 
-  menuData: [], // Will be populated by the Spring Boot backend
+  menuData: [],
 
   async init() {
     if (!this.overlay) return;
 
-    // Fetch the live menu in the background when the page loads
     await this.fetchLiveMenu();
 
     this.openBtn?.addEventListener('click', () => this.open());
@@ -169,7 +168,6 @@ const SearchOverlay = {
     const q = this.input.value.trim().toLowerCase();
     if (!q) { this.suggestions.innerHTML = ''; return; }
 
-    // Filter against live API data
     const matches = this.menuData.filter(item => item.name.toLowerCase().includes(q));
 
     if (matches.length === 0) {
@@ -177,7 +175,6 @@ const SearchOverlay = {
       return;
     }
 
-    // Render matches formatting price in Rands
     this.suggestions.innerHTML = matches
         .map(m => `
         <a href="#order" style="display:flex; justify-content: space-between; padding:.8rem 0; color:#fff; font-size:1.6rem; border-bottom:1px solid rgba(255,255,255,.08); text-decoration: none;">
@@ -223,7 +220,7 @@ const DishFilter = {
 
 /* =====================================================
    6. CART TOAST
-===================================================== */
+==================================================== */
 const CartToast = {
   el: document.getElementById('cart-toast'),
   msg: document.getElementById('cart-toast-msg'),
@@ -330,7 +327,6 @@ const OrderForm = {
   },
 
   async _onSubmit(e) {
-    // Intercept default form behavior
     e.preventDefault();
 
     const allValid = Object.keys(this.validators).every(name => {
@@ -344,7 +340,6 @@ const OrderForm = {
       return;
     }
 
-    // Capture frontend data
     const customerName = this.form.elements['name'].value;
     const mainDish = this.form.elements['food'].value;
 
@@ -355,11 +350,9 @@ const OrderForm = {
     }
 
     try {
-      // POST the order to the Spring Boot Backend
       const orderResponse = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // Assigning to T2 as a default web-order proxy
         body: JSON.stringify({ tableId: "T2", waiterId: "WEB_ORDER" })
       });
 
@@ -368,7 +361,6 @@ const OrderForm = {
 
       CartToast.show('Order successfully transmitted!');
 
-      // Redirect to the success screen with the new database ID
       setTimeout(() => {
         window.location.href = `/results.html?name=${encodeURIComponent(customerName)}&orderId=${orderData.orderId}&dish=${encodeURIComponent(mainDish)}`;
       }, 1500);
@@ -377,7 +369,6 @@ const OrderForm = {
       console.error('Network Error:', error);
       CartToast.show('Could not connect to the restaurant. Please try again.');
 
-      // Reset button state on failure
       if (this.submitBtn) {
         const btnText = this.submitBtn.querySelector('.btn__text');
         if (btnText) btnText.textContent = 'Place Order';

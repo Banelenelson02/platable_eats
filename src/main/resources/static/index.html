@@ -21,12 +21,8 @@
 
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__inner">
-    <svg class="loader__icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="20" cy="20" r="18" stroke="#c8a97e" stroke-width="2" stroke-dasharray="113" stroke-dashoffset="113">
-        <animate attributeName="stroke-dashoffset" from="113" to="0" dur="1.2s" fill="freeze" easing="ease-out"/>
-      </circle>
-    </svg>
-    <span class="loader__wordmark">Plateable<em> Eats</em></span>
+    <img src="images/loader.gif" alt="Loading Plateable Eats..." class="loader__gif" width="150" height="150">
+    <span class="loader__wordmark" style="color: #0d0d0d;">Plateable<em> Eats</em></span>
   </div>
 </div>
 
@@ -47,6 +43,10 @@
   <div class="header__actions">
     <button class="header__icon-btn" id="search-toggle" aria-label="Open search" aria-expanded="false" aria-controls="search-overlay">
       <i class="fas fa-search" aria-hidden="true"></i>
+    </button>
+    <button class="header__icon-btn" id="cart-toggle-btn" aria-label="Open shopping cart" style="position: relative;">
+      <i class="fas fa-shopping-basket" aria-hidden="true"></i>
+      <span class="cart-badge" id="cart-badge">0</span>
     </button>
     <button class="header__icon-btn" id="menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="navbar">
       <span class="hamburger"></span>
@@ -164,7 +164,7 @@
 
     <li class="dish-card" data-category="mains" role="listitem">
       <div class="dish-card__img-wrap">
-        <img src="images/Chicken%20and%20Waffles.png" alt="Crispy chicken and waffles" width="300" height="200" loading="lazy">
+        <img src="images/Chicken and Waffles.png" alt="Crispy chicken and waffles" width="300" height="200" loading="lazy">
       </div>
       <div class="dish-card__body">
         <h3 class="dish-card__name">Chicken & Waffles</h3>
@@ -403,7 +403,7 @@
       </div>
       <div class="dessert-card__body">
         <h3>Caramel Tart</h3>
-        <p>Buttery shortcrust filled with salted caramel custard and topped with fleur de sel</p>
+        <p>Buttery shortcrust filled with silky salted caramel custard, topped with fleur de sel crystals</p>
         <div class="dessert-card__footer">
           <span class="price">R100</span>
           <button class="btn btn--sm" aria-label="Add Caramel Tart to order">Add</button>
@@ -474,13 +474,13 @@
   <div class="order__split">
 
     <div class="order__info">
-      <span class="section-tag">Place Your Order</span>
-      <h2 class="section-title" id="order-heading">Free & Fast Delivery</h2>
-      <p>Place your order online and we'll have it at your door in under 45 minutes — or it's on us.</p>
+      <span class="section-tag">Direct Kitchen Dispatch</span>
+      <h2 class="section-title" id="order-heading">Complete Details</h2>
+      <p>Confirm delivery credentials below to checkout items currently active in your floating shopping basket.</p>
       <ul class="order__perks" aria-label="Order benefits">
-        <li><i class="fas fa-check-circle" aria-hidden="true"></i> No delivery fee on first order</li>
-        <li><i class="fas fa-check-circle" aria-hidden="true"></i> Tracked in real-time</li>
-        <li><i class="fas fa-check-circle" aria-hidden="true"></i> 45-min guarantee or refund</li>
+        <li><i class="fas fa-check-circle" aria-hidden="true"></i> Automated multi-tier verification</li>
+        <li><i class="fas fa-check-circle" aria-hidden="true"></i> Direct backend routing connection</li>
+        <li><i class="fas fa-check-circle" aria-hidden="true"></i> Real-time memory logging</li>
       </ul>
     </div>
 
@@ -500,66 +500,6 @@
           </div>
         </div>
 
-        <div class="form-row form-row--half">
-          <div class="form-group">
-            <label class="form-label" for="food">Main Dish <span aria-hidden="true">*</span></label>
-            <select class="form-input form-select" id="food" name="food" required>
-              <option value="" disabled selected>Choose a dish…</option>
-              <optgroup label="Mains">
-                <option>Alfredo Pasta</option>
-                <option>Chicken &amp; Waffles</option>
-                <option>Grilled Chicken</option>
-                <option>Assorted Board</option>
-                <option>Meatballs &amp; Pasta</option>
-                <option>Pita Wrap</option>
-                <option>Pizza</option>
-                <option>Butternut Bisque</option>
-                <option>Beef Pot Pie</option>
-              </optgroup>
-              <optgroup label="Desserts">
-                <option>French Toast Stuffing</option>
-                <option>Pancakes</option>
-                <option>Cinnamon Rolls</option>
-                <option>Chocolate Cake</option>
-                <option>Caramel Tart</option>
-                <option>Lava Cake</option>
-                <option>Malva Pudding</option>
-                <option>Cheesecake</option>
-                <option>Carrot Cake</option>
-              </optgroup>
-            </select>
-            <span class="form-error" role="alert" aria-live="polite"></span>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="qty">Quantity</label>
-            <input class="form-input" type="number" id="qty" name="qty" min="1" max="50" value="1">
-          </div>
-        </div>
-
-        <div class="form-row form-row--half">
-          <div class="form-group">
-            <label class="form-label" for="extra-food">Additional Item</label>
-            <select class="form-input form-select" id="extra-food" name="extra_food">
-              <option value="">None</option>
-              <optgroup label="Mains">
-                <option>Alfredo Pasta</option>
-                <option>Chicken &amp; Waffles</option>
-                <option>Grilled Chicken</option>
-                <option>Pita Wrap</option>
-              </optgroup>
-              <optgroup label="Desserts">
-                <option>Lava Cake</option>
-                <option>Malva Pudding</option>
-                <option>Cheesecake</option>
-              </optgroup>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="extra-qty">Extra Quantity</label>
-            <input class="form-input" type="number" id="extra-qty" name="extra_qty" min="1" max="50" value="1">
-          </div>
-        </div>
-
         <div class="form-group">
           <label class="form-label" for="address">Delivery Address <span aria-hidden="true">*</span></label>
           <input class="form-input" type="text" id="address" name="address" required autocomplete="street-address" placeholder="Street address, suburb, city">
@@ -573,8 +513,8 @@
 
         <div class="form-actions">
           <button type="reset" class="btn btn--ghost">Clear</button>
-          <button type="submit" class="btn btn--primary btn--wide" id="submit-btn">
-            <span class="btn__text">Place Order</span>
+          <button type="submit" class="btn btn--primary btn--wide" id="submit-btn" disabled>
+            <span class="btn__text">Add Items From Basket First</span>
             <i class="fas fa-arrow-right btn__icon" aria-hidden="true"></i>
           </button>
         </div>
@@ -633,6 +573,26 @@
 <div class="cart-toast" id="cart-toast" role="status" aria-live="polite" aria-atomic="true" hidden>
   <i class="fas fa-check-circle" aria-hidden="true"></i>
   <span id="cart-toast-msg">Item added to order</span>
+</div>
+
+<div class="cart-drawer-wrapper" id="cart-drawer" hidden>
+  <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+  <div class="cart-drawer-container">
+    <div class="cart-drawer-header">
+      <h2>Your Basket</h2>
+      <button class="cart-drawer-close-btn" id="cart-drawer-close-btn" aria-label="Close basket">&times;</button>
+    </div>
+    <div class="cart-drawer-items-list" id="cart-drawer-items-list">
+      <p class="cart-drawer-empty-placeholder">Your basket is completely empty.</p>
+    </div>
+    <div class="cart-drawer-footer">
+      <div class="cart-drawer-subtotal-row">
+        <span>Subtotal:</span>
+        <span id="cart-drawer-subtotal-value">R0.00</span>
+      </div>
+      <a href="#order" class="btn btn--primary btn--wide" id="cart-drawer-checkout-action-btn" style="text-align:center;">Proceed to Checkout</a>
+    </div>
+  </div>
 </div>
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

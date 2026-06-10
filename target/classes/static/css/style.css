@@ -1,5 +1,5 @@
 /* =====================================================
-   SAYLOR.EATS — Production CSS
+   PLATEABLE EATS — Production CSS
    Architecture: BEM + CSS Custom Properties
    ===================================================== */
 
@@ -180,11 +180,12 @@ ul, ol { list-style: none; }
   position: fixed;
   inset: 0;
   z-index: 9999;
-  background: var(--clr-ink);
+  background: #ffffff; /* Matches the white canvas background of loader.gif */
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+  visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .loader.hidden {
@@ -197,21 +198,22 @@ ul, ol { list-style: none; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.6rem;
+  gap: 2rem;
 }
 
-.loader__icon {
-  width: 5rem;
-  height: 5rem;
+.loader__gif {
+  object-fit: contain;
 }
 
 .loader__wordmark {
   font-family: var(--font-display);
   font-size: 3rem;
-  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #0d0d0d;
 }
 .loader__wordmark em {
-  color: var(--clr-gold);
+  color: var(--clr-gold-dark);
   font-style: normal;
 }
 
@@ -321,7 +323,6 @@ ul, ol { list-style: none; }
   border-radius: 2px;
   transition: transform var(--t-base), opacity var(--t-fast);
 }
-/* Simpler: use icon via font awesome in mobile toggle */
 #menu-toggle::before { content: '\f0c9'; font-family: 'Font Awesome 6 Free'; font-weight: 900; font-size: 1.8rem; }
 #menu-toggle .hamburger { display: none; }
 
@@ -664,10 +665,7 @@ ul, ol { list-style: none; }
 }
 .dish-card__add:hover { background: var(--clr-gold-dark); transform: rotate(90deg) scale(1.1); }
 
-/* Filter animation */
-.dish-card.hidden {
-  display: none;
-}
+.dish-card.hidden { display: none; }
 
 /* ---- 10. ABOUT ---- */
 .about {
@@ -684,9 +682,7 @@ ul, ol { list-style: none; }
   margin: 0 auto;
 }
 
-.about__image {
-  position: relative;
-}
+.about__image { position: relative; }
 .about__image img {
   width: 100%;
   border-radius: var(--r-xl);
@@ -1081,7 +1077,6 @@ ul, ol { list-style: none; }
     align-items: stretch;
     padding: var(--sp-4) var(--sp-5);
     gap: var(--sp-2);
-    /* Hidden by default */
     clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
     transition: clip-path var(--t-slow);
   }

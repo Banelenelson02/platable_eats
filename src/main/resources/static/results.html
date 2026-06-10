@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order Confirmed — Saylor.Eats</title>
+  <title>Order Confirmed — Plateable Eats</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
@@ -131,69 +131,66 @@
 </head>
 <body>
 
-  <main class="confirmation" role="main">
-    <div class="confirmation__icon" aria-hidden="true">✓</div>
-    <h1 class="confirmation__title">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order Placed!</h1>
-    <p class="confirmation__subtitle">
-      Thanks for your order. We're on it — expect your delivery in about 35–45 minutes.
-    </p>
+<main class="confirmation" role="main">
+  <div class="confirmation__icon" aria-hidden="true">✓</div>
+  <h1 class="confirmation__title">Order Placed!</h1>
+  <p class="confirmation__subtitle">
+    Thanks for your order. We're on it — expect your delivery in about 35–45 minutes.
+  </p>
 
-    <div class="order-summary" aria-label="com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order details">
-      <p class="order-summary__heading">Your com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order Details</p>
-      <div id="results">
-        <p class="empty-state">No order details found.</p>
-      </div>
+  <div class="order-summary" aria-label="Order details">
+    <p class="order-summary__heading">Your Order Details</p>
+    <div id="results">
+      <p class="empty-state">No order details found.</p>
     </div>
+  </div>
 
-    <a href="/" class="back-link">
-      ← Back to Menu
-    </a>
-  </main>
+  <a href="/" class="back-link">
+    ← Back to Menu
+  </a>
+</main>
 
-  <script>
-    (function () {
-      const resultsEl = document.getElementById('results');
-      const params = new URLSearchParams(window.location.search);
+<script>
+  (function () {
+    const resultsEl = document.getElementById('results');
+    const params = new URLSearchParams(window.location.search);
 
-      // Friendly label map
-      const labels = {
-        name:       'Name',
-        contact:    'Contact',
-        food:       'Main Dish',
-        qty:        'Quantity',
-        extra_food: 'Additional Item',
-        extra_qty:  'Extra Qty',
-        address:    'Delivery Address',
-        phone:      'Phone',
-        special:    'Special Instructions',
-      };
+    // Friendly label map to parse incoming API parameters beautifully
+    const labels = {
+      name:       'Name',
+      orderId:    'Order ID',
+      dish:       'Main Dish',
+      contact:    'Contact Number',
+      qty:        'Quantity',
+      address:    'Delivery Address',
+      special:    'Special Instructions',
+    };
 
-      // Filter out empty or unhelpful values
-      const rows = [];
-      params.forEach((value, key) => {
-        if (!value || value === 'undefined') return;
-        const label = labels[key] || key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
-        rows.push({ label, value });
-      });
+    const rows = [];
+    params.forEach((value, key) => {
+      if (!value || value === 'undefined') return;
+      const label = labels[key] || key.charAt(0).toUpperCase() + key.slice(1).replace(/_/g, ' ');
+      rows.push({ label, value });
+    });
 
-      if (rows.length === 0) return; // Keep default "No order details" message
+    if (rows.length === 0) return;
 
-      resultsEl.innerHTML = rows
-        .map(({ label, value }) => `
+    resultsEl.innerHTML = rows
+            .map(({ label, value }) => `
           <div class="order-row">
             <span class="order-row__label">${escapeHTML(label)}</span>
             <span class="order-row__value">${escapeHTML(value)}</span>
           </div>
         `)
-        .join('');
-    })();
+            .join('');
+  })();
 
-    function escapeHTML(str) {
-      const div = document.createElement('div');
-      div.appendChild(document.createTextNode(str));
-      return div.innerHTML;
-    }
-  </script>
+  function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+</script>
 
 </body>
 </html>
