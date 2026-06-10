@@ -420,12 +420,12 @@
         <div class="uml-class-header badge-system">RestaurantSystem</div>
         <div class="uml-section">
           <div><span class="visibility">—</span> <span class="field">tables: Map&lt;String, Table&gt;</span></div>
-          <div><span class="visibility">—</span> <span class="field">menu: Map&lt;String, MenuItem&gt;</span></div>
-          <div><span class="visibility">—</span> <span class="field">orders: Map&lt;String, Order&gt;</span></div>
+          <div><span class="visibility">—</span> <span class="field">menu: Map&lt;String, com.plateable.model.MenuItem.MenuItem&gt;</span></div>
+          <div><span class="visibility">—</span> <span class="field">orders: Map&lt;String, com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order&gt;</span></div>
           <div><span class="visibility">—</span> <span class="field">reservations: Map&lt;…&gt;</span></div>
         </div>
         <div class="uml-section">
-          <div><span class="visibility">+</span> <span class="method">createOrder(…): Order</span></div>
+          <div><span class="visibility">+</span> <span class="method">createOrder(…): com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</span></div>
           <div><span class="visibility">+</span> <span class="method">updateOrderStatus(…)</span></div>
           <div><span class="visibility">+</span> <span class="method">createReservation(…)</span></div>
           <div><span class="visibility">+</span> <span class="method">printStatus()</span></div>
@@ -440,12 +440,12 @@
     <div class="uml-grid">
 
       <div class="uml-class">
-        <div class="uml-class-header badge-system">Order</div>
+        <div class="uml-class-header badge-system">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</div>
         <div class="uml-section">
           <div><span class="field">orderId: String</span></div>
           <div><span class="field">tableId: String</span></div>
           <div><span class="field">waiterId: String</span></div>
-          <div><span class="field">items: List&lt;OrderItem&gt;</span></div>
+          <div><span class="field">items: List&lt;com.plateable.model.com.plateable.model.MenuItem.MenuItem.OrderItem&gt;</span></div>
           <div><span class="field">status: OrderStatus</span></div>
           <div><span class="field">createdAt: LocalDateTime</span></div>
         </div>
@@ -458,9 +458,9 @@
       </div>
 
       <div class="uml-class">
-        <div class="uml-class-header badge-system">OrderItem</div>
+        <div class="uml-class-header badge-system">com.plateable.model.com.plateable.model.MenuItem.MenuItem.OrderItem</div>
         <div class="uml-section">
-          <div><span class="field">menuItem: MenuItem</span></div>
+          <div><span class="field">menuItem: com.plateable.model.MenuItem.MenuItem</span></div>
           <div><span class="field">quantity: int</span></div>
           <div><span class="field">specialInstructions: String</span></div>
         </div>
@@ -470,7 +470,7 @@
       </div>
 
       <div class="uml-class">
-        <div class="uml-class-header badge-system">MenuItem</div>
+        <div class="uml-class-header badge-system">com.plateable.model.MenuItem.MenuItem</div>
         <div class="uml-section">
           <div><span class="field">id: String</span></div>
           <div><span class="field">name: String</span></div>
@@ -524,8 +524,8 @@
       <div class="rel-line"><span class="rel-from">Waiter</span><span class="rel-arrow">──extends──▶</span><span class="rel-to">Employee</span><span class="rel-label">inheritance</span></div>
       <div class="rel-line"><span class="rel-from">Chef</span><span class="rel-arrow">──extends──▶</span><span class="rel-to">Employee</span><span class="rel-label">inheritance</span></div>
       <div class="rel-line"><span class="rel-from">Manager</span><span class="rel-arrow">──extends──▶</span><span class="rel-to">Employee</span><span class="rel-label">inheritance</span></div>
-      <div class="rel-line"><span class="rel-from">Order</span><span class="rel-arrow">──contains──▶</span><span class="rel-to">OrderItem (1..*)</span><span class="rel-label">composition</span></div>
-      <div class="rel-line"><span class="rel-from">OrderItem</span><span class="rel-arrow">──references──▶</span><span class="rel-to">MenuItem</span><span class="rel-label">association</span></div>
+      <div class="rel-line"><span class="rel-from">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</span><span class="rel-arrow">──contains──▶</span><span class="rel-to">com.plateable.model.com.plateable.model.MenuItem.MenuItem.OrderItem (1..*)</span><span class="rel-label">composition</span></div>
+      <div class="rel-line"><span class="rel-from">com.plateable.model.com.plateable.model.MenuItem.MenuItem.OrderItem</span><span class="rel-arrow">──references──▶</span><span class="rel-to">com.plateable.model.MenuItem.MenuItem</span><span class="rel-label">association</span></div>
       <div class="rel-line"><span class="rel-from">Reservation</span><span class="rel-arrow">──linked to──▶</span><span class="rel-to">Table</span><span class="rel-label">association</span></div>
       <div class="rel-line"><span class="rel-from">All Actors</span><span class="rel-arrow">──use──▶</span><span class="rel-to">RestaurantSystem</span><span class="rel-label">dependency</span></div>
     </div>
@@ -586,7 +586,7 @@
 <span class="kw">class</span> <span class="cls">Waiter</span> <span class="kw">extends</span> <span class="cls">Employee</span> {
   <span class="kw">private</span> <span class="cls">RestaurantSystem</span> system;
 
-  <span class="kw">public</span> <span class="cls">Order</span> <span class="fn">takeOrder</span>(<span class="cls">String</span> tableId) {
+  <span class="kw">public</span> <span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</span> <span class="fn">takeOrder</span>(<span class="cls">String</span> tableId) {
     <span class="kw">return</span> system.<span class="fn">createOrder</span>(tableId, employeeId);
   }
   <span class="kw">public void</span> <span class="fn">submitToKitchen</span>(<span class="cls">String</span> orderId) {
@@ -597,42 +597,42 @@
   }
 }</div>
 
-    <div class="section-label">Order & OrderItem</div>
-    <div class="code-block"><span class="kw">class</span> <span class="cls">Order</span> {
-  <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">OrderItem</span>&gt; items = <span class="kw">new</span> <span class="cls">ArrayList</span>&lt;&gt;();
+    <div class="section-label">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order & com.plateable.model.com.plateable.model.MenuItem.MenuItem.OrderItem</div>
+    <div class="code-block"><span class="kw">class</span> <span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</span> {
+  <span class="kw">private</span> <span class="cls">List</span>&lt;<span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.OrderItem</span>&gt; items = <span class="kw">new</span> <span class="cls">ArrayList</span>&lt;&gt;();
   <span class="kw">private</span> <span class="cls">OrderStatus</span> status = <span class="cls">OrderStatus</span>.PENDING;
 
-  <span class="kw">public void</span> <span class="fn">addItem</span>(<span class="cls">MenuItem</span> item, <span class="kw">int</span> qty, <span class="cls">String</span> instr) {
+  <span class="kw">public void</span> <span class="fn">addItem</span>(<span class="cls">com.plateable.model.MenuItem.MenuItem</span> item, <span class="kw">int</span> qty, <span class="cls">String</span> instr) {
     <span class="cmt">// Merge if item already exists in order</span>
-    <span class="kw">for</span> (<span class="cls">OrderItem</span> oi : items) {
+    <span class="kw">for</span> (<span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.OrderItem</span> oi : items) {
       <span class="kw">if</span> (oi.<span class="fn">getMenuItem</span>().<span class="fn">getId</span>().<span class="fn">equals</span>(item.<span class="fn">getId</span>())) {
         oi.<span class="fn">setQuantity</span>(oi.<span class="fn">getQuantity</span>() + qty); <span class="kw">return</span>;
       }
     }
-    items.<span class="fn">add</span>(<span class="kw">new</span> <span class="cls">OrderItem</span>(item, qty, instr));
+    items.<span class="fn">add</span>(<span class="kw">new</span> <span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.OrderItem</span>(item, qty, instr));
   }
 
   <span class="kw">public double</span> <span class="fn">getTotal</span>() {
-    <span class="kw">return</span> items.<span class="fn">stream</span>().<span class="fn">mapToDouble</span>(<span class="cls">OrderItem</span>::getSubtotal).<span class="fn">sum</span>();
+    <span class="kw">return</span> items.<span class="fn">stream</span>().<span class="fn">mapToDouble</span>(<span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.OrderItem</span>::getSubtotal).<span class="fn">sum</span>();
   }
 }</div>
 
     <div class="section-label">Restaurant System Core</div>
     <div class="code-block"><span class="kw">class</span> <span class="cls">RestaurantSystem</span> {
   <span class="kw">private</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Table</span>&gt; tables = <span class="kw">new</span> <span class="cls">LinkedHashMap</span>&lt;&gt;();
-  <span class="kw">private</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">MenuItem</span>&gt; menu = <span class="kw">new</span> <span class="cls">LinkedHashMap</span>&lt;&gt;();
-  <span class="kw">private</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">Order</span>&gt; orders = <span class="kw">new</span> <span class="cls">LinkedHashMap</span>&lt;&gt;();
+  <span class="kw">private</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">com.plateable.model.MenuItem.MenuItem</span>&gt; menu = <span class="kw">new</span> <span class="cls">LinkedHashMap</span>&lt;&gt;();
+  <span class="kw">private</span> <span class="cls">Map</span>&lt;<span class="cls">String</span>, <span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</span>&gt; orders = <span class="kw">new</span> <span class="cls">LinkedHashMap</span>&lt;&gt;();
 
-  <span class="kw">public</span> <span class="cls">Order</span> <span class="fn">createOrder</span>(<span class="cls">String</span> tableId, <span class="cls">String</span> waiterId) {
+  <span class="kw">public</span> <span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</span> <span class="fn">createOrder</span>(<span class="cls">String</span> tableId, <span class="cls">String</span> waiterId) {
     <span class="cls">String</span> orderId = <span class="str">"ORD"</span> + <span class="cls">String</span>.<span class="fn">format</span>(<span class="str">"%03d"</span>, orderCounter++);
-    <span class="cls">Order</span> order = <span class="kw">new</span> <span class="cls">Order</span>(orderId, tableId, waiterId);
+    <span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</span> order = <span class="kw">new</span> <span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</span>(orderId, tableId, waiterId);
     orders.<span class="fn">put</span>(orderId, order);
     tables.<span class="fn">get</span>(tableId).<span class="fn">setStatus</span>(<span class="cls">TableStatus</span>.OCCUPIED);
     <span class="kw">return</span> order;
   }
 
   <span class="kw">public void</span> <span class="fn">updateOrderStatus</span>(<span class="cls">String</span> orderId, <span class="cls">OrderStatus</span> status) {
-    <span class="cls">Order</span> o = orders.<span class="fn">get</span>(orderId);
+    <span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</span> o = orders.<span class="fn">get</span>(orderId);
     <span class="kw">if</span> (o != <span class="kw">null</span>) {
       o.<span class="fn">setStatus</span>(status);
       <span class="kw">if</span> (status == <span class="cls">OrderStatus</span>.SERVED)
@@ -649,7 +649,7 @@
 
 manager.<span class="fn">addMenuItem</span>(<span class="str">"P001"</span>, <span class="str">"Margherita Pizza"</span>, <span class="num">12.99</span>, <span class="str">"Pizza"</span>);
 
-<span class="cls">Order</span> order = waiter.<span class="fn">takeOrder</span>(<span class="str">"T2"</span>);
+<span class="cls">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</span> order = waiter.<span class="fn">takeOrder</span>(<span class="str">"T2"</span>);
 waiter.<span class="fn">addItemToOrder</span>(order.<span class="fn">getOrderId</span>(), <span class="str">"P001"</span>, <span class="num">2</span>, <span class="str">"extra cheese"</span>);
 waiter.<span class="fn">submitToKitchen</span>(order.<span class="fn">getOrderId</span>());
 
@@ -823,7 +823,7 @@ function actionTakeOrder() {
   state.orders[ordId] = { tableId: tid, status: 'PENDING', items: [] };
   state.tables[tid].status = 'OCCUPIED';
   state.tables[tid].orderId = ordId;
-  log(`Waiter → takeOrder("${tid}") → Order ${ordId} created`, 'success');
+  log(`Waiter → takeOrder("${tid}") → com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order ${ordId} created`, 'success');
   renderState();
 }
 
@@ -880,7 +880,7 @@ function actionMarkReady() {
   if (!inKitchen.length) { log('No orders in kitchen queue', 'warn'); return; }
   const [oid, order] = inKitchen[0];
   order.status = 'READY';
-  log(`Chef → markOrderReady("${oid}") → ✅ Order ready for pickup`, 'success');
+  log(`Chef → markOrderReady("${oid}") → ✅ com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order ready for pickup`, 'success');
   renderState();
 }
 

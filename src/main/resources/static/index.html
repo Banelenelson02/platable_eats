@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Plateable Eats — Handcrafted dishes made fresh daily. Order pizza, grilled chicken, decadent desserts and more delivered fast.">
+  <meta name="theme-color" content="#0d0d0d">
+  <meta property="og:title" content="Plateable Eats — Fine Casual Dining">
+  <meta property="og:description" content="Handcrafted dishes, delivered fast. From woodfired pizza to Malva pudding.">
+  <meta property="og:type" content="website">
+  <title>Plateable Eats — Handcrafted Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__inner">
+    <svg class="loader__icon" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="18" stroke="#c8a97e" stroke-width="2" stroke-dasharray="113" stroke-dashoffset="113">
+        <animate attributeName="stroke-dashoffset" from="113" to="0" dur="1.2s" fill="freeze" easing="ease-out"/>
+      </circle>
+    </svg>
+    <span class="loader__wordmark">Plateable<em> Eats</em></span>
+  </div>
+</div>
+
+<header class="header" id="header" role="banner">
+  <a href="#home" class="header__logo" aria-label="Plateable Eats homepage">
+    <i class="fas fa-utensils" aria-hidden="true"></i>
+    <span>Plateable<em> Eats</em></span>
+  </a>
+
+  <nav class="header__nav" id="navbar" role="navigation" aria-label="Main navigation">
+    <a href="#home" class="header__nav-link active">Home</a>
+    <a href="#dishes" class="header__nav-link">Dishes</a>
+    <a href="#about" class="header__nav-link">About</a>
+    <a href="#menu" class="header__nav-link">Desserts</a>
+    <a href="#order" class="header__nav-link header__nav-link--cta">Order Now</a>
+  </nav>
+
+  <div class="header__actions">
+    <button class="header__icon-btn" id="search-toggle" aria-label="Open search" aria-expanded="false" aria-controls="search-overlay">
+      <i class="fas fa-search" aria-hidden="true"></i>
+    </button>
+    <button class="header__icon-btn" id="menu-toggle" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="navbar">
+      <span class="hamburger"></span>
+    </button>
+  </div>
+</header>
+
+<div class="search-overlay" id="search-overlay" role="dialog" aria-modal="true" aria-label="Search" hidden>
+  <div class="search-overlay__inner">
+    <label for="search-input" class="search-overlay__label">What are you craving?</label>
+    <div class="search-overlay__field">
+      <i class="fas fa-search" aria-hidden="true"></i>
+      <input type="search" id="search-input" class="search-overlay__input" placeholder="e.g. pizza, cinnamon rolls..." autocomplete="off">
+    </div>
+    <div class="search-overlay__suggestions" id="search-suggestions" aria-live="polite"></div>
+  </div>
+  <button class="search-overlay__close" id="search-close" aria-label="Close search">
+    <i class="fas fa-times" aria-hidden="true"></i>
+  </button>
+</div>
+
+<section class="hero" id="home" aria-label="Featured dishes">
+  <div class="swiper hero__slider">
+    <div class="swiper-wrapper">
+
+      <div class="swiper-slide hero__slide">
+        <div class="hero__content">
+          <span class="hero__tag">Chef's Special</span>
+          <h1 class="hero__title">Wood-fired<br><em>Pizza</em></h1>
+          <p class="hero__desc">Thin, crispy base with fior di latte, red onion, wild mushrooms, salami, olives and fresh basil</p>
+          <div class="hero__actions">
+            <a href="#order" class="btn btn--primary">Order Now <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="#dishes" class="btn btn--ghost">See Menu</a>
+          </div>
+        </div>
+        <div class="hero__image">
+          <img src="images/Pizza.png" alt="Wood-fired pizza with fresh toppings" width="520" height="560" loading="eager">
+        </div>
+      </div>
+
+      <div class="swiper-slide hero__slide">
+        <div class="hero__content">
+          <span class="hero__tag">Chef's Special</span>
+          <h1 class="hero__title">Butternut<br><em>Bisque</em></h1>
+          <p class="hero__desc">Roasted red peppers and butternut blended with aromatic broth, topped with Greek yogurt and crusty bread</p>
+          <div class="hero__actions">
+            <a href="#order" class="btn btn--primary">Order Now <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="#dishes" class="btn btn--ghost">See Menu</a>
+          </div>
+        </div>
+        <div class="hero__image">
+          <img src="images/Soup.png" alt="Roasted red pepper and butternut soup" width="520" height="560" loading="lazy">
+        </div>
+      </div>
+
+      <div class="swiper-slide hero__slide">
+        <div class="hero__content">
+          <span class="hero__tag">Chef's Special</span>
+          <h1 class="hero__title">Beef<br><em>Pot Pie</em></h1>
+          <p class="hero__desc">Slow-braised beef stew sealed under a golden, shattering pastry crust — comfort in every bite</p>
+          <div class="hero__actions">
+            <a href="#order" class="btn btn--primary">Order Now <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+            <a href="#dishes" class="btn btn--ghost">See Menu</a>
+          </div>
+        </div>
+        <div class="hero__image">
+          <img src="images/Pie.png" alt="Golden beef pot pie" width="520" height="560" loading="lazy">
+        </div>
+      </div>
+
+    </div>
+    <div class="swiper-pagination hero__pagination"></div>
+  </div>
+
+  <div class="hero__scroll-hint" aria-hidden="true">
+    <span>Scroll</span>
+    <i class="fas fa-chevron-down"></i>
+  </div>
+</section>
+
+<section class="dishes" id="dishes" aria-labelledby="dishes-heading">
+  <div class="section-header">
+    <span class="section-tag">The Classics</span>
+    <h2 class="section-title" id="dishes-heading">Recommended Dishes</h2>
+  </div>
+
+  <div class="filter-bar" role="group" aria-label="Filter dishes">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="mains">Mains</button>
+    <button class="filter-btn" data-filter="pasta">Pasta</button>
+    <button class="filter-btn" data-filter="wraps">Wraps</button>
+  </div>
+
+  <ul class="dishes__grid" role="list">
+    <li class="dish-card" data-category="mains" role="listitem">
+      <div class="dish-card__img-wrap">
+        <img src="images/Alfredo.png" alt="Creamy Alfredo pasta" width="300" height="200" loading="lazy">
+        <span class="dish-card__badge">Popular</span>
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Alfredo Pasta</h3>
+        <div class="dish-card__stars" aria-label="4.5 out of 5 stars">
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="fas fa-star-half-alt" aria-hidden="true"></i>
+        </div>
+        <div class="dish-card__footer">
+          <span class="dish-card__price">R100</span>
+          <button class="dish-card__add" aria-label="Add Alfredo Pasta to order">
+            <i class="fas fa-plus" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </li>
+
+    <li class="dish-card" data-category="mains" role="listitem">
+      <div class="dish-card__img-wrap">
+        <img src="images/Chicken%20and%20Waffles.png" alt="Crispy chicken and waffles" width="300" height="200" loading="lazy">
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Chicken & Waffles</h3>
+        <div class="dish-card__stars" aria-label="4 out of 5 stars">
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="far fa-star" aria-hidden="true"></i>
+        </div>
+        <div class="dish-card__footer">
+          <span class="dish-card__price">R100</span>
+          <button class="dish-card__add" aria-label="Add Chicken and Waffles to order">
+            <i class="fas fa-plus" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </li>
+
+    <li class="dish-card" data-category="mains" role="listitem">
+      <div class="dish-card__img-wrap">
+        <img src="images/Chicken.png" alt="Grilled chicken breast" width="300" height="200" loading="lazy">
+        <span class="dish-card__badge dish-card__badge--green">Healthy</span>
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Grilled Chicken</h3>
+        <div class="dish-card__stars" aria-label="5 out of 5 stars">
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="fas fa-star" aria-hidden="true"></i>
+        </div>
+        <div class="dish-card__footer">
+          <span class="dish-card__price">R100</span>
+          <button class="dish-card__add" aria-label="Add Grilled Chicken to order">
+            <i class="fas fa-plus" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </li>
+
+    <li class="dish-card" data-category="mains" role="listitem">
+      <div class="dish-card__img-wrap">
+        <img src="images/CrumbledBoard.png" alt="Assorted charcuterie board" width="300" height="200" loading="lazy">
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Assorted Board</h3>
+        <div class="dish-card__stars" aria-label="4 out of 5 stars">
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="far fa-star" aria-hidden="true"></i>
+        </div>
+        <div class="dish-card__footer">
+          <span class="dish-card__price">R100</span>
+          <button class="dish-card__add" aria-label="Add Assorted Board to order">
+            <i class="fas fa-plus" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </li>
+
+    <li class="dish-card" data-category="pasta" role="listitem">
+      <div class="dish-card__img-wrap">
+        <img src="images/Meatballs.png" alt="Meatballs with pasta and tomato sauce" width="300" height="200" loading="lazy">
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Meatballs & Pasta</h3>
+        <div class="dish-card__stars" aria-label="4.5 out of 5 stars">
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="fas fa-star-half-alt" aria-hidden="true"></i>
+        </div>
+        <div class="dish-card__footer">
+          <span class="dish-card__price">R100</span>
+          <button class="dish-card__add" aria-label="Add Meatballs and Pasta to order">
+            <i class="fas fa-plus" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </li>
+
+    <li class="dish-card" data-category="wraps" role="listitem">
+      <div class="dish-card__img-wrap">
+        <img src="images/Pita.png" alt="Pita wrap with fresh filling" width="300" height="200" loading="lazy">
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Pita Wrap</h3>
+        <div class="dish-card__stars" aria-label="4 out of 5 stars">
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="fas fa-star" aria-hidden="true"></i><i class="fas fa-star" aria-hidden="true"></i>
+          <i class="far fa-star" aria-hidden="true"></i>
+        </div>
+        <div class="dish-card__footer">
+          <span class="dish-card__price">R100</span>
+          <button class="dish-card__add" aria-label="Add Pita Wrap to order">
+            <i class="fas fa-plus" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<section class="about" id="about" aria-labelledby="about-heading">
+  <div class="section-header">
+    <span class="section-tag">About Us</span>
+    <h2 class="section-title" id="about-heading">Why Choose Us?</h2>
+  </div>
+
+  <div class="about__row">
+    <div class="about__image">
+      <img src="images/Pita.png" alt="Chef preparing a fresh pita wrap" width="580" height="480" loading="lazy">
+      <div class="about__image-tag">
+        <strong>12+</strong>
+        <span>Years of craft</span>
+      </div>
+    </div>
+
+    <div class="about__content">
+      <h3 class="about__headline">Crafted with love,<br>served with pride</h3>
+      <p class="about__text">Every dish on our menu is made from locally-sourced ingredients by chefs who care. We believe great food is the foundation of great memories — so we put everything into every plate we serve.</p>
+
+      <div class="about__stats">
+        <div class="about__stat">
+          <strong>2 400+</strong>
+          <span>Happy customers</span>
+        </div>
+        <div class="about__stat">
+          <strong>50+</strong>
+          <span>Menu items</span>
+        </div>
+        <div class="about__stat">
+          <strong>4.9★</strong>
+          <span>Average rating</span>
+        </div>
+      </div>
+
+      <div class="about__pillars">
+        <div class="about__pillar">
+          <i class="fas fa-credit-card" aria-hidden="true"></i>
+          <div>
+            <strong>Easy Payments</strong>
+            <p>Card, EFT, or cash on delivery</p>
+          </div>
+        </div>
+        <div class="about__pillar">
+          <i class="fas fa-headset" aria-hidden="true"></i>
+          <div>
+            <strong>24/7 Support</strong>
+            <p>We're always here for you</p>
+          </div>
+        </div>
+        <div class="about__pillar">
+          <i class="fas fa-truck" aria-hidden="true"></i>
+          <div>
+            <strong>Fast Delivery</strong>
+            <p>Average 35-minute delivery time</p>
+          </div>
+        </div>
+        <div class="about__pillar">
+          <i class="fas fa-leaf" aria-hidden="true"></i>
+          <div>
+            <strong>Fresh Ingredients</strong>
+            <p>Locally sourced, daily restocked</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="desserts" id="menu" aria-labelledby="desserts-heading">
+  <div class="section-header">
+    <span class="section-tag">Decadent Desserts</span>
+    <h2 class="section-title" id="desserts-heading">Baked Daily</h2>
+  </div>
+
+  <div class="desserts__grid">
+
+    <article class="dessert-card">
+      <div class="dessert-card__img">
+        <img src="images/FrenchToast.png" alt="French toast with cream and berries" width="380" height="260" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>French Toast Stuffing</h3>
+        <p>Brioche french toast filled with mascarpone and seasonal berry compote</p>
+        <div class="dessert-card__footer">
+          <span class="price">R100</span>
+          <button class="btn btn--sm" aria-label="Add French Toast Stuffing to order">Add</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="dessert-card">
+      <div class="dessert-card__img">
+        <img src="images/PanCakes.png" alt="Stack of fluffy pancakes" width="380" height="260" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Fluffy Pancakes</h3>
+        <p>Buttermilk pancakes stacked high with maple syrup and whipped butter</p>
+        <div class="dessert-card__footer">
+          <span class="price">R100</span>
+          <button class="btn btn--sm" aria-label="Add Pancakes to order">Add</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="dessert-card">
+      <div class="dessert-card__img">
+        <img src="images/CinnaRolls.png" alt="Caramelized cinnamon rolls with glaze" width="380" height="260" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Caramelized Cinnamon Rolls</h3>
+        <p>Slow-proved rolls baked in brown butter caramel with cream cheese glaze</p>
+        <div class="dessert-card__footer">
+          <span class="price">R100</span>
+          <button class="btn btn--sm" aria-label="Add Cinnamon Rolls to order">Add</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="dessert-card">
+      <div class="dessert-card__img">
+        <img src="images/ChocolateCake.png" alt="Rich dark chocolate cake" width="380" height="260" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Chocolate Cake</h3>
+        <p>Three-layer dark chocolate sponge with ganache and chocolate shards</p>
+        <div class="dessert-card__footer">
+          <span class="price">R100</span>
+          <button class="btn btn--sm" aria-label="Add Chocolate Cake to order">Add</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="dessert-card">
+      <div class="dessert-card__img">
+        <img src="images/CaramelTart.png" alt="Caramel tart with sea salt" width="380" height="260" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Caramel Tart</h3>
+        <p>Buttery shortcrust filled with salted caramel custard and topped with fleur de sel</p>
+        <div class="dessert-card__footer">
+          <span class="price">R100</span>
+          <button class="btn btn--sm" aria-label="Add Caramel Tart to order">Add</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="dessert-card">
+      <div class="dessert-card__img">
+        <img src="images/LavaCake.png" alt="Chocolate lava cake with molten center" width="380" height="260" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Lava Cake</h3>
+        <p>Warm chocolate fondant with a flowing molten center, served with vanilla ice cream</p>
+        <div class="dessert-card__footer">
+          <span class="price">R100</span>
+          <button class="btn btn--sm" aria-label="Add Lava Cake to order">Add</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="dessert-card">
+      <div class="dessert-card__img">
+        <img src="images/Malva.png" alt="Traditional South African Malva pudding" width="380" height="260" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Malva Pudding</h3>
+        <p>The South African classic — sticky apricot sponge soaked in warm cream sauce</p>
+        <div class="dessert-card__footer">
+          <span class="price">R100</span>
+          <button class="btn btn--sm btn--featured" aria-label="Add Malva Pudding to order">Add</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="dessert-card">
+      <div class="dessert-card__img">
+        <img src="images/CheeseCake.png" alt="New York style cheesecake" width="380" height="260" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Cheesecake</h3>
+        <p>New York-style baked cheesecake on a buttery digestive base with berry coulis</p>
+        <div class="dessert-card__footer">
+          <span class="price">R100</span>
+          <button class="btn btn--sm" aria-label="Add Cheesecake to order">Add</button>
+        </div>
+      </div>
+    </article>
+
+    <article class="dessert-card">
+      <div class="dessert-card__img">
+        <img src="images/CarrotCake.png" alt="Spiced carrot cake with cream cheese frosting" width="380" height="260" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Carrot Cake</h3>
+        <p>Spiced with cinnamon and nutmeg, finished with a whipped cream cheese frosting</p>
+        <div class="dessert-card__footer">
+          <span class="price">R100</span>
+          <button class="btn btn--sm" aria-label="Add Carrot Cake to order">Add</button>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section class="order" id="order" aria-labelledby="order-heading">
+  <div class="order__split">
+
+    <div class="order__info">
+      <span class="section-tag">Place Your Order</span>
+      <h2 class="section-title" id="order-heading">Free & Fast Delivery</h2>
+      <p>Place your order online and we'll have it at your door in under 45 minutes — or it's on us.</p>
+      <ul class="order__perks" aria-label="Order benefits">
+        <li><i class="fas fa-check-circle" aria-hidden="true"></i> No delivery fee on first order</li>
+        <li><i class="fas fa-check-circle" aria-hidden="true"></i> Tracked in real-time</li>
+        <li><i class="fas fa-check-circle" aria-hidden="true"></i> 45-min guarantee or refund</li>
+      </ul>
+    </div>
+
+    <div class="order__form-wrap">
+      <form class="order__form" id="order-form" action="results.html" method="GET" novalidate aria-label="Order form">
+
+        <div class="form-row form-row--half">
+          <div class="form-group">
+            <label class="form-label" for="name">Full Name <span aria-hidden="true">*</span></label>
+            <input class="form-input" type="text" id="name" name="name" required autocomplete="name" placeholder="Your name">
+            <span class="form-error" role="alert" aria-live="polite"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact">Contact Number <span aria-hidden="true">*</span></label>
+            <input class="form-input" type="tel" id="contact" name="contact" required autocomplete="tel" placeholder="e.g. 082 000 0000">
+            <span class="form-error" role="alert" aria-live="polite"></span>
+          </div>
+        </div>
+
+        <div class="form-row form-row--half">
+          <div class="form-group">
+            <label class="form-label" for="food">Main Dish <span aria-hidden="true">*</span></label>
+            <select class="form-input form-select" id="food" name="food" required>
+              <option value="" disabled selected>Choose a dish…</option>
+              <optgroup label="Mains">
+                <option>Alfredo Pasta</option>
+                <option>Chicken &amp; Waffles</option>
+                <option>Grilled Chicken</option>
+                <option>Assorted Board</option>
+                <option>Meatballs &amp; Pasta</option>
+                <option>Pita Wrap</option>
+                <option>Pizza</option>
+                <option>Butternut Bisque</option>
+                <option>Beef Pot Pie</option>
+              </optgroup>
+              <optgroup label="Desserts">
+                <option>French Toast Stuffing</option>
+                <option>Pancakes</option>
+                <option>Cinnamon Rolls</option>
+                <option>Chocolate Cake</option>
+                <option>Caramel Tart</option>
+                <option>Lava Cake</option>
+                <option>Malva Pudding</option>
+                <option>Cheesecake</option>
+                <option>Carrot Cake</option>
+              </optgroup>
+            </select>
+            <span class="form-error" role="alert" aria-live="polite"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="qty">Quantity</label>
+            <input class="form-input" type="number" id="qty" name="qty" min="1" max="50" value="1">
+          </div>
+        </div>
+
+        <div class="form-row form-row--half">
+          <div class="form-group">
+            <label class="form-label" for="extra-food">Additional Item</label>
+            <select class="form-input form-select" id="extra-food" name="extra_food">
+              <option value="">None</option>
+              <optgroup label="Mains">
+                <option>Alfredo Pasta</option>
+                <option>Chicken &amp; Waffles</option>
+                <option>Grilled Chicken</option>
+                <option>Pita Wrap</option>
+              </optgroup>
+              <optgroup label="Desserts">
+                <option>Lava Cake</option>
+                <option>Malva Pudding</option>
+                <option>Cheesecake</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="extra-qty">Extra Quantity</label>
+            <input class="form-input" type="number" id="extra-qty" name="extra_qty" min="1" max="50" value="1">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="address">Delivery Address <span aria-hidden="true">*</span></label>
+          <input class="form-input" type="text" id="address" name="address" required autocomplete="street-address" placeholder="Street address, suburb, city">
+          <span class="form-error" role="alert" aria-live="polite"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="special">Special Instructions</label>
+          <textarea class="form-input form-textarea" id="special" name="special" rows="3" placeholder="Allergies, substitutions, extra sauce…"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn--ghost">Clear</button>
+          <button type="submit" class="btn btn--primary btn--wide" id="submit-btn">
+            <span class="btn__text">Place Order</span>
+            <i class="fas fa-arrow-right btn__icon" aria-hidden="true"></i>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer class="footer" role="contentinfo">
+  <div class="footer__grid">
+    <div class="footer__brand">
+      <a href="#home" class="footer__logo" aria-label="Back to top">
+        <i class="fas fa-utensils" aria-hidden="true"></i>
+        Plateable<em> Eats</em>
+      </a>
+      <p>Handcrafted food made with locally sourced ingredients, delivered to your door.</p>
+      <div class="footer__social" aria-label="Social media links">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
+      </div>
+    </div>
+
+    <div class="footer__links">
+      <h3 class="footer__heading">Quick Links</h3>
+      <nav aria-label="Footer navigation">
+        <a href="#home">Home</a>
+        <a href="#dishes">Dishes</a>
+        <a href="#about">About</a>
+        <a href="#menu">Desserts</a>
+        <a href="#order">Order</a>
+      </nav>
+    </div>
+
+    <div class="footer__links">
+      <h3 class="footer__heading">Locations</h3>
+      <a href="#">Johannesburg, Gauteng</a>
+      <a href="#">Pretoria, Gauteng</a>
+      <a href="#">Coming soon…</a>
+    </div>
+
+    <div class="footer__links">
+      <h3 class="footer__heading">Contact</h3>
+      <a href="mailto:hello@plateableeats.co.za">hello@plateableeats.co.za</a>
+      <a href="tel:+27800000000">0800 000 000</a>
+      <a href="#order">Order Online</a>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <p>&copy; <span id="copyright-year"></span> Plateable Eats. All rights reserved. Made in South Africa 🇿🇦</p>
+  </div>
+</footer>
+
+<div class="cart-toast" id="cart-toast" role="status" aria-live="polite" aria-atomic="true" hidden>
+  <i class="fas fa-check-circle" aria-hidden="true"></i>
+  <span id="cart-toast-msg">Item added to order</span>
+</div>
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="script/script.js"></script>
+</body>
+</html>

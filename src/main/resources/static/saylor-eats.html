@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Saylor.Eats — Handcrafted dishes made fresh daily. com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order pizza, grilled chicken, decadent desserts and more, delivered fast across Gauteng.">
+  <meta property="og:title" content="Saylor.Eats — Fine Casual Dining">
+  <meta property="og:description" content="Handcrafted food, fast delivery across Gauteng.">
+  <meta name="theme-color" content="#0d0d0d">
+  <title>Saylor.Eats — Handcrafted Food</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+/* ═══════════════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════════════ */
+:root {
+  --ink:        #111008;
+  --ink-soft:   #2d2a20;
+  --cream:      #f8f4ed;
+  --warm:       #f0e8d8;
+  --warmer:     #e8d8bc;
+  --gold:       #c9973a;
+  --gold-lt:    #e8c47a;
+  --gold-dim:   rgba(201,151,58,.15);
+  --rust:       #b84c1e;
+  --green:      #2e6e4a;
+  --muted:      #7a6e5a;
+  --border:     rgba(17,16,8,.10);
+  --border-lt:  rgba(17,16,8,.06);
+
+  --ff-display: 'Cormorant Garamond', Georgia, serif;
+  --ff-body:    'Outfit', system-ui, sans-serif;
+
+  --shadow-xs:  0 1px 2px rgba(0,0,0,.06);
+  --shadow-sm:  0 2px 8px rgba(0,0,0,.08), 0 1px 3px rgba(0,0,0,.05);
+  --shadow-md:  0 6px 24px rgba(0,0,0,.10), 0 2px 8px rgba(0,0,0,.06);
+  --shadow-lg:  0 16px 56px rgba(0,0,0,.14), 0 4px 16px rgba(0,0,0,.07);
+  --shadow-gold:0 8px 32px rgba(201,151,58,.28);
+
+  --ease:       cubic-bezier(.4,0,.2,1);
+  --ease-out:   cubic-bezier(0,0,.2,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+
+  --header-h:   7rem;
+  --gutter:     clamp(2rem, 6vw, 10rem);
+  --max-w:      1320px;
+  --r-sm: .4rem; --r-md: .8rem; --r-lg: 1.6rem; --r-xl: 2.4rem; --r-full: 9999px;
+}
+
+/* ═══════════════════════════════════════════════════
+   RESET
+═══════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:62.5%;scroll-behavior:smooth;scroll-padding-top:calc(var(--header-h) + 1.6rem);overflow-x:hidden;-webkit-text-size-adjust:100%}
+body{font-family:var(--ff-body);font-size:1.6rem;line-height:1.6;color:var(--ink);background:var(--cream);-webkit-font-smoothing:antialiased}
+img,video{display:block;max-width:100%;height:auto}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:inherit;border:none;background:none}
+ul,ol{list-style:none}
+:focus-visible{outline:2.5px solid var(--gold);outline-offset:3px;border-radius:var(--r-sm)}
+
+/* ═══════════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════════ */
+.section-tag{display:inline-block;font-family:var(--ff-body);font-size:1.2rem;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+.section-title{font-family:var(--ff-display);font-size:clamp(3.6rem,5vw,5.6rem);color:var(--ink);line-height:1.1;margin-top:.8rem}
+.section-header{text-align:center;margin-bottom:clamp(4rem,6vw,7rem)}
+
+/* ═══════════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════════ */
+.btn{display:inline-flex;align-items:center;gap:.8rem;font-family:var(--ff-body);font-size:1.5rem;font-weight:500;padding:1.25rem 3rem;border-radius:var(--r-full);transition:all .25s var(--ease);white-space:nowrap;position:relative;overflow:hidden}
+.btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background .2s}
+.btn:hover::after{background:rgba(255,255,255,.07)}
+.btn--primary{background:var(--ink);color:#fff;box-shadow:var(--shadow-sm)}
+.btn--primary:hover{background:var(--gold);box-shadow:var(--shadow-gold);transform:translateY(-2px)}
+.btn--primary:active{transform:translateY(0)}
+.btn--ghost{background:transparent;color:var(--ink);border:1.5px solid var(--border)}
+.btn--ghost:hover{border-color:var(--ink);background:var(--warm)}
+.btn--sm{padding:.75rem 1.8rem;font-size:1.4rem}
+.btn--wide{width:100%;justify-content:center}
+.btn--green{background:var(--green);color:#fff}
+.btn--green:hover{background:#1e5438;box-shadow:0 8px 24px rgba(46,110,74,.3);transform:translateY(-2px)}
+
+/* ═══════════════════════════════════════════════════
+   LOADER
+═══════════════════════════════════════════════════ */
+.loader{position:fixed;inset:0;z-index:9999;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:2rem;transition:opacity .6s var(--ease),visibility .6s var(--ease)}
+.loader.out{opacity:0;visibility:hidden;pointer-events:none}
+.loader__ring{width:5.6rem;height:5.6rem}
+.loader__ring circle{fill:none;stroke:var(--gold);stroke-width:2;stroke-dasharray:110;stroke-dashoffset:110;stroke-linecap:round;animation:ring-fill 1.1s var(--ease-out) forwards .1s}
+@keyframes ring-fill{to{stroke-dashoffset:0}}
+.loader__word{font-family:var(--ff-display);font-size:3.2rem;font-style:italic;color:#fff;animation:fade-in .6s ease forwards .3s;opacity:0}
+.loader__word em{color:var(--gold);font-style:normal}
+@keyframes fade-in{to{opacity:1}}
+
+/* ═══════════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════════ */
+.header{position:fixed;top:0;left:0;right:0;height:var(--header-h);background:rgba(248,244,237,.94);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);border-bottom:1px solid var(--border-lt);padding:0 var(--gutter);display:flex;align-items:center;justify-content:space-between;gap:2.4rem;z-index:1000;transition:box-shadow .3s var(--ease)}
+.header.scrolled{box-shadow:var(--shadow-md)}
+.header__logo{display:flex;align-items:center;gap:.8rem;font-family:var(--ff-display);font-size:2.4rem;font-weight:700;color:var(--ink);flex-shrink:0;letter-spacing:-.01em}
+.header__logo i{color:var(--gold);font-size:2rem}
+.header__logo em{color:var(--gold);font-style:normal}
+.header__nav{display:flex;align-items:center;gap:.4rem}
+.nav-link{font-size:1.5rem;font-weight:500;color:var(--muted);padding:.6rem 1.4rem;border-radius:var(--r-full);transition:color .15s,background .15s}
+.nav-link:hover,.nav-link.active{color:var(--ink);background:var(--warm)}
+.nav-link--cta{background:var(--ink);color:#fff !important;padding:.8rem 2.2rem}
+.nav-link--cta:hover{background:var(--gold) !important;color:#fff !important}
+.header__actions{display:flex;align-items:center;gap:.8rem}
+.icon-btn{width:4rem;height:4rem;border-radius:50%;background:var(--warm);color:var(--ink);font-size:1.5rem;display:flex;align-items:center;justify-content:center;transition:background .15s,transform .15s var(--ease-spring)}
+.icon-btn:hover{background:var(--gold);color:#fff;transform:scale(1.1)}
+#menu-toggle{display:none;flex-direction:column;gap:.5rem;width:4rem;height:4rem;align-items:center;justify-content:center;border-radius:50%;background:var(--warm)}
+#menu-toggle span{display:block;width:1.8rem;height:2px;background:var(--ink);border-radius:2px;transition:transform .3s var(--ease),opacity .2s}
+#menu-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+#menu-toggle.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+#menu-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* ═══════════════════════════════════════════════════
+   SEARCH OVERLAY
+═══════════════════════════════════════════════════ */
+.search-overlay{position:fixed;inset:0;z-index:1010;background:rgba(17,16,8,.93);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:2.4rem;opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s var(--ease)}
+.search-overlay.open{opacity:1;visibility:visible}
+.search-inner{width:100%;max-width:60rem}
+.search-label{font-family:var(--ff-display);font-size:clamp(2.8rem,5vw,4.8rem);font-style:italic;color:#fff;text-align:center;display:block;margin-bottom:3.2rem}
+.search-field{display:flex;align-items:center;gap:1.2rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);border-radius:var(--r-full);padding:1.4rem 2.4rem;transition:border-color .2s}
+.search-field:focus-within{border-color:var(--gold)}
+.search-field i{color:rgba(255,255,255,.4);font-size:1.8rem;flex-shrink:0}
+.search-field input{flex:1;background:none;border:none;outline:none;color:#fff;font-size:1.8rem;font-family:var(--ff-body);font-weight:400}
+.search-field input::placeholder{color:rgba(255,255,255,.35)}
+.search-results{margin-top:1.6rem;display:flex;flex-direction:column;gap:.4rem}
+.search-result-item{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.6rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);border-radius:var(--r-md);color:rgba(255,255,255,.85);font-size:1.5rem;cursor:pointer;transition:background .15s,border-color .15s}
+.search-result-item:hover{background:rgba(201,151,58,.15);border-color:rgba(201,151,58,.3);color:#fff}
+.search-close{position:absolute;top:2.4rem;right:2.4rem;width:4.8rem;height:4.8rem;border-radius:50%;background:rgba(255,255,255,.08);color:rgba(255,255,255,.7);font-size:2rem;display:flex;align-items:center;justify-content:center;transition:background .15s,color .15s}
+.search-close:hover{background:rgba(255,255,255,.15);color:#fff}
+
+/* ═══════════════════════════════════════════════════
+   HERO
+═══════════════════════════════════════════════════ */
+.hero{min-height:100svh;background:var(--cream);position:relative;overflow:hidden}
+/* Subtle grain texture overlay */
+.hero::before{content:'';position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");opacity:.4;pointer-events:none;z-index:0}
+.hero__slide{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:4rem;padding:calc(var(--header-h) + 8rem) var(--gutter) 8rem;min-height:100svh;position:relative;z-index:1}
+.hero__content{display:flex;flex-direction:column;gap:2rem}
+.hero__tag{font-size:1.2rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:1rem}
+.hero__tag::before{content:'';display:inline-block;width:2.4rem;height:1.5px;background:var(--gold)}
+.hero__title{font-family:var(--ff-display);font-size:clamp(6rem,9vw,10rem);line-height:1;color:var(--ink);font-weight:700}
+.hero__title em{font-style:italic;color:var(--gold)}
+.hero__desc{font-size:1.8rem;color:var(--muted);line-height:1.7;max-width:46rem;font-weight:300}
+.hero__actions{display:flex;gap:1.2rem;flex-wrap:wrap;padding-top:.8rem}
+.hero__price-tag{display:inline-flex;align-items:center;gap:.8rem;background:var(--warm);border:1px solid var(--warmer);border-radius:var(--r-full);padding:.8rem 1.8rem;font-size:1.5rem;font-weight:600;color:var(--ink-soft);width:fit-content}
+.hero__price-tag .price-num{font-family:var(--ff-display);font-size:2.4rem;color:var(--gold);font-style:italic}
+.hero__image{display:flex;align-items:center;justify-content:center;position:relative}
+.hero__image-bg{position:absolute;width:70%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,rgba(201,151,58,.18) 0%,transparent 70%);animation:pulse-bg 4s ease-in-out infinite}
+@keyframes pulse-bg{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.08);opacity:1}}
+.hero__image img{position:relative;z-index:1;max-height:58rem;width:auto;object-fit:contain;filter:drop-shadow(0 32px 64px rgba(0,0,0,.18));animation:float 7s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}33%{transform:translateY(-1.2rem) rotate(.5deg)}66%{transform:translateY(-2rem) rotate(-.5deg)}}
+.swiper-pagination-bullet{width:.7rem;height:.7rem;background:var(--warmer);opacity:.6;transition:width .3s,opacity .3s,background .3s;border-radius:var(--r-full)}
+.swiper-pagination-bullet-active{width:2.8rem;opacity:1;background:var(--gold)}
+.hero-pagination{position:absolute;bottom:4rem;left:var(--gutter);z-index:10;display:flex;gap:.8rem;align-items:center}
+
+/* ═══════════════════════════════════════════════════
+   MARQUEE STRIP
+═══════════════════════════════════════════════════ */
+.marquee-strip{background:var(--ink);padding:1.4rem 0;overflow:hidden;position:relative;z-index:2}
+.marquee-track{display:flex;gap:4rem;animation:marquee 25s linear infinite;width:max-content}
+.marquee-item{display:flex;align-items:center;gap:1.2rem;font-size:1.3rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5);white-space:nowrap;flex-shrink:0}
+.marquee-item i{color:var(--gold);font-size:1.1rem}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ═══════════════════════════════════════════════════
+   DISHES
+═══════════════════════════════════════════════════ */
+.dishes{padding:clamp(6rem,10vw,10rem) var(--gutter);background:var(--cream)}
+.filter-bar{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap;margin-bottom:4.8rem}
+.filter-btn{font-size:1.4rem;font-weight:500;padding:.8rem 2.2rem;border-radius:var(--r-full);border:1.5px solid var(--border);color:var(--muted);background:transparent;transition:all .18s var(--ease)}
+.filter-btn:hover{border-color:var(--ink);color:var(--ink)}
+.filter-btn.active{background:var(--ink);border-color:var(--ink);color:#fff}
+.dishes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(28rem,1fr));gap:2.4rem;max-width:var(--max-w);margin:0 auto}
+.dish-card{background:#fff;border-radius:var(--r-xl);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;display:flex;flex-direction:column;transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.dish-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.dish-card.hidden{display:none}
+.dish-card__img{position:relative;aspect-ratio:4/3;background:var(--warm);overflow:hidden}
+.dish-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.dish-card:hover .dish-card__img img{transform:scale(1.07)}
+.dish-card__badge{position:absolute;top:1.2rem;left:1.2rem;font-size:1.1rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:.35rem 1.1rem;border-radius:var(--r-full)}
+.badge--gold{background:var(--gold);color:#fff}
+.badge--green{background:#d4eddf;color:var(--green)}
+.dish-card__body{padding:2rem;display:flex;flex-direction:column;gap:1rem;flex:1}
+.dish-card__name{font-family:var(--ff-display);font-size:2.2rem;color:var(--ink);font-weight:600;line-height:1.2}
+.stars{display:flex;gap:.3rem;color:var(--gold);font-size:1.2rem}
+.dish-card__footer{display:flex;align-items:center;justify-content:space-between;padding-top:1.2rem;border-top:1px solid var(--border-lt);margin-top:auto}
+.dish-price{font-family:var(--ff-display);font-size:2.4rem;font-style:italic;color:var(--gold);font-weight:700}
+.add-btn{width:3.8rem;height:3.8rem;border-radius:50%;background:var(--ink);color:#fff;font-size:1.5rem;display:flex;align-items:center;justify-content:center;transition:background .18s,transform .25s var(--ease-spring)}
+.add-btn:hover{background:var(--gold);transform:rotate(90deg) scale(1.12)}
+.add-btn.added{background:var(--green);animation:pop .3s var(--ease-spring)}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+
+/* ═══════════════════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════════════════ */
+.about{padding:clamp(6rem,10vw,10rem) var(--gutter);background:var(--warm)}
+.about__row{display:grid;grid-template-columns:1fr 1fr;gap:clamp(4rem,7vw,9rem);align-items:center;max-width:var(--max-w);margin:0 auto}
+.about__image{position:relative}
+.about__image img{width:100%;aspect-ratio:5/6;object-fit:cover;border-radius:var(--r-xl);box-shadow:var(--shadow-md)}
+.about__float-card{position:absolute;bottom:-3.2rem;right:-3.2rem;background:var(--ink);color:#fff;padding:2.4rem;border-radius:var(--r-lg);box-shadow:var(--shadow-lg);min-width:16rem;text-align:center}
+.about__float-card strong{display:block;font-family:var(--ff-display);font-size:3.6rem;font-style:italic;color:var(--gold);line-height:1}
+.about__float-card span{font-size:1.3rem;color:rgba(255,255,255,.6);margin-top:.4rem;display:block}
+.about__content{display:flex;flex-direction:column;gap:2.8rem}
+.about__headline{font-family:var(--ff-display);font-size:clamp(3.4rem,4.5vw,5rem);line-height:1.15;color:var(--ink)}
+.about__headline em{font-style:italic;color:var(--gold)}
+.about__text{font-size:1.7rem;color:var(--muted);line-height:1.8;font-weight:300}
+.about__stats{display:flex;gap:3.2rem;flex-wrap:wrap}
+.about__stat strong{display:block;font-family:var(--ff-display);font-size:3.2rem;font-style:italic;color:var(--gold)}
+.about__stat span{font-size:1.3rem;color:var(--muted);margin-top:.2rem;display:block}
+.pillars{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.pillar{display:flex;align-items:flex-start;gap:1.4rem;padding:1.8rem;background:#fff;border-radius:var(--r-lg);border:1px solid var(--border);box-shadow:var(--shadow-xs);transition:box-shadow .2s,transform .2s}
+.pillar:hover{box-shadow:var(--shadow-md);transform:translateY(-2px)}
+.pillar i{font-size:2rem;color:var(--gold);flex-shrink:0;margin-top:.2rem}
+.pillar strong{display:block;font-size:1.5rem;color:var(--ink);margin-bottom:.3rem}
+.pillar p{font-size:1.3rem;color:var(--muted);line-height:1.4}
+
+/* ═══════════════════════════════════════════════════
+   DESSERTS
+═══════════════════════════════════════════════════ */
+.desserts{padding:clamp(6rem,10vw,10rem) var(--gutter);background:var(--cream)}
+.desserts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(30rem,1fr));gap:2.4rem;max-width:var(--max-w);margin:0 auto}
+.dessert-card{background:#fff;border-radius:var(--r-xl);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;display:flex;flex-direction:column;transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.dessert-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+.dessert-card__img{aspect-ratio:3/2;background:var(--warm);overflow:hidden;position:relative}
+.dessert-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.dessert-card:hover .dessert-card__img img{transform:scale(1.07)}
+.dessert-card__badge{position:absolute;top:1.2rem;right:1.2rem;background:rgba(17,16,8,.75);backdrop-filter:blur(6px);color:#fff;font-size:1.1rem;font-weight:600;padding:.3rem 1rem;border-radius:var(--r-full)}
+.dessert-card__body{padding:2rem;display:flex;flex-direction:column;gap:1rem;flex:1}
+.dessert-card__body h3{font-family:var(--ff-display);font-size:2.2rem;font-weight:600;color:var(--ink)}
+.dessert-card__body p{font-size:1.4rem;color:var(--muted);line-height:1.55;font-weight:300;flex:1}
+.dessert-card__footer{display:flex;align-items:center;justify-content:space-between;padding-top:1.2rem;border-top:1px solid var(--border-lt);margin-top:auto}
+.price{font-family:var(--ff-display);font-size:2.2rem;font-style:italic;color:var(--gold);font-weight:700}
+
+/* ═══════════════════════════════════════════════════
+   ORDER
+═══════════════════════════════════════════════════ */
+.order{padding:clamp(6rem,10vw,10rem) var(--gutter);background:var(--ink);position:relative;overflow:hidden}
+.order::before{content:'';position:absolute;top:-30%;right:-10%;width:60rem;height:60rem;border-radius:50%;background:radial-gradient(circle,rgba(201,151,58,.08) 0%,transparent 60%);pointer-events:none}
+.order__split{display:grid;grid-template-columns:1fr 1.7fr;gap:clamp(4rem,7vw,9rem);align-items:start;max-width:var(--max-w);margin:0 auto;position:relative;z-index:1}
+.order__info .section-tag{color:var(--gold-lt)}
+.order__info .section-title{color:#fff}
+.order__info .desc{font-size:1.7rem;color:rgba(255,255,255,.55);line-height:1.75;margin-top:1.6rem;font-weight:300}
+.order-perks{display:flex;flex-direction:column;gap:1.4rem;margin-top:3.2rem}
+.order-perk{display:flex;align-items:center;gap:1.2rem;font-size:1.5rem;color:rgba(255,255,255,.7)}
+.order-perk i{color:var(--gold);font-size:1.4rem;width:2rem;text-align:center}
+.order-form-wrap{background:var(--cream);border-radius:var(--r-xl);padding:clamp(2.4rem,4vw,4rem);box-shadow:var(--shadow-lg)}
+.order-form{display:flex;flex-direction:column;gap:2rem}
+.form-row{display:flex;gap:1.6rem}
+.form-row .form-group{flex:1}
+.form-group{display:flex;flex-direction:column;gap:.6rem}
+.form-label{font-size:1.3rem;font-weight:600;color:var(--ink-soft);letter-spacing:.03em;text-transform:uppercase}
+.form-label .req{color:var(--rust)}
+.form-input{width:100%;padding:1.15rem 1.5rem;font-size:1.5rem;font-family:var(--ff-body);color:var(--ink);background:#fff;border:1.5px solid var(--border);border-radius:var(--r-md);transition:border-color .18s,box-shadow .18s;appearance:none}
+.form-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,151,58,.15);outline:none}
+.form-input.error{border-color:var(--rust)}
+.form-input.ok{border-color:var(--green)}
+.form-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='m6 9 6 6 6-6' stroke='%237a6e5a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1.2rem center;padding-right:3.6rem;cursor:pointer}
+.form-textarea{resize:vertical;min-height:9rem}
+.form-error{font-size:1.2rem;color:var(--rust);min-height:1.6rem}
+.form-actions{display:flex;gap:1.2rem;padding-top:.4rem}
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════════════ */
+.footer{background:#080806;padding:clamp(5rem,8vw,8rem) var(--gutter) 3.2rem}
+.footer__grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:clamp(3rem,5vw,6rem);max-width:var(--max-w);margin:0 auto;padding-bottom:4rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.footer__logo{display:inline-flex;align-items:center;gap:.8rem;font-family:var(--ff-display);font-size:2.6rem;font-weight:700;color:#fff;margin-bottom:1.6rem}
+.footer__logo i{color:var(--gold)}
+.footer__logo em{color:var(--gold);font-style:normal}
+.footer__brand p{font-size:1.4rem;color:rgba(255,255,255,.4);line-height:1.7;max-width:30rem;font-weight:300}
+.footer__social{display:flex;gap:1.2rem;margin-top:2.4rem}
+.footer__social a{width:3.8rem;height:3.8rem;border-radius:50%;background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);font-size:1.5rem;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s,transform .18s}
+.footer__social a:hover{background:var(--gold);color:#fff;transform:scale(1.1)}
+.footer__col-title{font-size:1.2rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:2rem}
+.footer__links{display:flex;flex-direction:column;gap:1.2rem}
+.footer__links a{font-size:1.5rem;color:rgba(255,255,255,.55);transition:color .15s;font-weight:300}
+.footer__links a:hover{color:var(--gold)}
+.footer__bottom{max-width:var(--max-w);margin:0 auto;padding-top:2.4rem;display:flex;align-items:center;justify-content:space-between;gap:1.6rem;flex-wrap:wrap}
+.footer__copyright{font-size:1.3rem;color:rgba(255,255,255,.25)}
+
+/* ═══════════════════════════════════════════════════
+   CART TOAST
+═══════════════════════════════════════════════════ */
+.toast{position:fixed;bottom:3.2rem;left:50%;transform:translateX(-50%) translateY(1.6rem);background:var(--ink);color:#fff;padding:1.2rem 2.4rem 1.2rem 1.8rem;border-radius:var(--r-full);font-size:1.5rem;display:flex;align-items:center;gap:1rem;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity .3s var(--ease),transform .35s var(--ease-spring);z-index:5000;white-space:nowrap;border:1px solid rgba(255,255,255,.08)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.toast i{color:var(--gold);font-size:1.6rem}
+
+/* ═══════════════════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════════════════ */
+[data-sr]{opacity:0;transform:translateY(2.8rem);transition:opacity .65s var(--ease-out),transform .65s var(--ease-out)}
+[data-sr].in{opacity:1;transform:translateY(0)}
+[data-sr="left"]{transform:translateX(-3.2rem)}
+[data-sr="left"].in{transform:translateX(0)}
+[data-sr="right"]{transform:translateX(3.2rem)}
+[data-sr="right"].in{transform:translateX(0)}
+[data-sr="scale"]{transform:scale(.9)}
+[data-sr="scale"].in{transform:scale(1)}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════════ */
+@media(max-width:1100px){
+  .about__row{grid-template-columns:1fr}
+  .about__float-card{right:2.4rem;bottom:-2rem}
+  .order__split{grid-template-columns:1fr}
+  .footer__grid{grid-template-columns:1fr 1fr;gap:3.2rem}
+}
+@media(max-width:768px){
+  #menu-toggle{display:flex}
+  .header__nav{position:absolute;top:100%;left:0;right:0;background:rgba(248,244,237,.98);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);flex-direction:column;align-items:stretch;padding:1.6rem 2.4rem;gap:.8rem;clip-path:polygon(0 0,100% 0,100% 0,0 0);transition:clip-path .35s var(--ease)}
+  .header__nav.open{clip-path:polygon(0 0,100% 0,100% 100%,0 100%)}
+  .nav-link{text-align:center;padding:1.2rem}
+  .hero__slide{grid-template-columns:1fr;text-align:center;padding-top:calc(var(--header-h) + 4rem);padding-bottom:6rem}
+  .hero__image{order:-1}
+  .hero__image img{max-height:32rem}
+  .hero__actions{justify-content:center}
+  .hero__desc{margin:0 auto}
+  .hero__tag{justify-content:center}
+  .pillars{grid-template-columns:1fr}
+  .form-row{flex-direction:column}
+  .footer__grid{grid-template-columns:1fr;gap:2.4rem}
+  .footer__bottom{flex-direction:column;text-align:center}
+}
+@media(max-width:480px){
+  html{font-size:56.25%}
+  .dishes-grid,.desserts-grid{grid-template-columns:1fr}
+  .order-form-wrap{padding:2rem 1.6rem}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="loader" id="loader" aria-hidden="true">
+  <svg class="loader__ring" viewBox="0 0 56 56">
+    <circle cx="28" cy="28" r="24" stroke-dasharray="150" stroke-dashoffset="150">
+      <animate attributeName="stroke-dashoffset" from="150" to="0" dur="1.1s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/>
+    </circle>
+  </svg>
+  <span class="loader__word">Saylor<em>.Eats</em></span>
+</div>
+
+<!-- HEADER -->
+<header class="header" id="header" role="banner">
+  <a href="#home" class="header__logo" aria-label="Saylor.Eats — home">
+    <i class="fas fa-utensils" aria-hidden="true"></i>
+    Saylor<em>.Eats</em>
+  </a>
+
+  <nav class="header__nav" id="main-nav" role="navigation" aria-label="Main navigation">
+    <a href="#home" class="nav-link active">Home</a>
+    <a href="#dishes" class="nav-link">Dishes</a>
+    <a href="#about" class="nav-link">About</a>
+    <a href="#menu" class="nav-link">Desserts</a>
+    <a href="#order" class="nav-link nav-link--cta">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order Now</a>
+  </nav>
+
+  <div class="header__actions">
+    <button class="icon-btn" id="search-toggle" aria-label="Search menu" aria-expanded="false">
+      <i class="fas fa-search" aria-hidden="true"></i>
+    </button>
+    <button id="menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="main-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay" role="dialog" aria-modal="true" aria-label="Search">
+  <div class="search-inner">
+    <label class="search-label" for="search-input">What are you craving?</label>
+    <div class="search-field">
+      <i class="fas fa-search" aria-hidden="true"></i>
+      <input type="search" id="search-input" placeholder="e.g. pizza, malva pudding…" autocomplete="off">
+    </div>
+    <div class="search-results" id="search-results" aria-live="polite"></div>
+  </div>
+  <button class="search-close" id="search-close" aria-label="Close search">
+    <i class="fas fa-times" aria-hidden="true"></i>
+  </button>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home" aria-label="Featured dishes">
+
+  <!-- Swiper slides built via JS to keep HTML clean -->
+  <div class="swiper hero-swiper" style="width:100%;height:100%">
+    <div class="swiper-wrapper">
+
+      <div class="swiper-slide">
+        <div class="hero__slide">
+          <div class="hero__content" data-sr>
+            <span class="hero__tag">Chef's Special</span>
+            <h1 class="hero__title">Wood-fired<br><em>Pizza</em></h1>
+            <p class="hero__desc">Thin, crispy base with fior di latte, red onion, wild mushrooms, salami, olives and fresh basil — baked in 90 seconds flat.</p>
+            <div class="hero__actions">
+              <a href="#order" class="btn btn--primary">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order Now <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+              <a href="#dishes" class="btn btn--ghost">View Menu</a>
+            </div>
+            <div class="hero__price-tag">
+              Starting from <span class="price-num">R100</span>
+            </div>
+          </div>
+          <div class="hero__image" data-sr="right">
+            <div class="hero__image-bg"></div>
+            <img src="images/Pizza.png" alt="Wood-fired pizza with fresh toppings" width="520" height="560" loading="eager">
+          </div>
+        </div>
+      </div>
+
+      <div class="swiper-slide">
+        <div class="hero__slide">
+          <div class="hero__content">
+            <span class="hero__tag">Chef's Special</span>
+            <h1 class="hero__title">Butternut<br><em>Bisque</em></h1>
+            <p class="hero__desc">Roasted red peppers and butternut blended with aromatic broth, crowned with Greek yogurt and served with crusty artisan bread.</p>
+            <div class="hero__actions">
+              <a href="#order" class="btn btn--primary">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order Now <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+              <a href="#dishes" class="btn btn--ghost">View Menu</a>
+            </div>
+            <div class="hero__price-tag">Starting from <span class="price-num">R100</span></div>
+          </div>
+          <div class="hero__image">
+            <div class="hero__image-bg"></div>
+            <img src="images/Soup.png" alt="Roasted butternut and red pepper soup" width="520" height="560" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+      <div class="swiper-slide">
+        <div class="hero__slide">
+          <div class="hero__content">
+            <span class="hero__tag">Chef's Special</span>
+            <h1 class="hero__title">Beef<br><em>Pot Pie</em></h1>
+            <p class="hero__desc">Slow-braised beef stew sealed beneath a golden, shattering pastry crust — pure comfort on a plate, every single time.</p>
+            <div class="hero__actions">
+              <a href="#order" class="btn btn--primary">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order Now <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+              <a href="#dishes" class="btn btn--ghost">View Menu</a>
+            </div>
+            <div class="hero__price-tag">Starting from <span class="price-num">R100</span></div>
+          </div>
+          <div class="hero__image">
+            <div class="hero__image-bg"></div>
+            <img src="images/Pie.png" alt="Golden beef pot pie" width="520" height="560" loading="lazy">
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="hero-pagination swiper-pagination"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip" aria-hidden="true">
+  <div class="marquee-track" id="marquee">
+    <span class="marquee-item"><i class="fas fa-star"></i> Free delivery on first order</span>
+    <span class="marquee-item"><i class="fas fa-clock"></i> 45-min delivery guarantee</span>
+    <span class="marquee-item"><i class="fas fa-leaf"></i> Locally sourced ingredients</span>
+    <span class="marquee-item"><i class="fas fa-fire"></i> Baked fresh daily</span>
+    <span class="marquee-item"><i class="fas fa-map-marker-alt"></i> Serving all of Gauteng</span>
+    <span class="marquee-item"><i class="fas fa-star"></i> 4.9 average rating</span>
+    <span class="marquee-item"><i class="fas fa-utensils"></i> 50+ menu items</span>
+    <!-- Duplicate for seamless loop -->
+    <span class="marquee-item"><i class="fas fa-star"></i> Free delivery on first order</span>
+    <span class="marquee-item"><i class="fas fa-clock"></i> 45-min delivery guarantee</span>
+    <span class="marquee-item"><i class="fas fa-leaf"></i> Locally sourced ingredients</span>
+    <span class="marquee-item"><i class="fas fa-fire"></i> Baked fresh daily</span>
+    <span class="marquee-item"><i class="fas fa-map-marker-alt"></i> Serving all of Gauteng</span>
+    <span class="marquee-item"><i class="fas fa-star"></i> 4.9 average rating</span>
+    <span class="marquee-item"><i class="fas fa-utensils"></i> 50+ menu items</span>
+  </div>
+</div>
+
+<!-- DISHES -->
+<section class="dishes" id="dishes" aria-labelledby="dishes-h">
+  <div class="section-header" data-sr>
+    <span class="section-tag">The Classics</span>
+    <h2 class="section-title" id="dishes-h">Recommended Dishes</h2>
+  </div>
+
+  <div class="filter-bar" role="group" aria-label="Filter dishes by category">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="mains">Mains</button>
+    <button class="filter-btn" data-filter="pasta">Pasta</button>
+    <button class="filter-btn" data-filter="wraps">Wraps & Boards</button>
+  </div>
+
+  <ul class="dishes-grid" role="list">
+    <li class="dish-card" data-category="pasta" data-sr>
+      <div class="dish-card__img">
+        <img src="images/Alfredo.png" alt="Creamy Alfredo pasta" width="360" height="270" loading="lazy">
+        <span class="dish-card__badge badge--gold">Popular</span>
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Alfredo Pasta</h3>
+        <div class="stars" aria-label="4.5 stars">★★★★☆</div>
+        <div class="dish-card__footer">
+          <span class="dish-price">R100</span>
+          <button class="add-btn" aria-label="Add Alfredo Pasta to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </li>
+
+    <li class="dish-card" data-category="mains" data-sr>
+      <div class="dish-card__img">
+        <img src="images/Chicken%20and%20Waffles.png" alt="Crispy chicken and waffles" width="360" height="270" loading="lazy">
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Chicken & Waffles</h3>
+        <div class="stars" aria-label="4 stars">★★★★☆</div>
+        <div class="dish-card__footer">
+          <span class="dish-price">R100</span>
+          <button class="add-btn" aria-label="Add Chicken and Waffles to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </li>
+
+    <li class="dish-card" data-category="mains" data-sr>
+      <div class="dish-card__img">
+        <img src="images/Chicken.png" alt="Grilled chicken breast" width="360" height="270" loading="lazy">
+        <span class="dish-card__badge badge--green">Healthy</span>
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Grilled Chicken</h3>
+        <div class="stars" aria-label="5 stars">★★★★★</div>
+        <div class="dish-card__footer">
+          <span class="dish-price">R100</span>
+          <button class="add-btn" aria-label="Add Grilled Chicken to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </li>
+
+    <li class="dish-card" data-category="wraps" data-sr>
+      <div class="dish-card__img">
+        <img src="images/CrumbledBoard.png" alt="Artisan charcuterie board" width="360" height="270" loading="lazy">
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Assorted Board</h3>
+        <div class="stars" aria-label="4 stars">★★★★☆</div>
+        <div class="dish-card__footer">
+          <span class="dish-price">R100</span>
+          <button class="add-btn" aria-label="Add Assorted Board to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </li>
+
+    <li class="dish-card" data-category="pasta" data-sr>
+      <div class="dish-card__img">
+        <img src="images/Meatballs.png" alt="Meatballs in tomato sauce with pasta" width="360" height="270" loading="lazy">
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Meatballs & Pasta</h3>
+        <div class="stars" aria-label="4.5 stars">★★★★☆</div>
+        <div class="dish-card__footer">
+          <span class="dish-price">R100</span>
+          <button class="add-btn" aria-label="Add Meatballs and Pasta to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </li>
+
+    <li class="dish-card" data-category="wraps" data-sr>
+      <div class="dish-card__img">
+        <img src="images/Pita.png" alt="Stuffed pita wrap with fresh salad" width="360" height="270" loading="lazy">
+      </div>
+      <div class="dish-card__body">
+        <h3 class="dish-card__name">Pita Wrap</h3>
+        <div class="stars" aria-label="4 stars">★★★★☆</div>
+        <div class="dish-card__footer">
+          <span class="dish-price">R100</span>
+          <button class="add-btn" aria-label="Add Pita Wrap to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </li>
+  </ul>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about" aria-labelledby="about-h">
+  <div class="about__row">
+    <div class="about__image" data-sr="left">
+      <img src="images/Pita.png" alt="Chef plating a fresh pita wrap" width="600" height="720" loading="lazy">
+      <div class="about__float-card">
+        <strong>12+</strong>
+        <span>Years of craft</span>
+      </div>
+    </div>
+
+    <div class="about__content" data-sr="right">
+      <div>
+        <span class="section-tag">About Us</span>
+        <h2 class="about__headline" id="about-h">Crafted with love,<br><em>served with pride</em></h2>
+      </div>
+      <p class="about__text">Every dish on our menu starts with locally-sourced ingredients and ends with a chef who refuses to rush. We believe great food is the foundation of great memories — so we put everything into every plate we serve, every single day.</p>
+
+      <div class="about__stats">
+        <div class="about__stat">
+          <strong>2 400+</strong>
+          <span>Happy customers</span>
+        </div>
+        <div class="about__stat">
+          <strong>50+</strong>
+          <span>Menu items</span>
+        </div>
+        <div class="about__stat">
+          <strong>4.9★</strong>
+          <span>Average rating</span>
+        </div>
+      </div>
+
+      <div class="pillars">
+        <div class="pillar">
+          <i class="fas fa-credit-card" aria-hidden="true"></i>
+          <div><strong>Easy Payments</strong><p>Card, EFT, or cash on delivery</p></div>
+        </div>
+        <div class="pillar">
+          <i class="fas fa-headset" aria-hidden="true"></i>
+          <div><strong>24/7 Support</strong><p>Always here when you need us</p></div>
+        </div>
+        <div class="pillar">
+          <i class="fas fa-truck" aria-hidden="true"></i>
+          <div><strong>Fast Delivery</strong><p>35-minute average across Gauteng</p></div>
+        </div>
+        <div class="pillar">
+          <i class="fas fa-leaf" aria-hidden="true"></i>
+          <div><strong>Fresh Daily</strong><p>Locally sourced, restocked every morning</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DESSERTS -->
+<section class="desserts" id="menu" aria-labelledby="desserts-h">
+  <div class="section-header" data-sr>
+    <span class="section-tag">Decadent Desserts</span>
+    <h2 class="section-title" id="desserts-h">Baked Daily</h2>
+  </div>
+
+  <div class="desserts-grid">
+
+    <article class="dessert-card" data-sr>
+      <div class="dessert-card__img">
+        <img src="images/FrenchToast.png" alt="French toast with cream and berries" width="400" height="267" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>French Toast Stuffing</h3>
+        <p>Brioche french toast filled with mascarpone and seasonal berry compote, dusted with icing sugar</p>
+        <div class="dessert-card__footer"><span class="price">R100</span><button class="btn btn--sm btn--primary add-btn" aria-label="Add French Toast to order">Add</button></div>
+      </div>
+    </article>
+
+    <article class="dessert-card" data-sr>
+      <div class="dessert-card__img">
+        <img src="images/PanCakes.png" alt="Stack of fluffy buttermilk pancakes" width="400" height="267" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Fluffy Pancakes</h3>
+        <p>Buttermilk stacks with maple syrup, whipped butter, and fresh banana — tall, golden, and perfect</p>
+        <div class="dessert-card__footer"><span class="price">R100</span><button class="btn btn--sm btn--primary add-btn" aria-label="Add Pancakes to order">Add</button></div>
+      </div>
+    </article>
+
+    <article class="dessert-card" data-sr>
+      <div class="dessert-card__img">
+        <img src="images/CinnaRolls.png" alt="Caramelized cinnamon rolls with glaze" width="400" height="267" loading="lazy">
+        <span class="dessert-card__badge">Fan Favourite</span>
+      </div>
+      <div class="dessert-card__body">
+        <h3>Cinnamon Rolls</h3>
+        <p>Slow-proved rolls baked in brown butter caramel with a cream cheese glaze — obscenely good</p>
+        <div class="dessert-card__footer"><span class="price">R100</span><button class="btn btn--sm btn--primary add-btn" aria-label="Add Cinnamon Rolls to order">Add</button></div>
+      </div>
+    </article>
+
+    <article class="dessert-card" data-sr>
+      <div class="dessert-card__img">
+        <img src="images/ChocolateCake.png" alt="Rich dark chocolate layer cake" width="400" height="267" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Chocolate Cake</h3>
+        <p>Three-layer dark chocolate sponge with ganache, chocolate shards and a dusting of cocoa</p>
+        <div class="dessert-card__footer"><span class="price">R100</span><button class="btn btn--sm btn--primary add-btn" aria-label="Add Chocolate Cake to order">Add</button></div>
+      </div>
+    </article>
+
+    <article class="dessert-card" data-sr>
+      <div class="dessert-card__img">
+        <img src="images/CaramelTart.png" alt="Salted caramel tart" width="400" height="267" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Caramel Tart</h3>
+        <p>Buttery shortcrust filled with silky salted caramel custard, topped with fleur de sel crystals</p>
+        <div class="dessert-card__footer"><span class="price">R100</span><button class="btn btn--sm btn--primary add-btn" aria-label="Add Caramel Tart to order">Add</button></div>
+      </div>
+    </article>
+
+    <article class="dessert-card" data-sr>
+      <div class="dessert-card__img">
+        <img src="images/LavaCake.png" alt="Chocolate lava cake with molten center" width="400" height="267" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Lava Cake</h3>
+        <p>Warm chocolate fondant with a flowing molten center — serve with vanilla ice cream for maximum joy</p>
+        <div class="dessert-card__footer"><span class="price">R100</span><button class="btn btn--sm btn--primary add-btn" aria-label="Add Lava Cake to order">Add</button></div>
+      </div>
+    </article>
+
+    <article class="dessert-card" data-sr>
+      <div class="dessert-card__img">
+        <img src="images/Malva.png" alt="Traditional South African Malva pudding" width="400" height="267" loading="lazy">
+        <span class="dessert-card__badge">South African Classic</span>
+      </div>
+      <div class="dessert-card__body">
+        <h3>Malva Pudding</h3>
+        <p>The beloved South African classic — sticky apricot sponge drenched in a warm cream sauce, served hot</p>
+        <div class="dessert-card__footer"><span class="price">R100</span><button class="btn btn--sm btn--green add-btn" aria-label="Add Malva Pudding to order">Add</button></div>
+      </div>
+    </article>
+
+    <article class="dessert-card" data-sr>
+      <div class="dessert-card__img">
+        <img src="images/CheeseCake.png" alt="New York style baked cheesecake" width="400" height="267" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Cheesecake</h3>
+        <p>New York-style baked cheesecake on a buttery digestive base with seasonal berry coulis</p>
+        <div class="dessert-card__footer"><span class="price">R100</span><button class="btn btn--sm btn--primary add-btn" aria-label="Add Cheesecake to order">Add</button></div>
+      </div>
+    </article>
+
+    <article class="dessert-card" data-sr>
+      <div class="dessert-card__img">
+        <img src="images/CarrotCake.png" alt="Spiced carrot cake with cream cheese frosting" width="400" height="267" loading="lazy">
+      </div>
+      <div class="dessert-card__body">
+        <h3>Carrot Cake</h3>
+        <p>Spiced with cinnamon and nutmeg, layered generously with whipped cream cheese frosting</p>
+        <div class="dessert-card__footer"><span class="price">R100</span><button class="btn btn--sm btn--primary add-btn" aria-label="Add Carrot Cake to order">Add</button></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ORDER -->
+<section class="order" id="order" aria-labelledby="order-h">
+  <div class="order__split">
+    <div class="order__info" data-sr="left">
+      <span class="section-tag">Place Your com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order</span>
+      <h2 class="section-title" id="order-h">Free &amp; Fast<br>Delivery</h2>
+      <p class="desc">Place your order online and we'll have it at your door in under 45 minutes — or it's completely on us.</p>
+      <ul class="order-perks">
+        <li class="order-perk"><i class="fas fa-check-circle" aria-hidden="true"></i> No delivery fee on your first order</li>
+        <li class="order-perk"><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Real-time GPS tracking</li>
+        <li class="order-perk"><i class="fas fa-clock" aria-hidden="true"></i> 45-minute guarantee or full refund</li>
+        <li class="order-perk"><i class="fas fa-phone" aria-hidden="true"></i> Live driver contact on dispatch</li>
+      </ul>
+    </div>
+
+    <div class="order-form-wrap" data-sr="right">
+      <form class="order-form" id="order-form" action="results.html" method="GET" novalidate aria-label="Place your order">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="name">Full Name <span class="req" aria-hidden="true">*</span></label>
+            <input class="form-input" type="text" id="name" name="name" required autocomplete="name" placeholder="Your full name">
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="contact">Contact No. <span class="req" aria-hidden="true">*</span></label>
+            <input class="form-input" type="tel" id="contact" name="contact" required autocomplete="tel" placeholder="082 000 0000">
+            <span class="form-error" role="alert"></span>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="food">Main Dish <span class="req" aria-hidden="true">*</span></label>
+            <select class="form-input form-select" id="food" name="food" required>
+              <option value="" disabled selected>Choose a dish…</option>
+              <optgroup label="— Mains —">
+                <option>Pizza</option>
+                <option>Butternut Bisque</option>
+                <option>Beef Pot Pie</option>
+                <option>Alfredo Pasta</option>
+                <option>Chicken &amp; Waffles</option>
+                <option>Grilled Chicken</option>
+                <option>Assorted Board</option>
+                <option>Meatballs &amp; Pasta</option>
+                <option>Pita Wrap</option>
+              </optgroup>
+              <optgroup label="— Desserts —">
+                <option>French Toast Stuffing</option>
+                <option>Fluffy Pancakes</option>
+                <option>Cinnamon Rolls</option>
+                <option>Chocolate Cake</option>
+                <option>Caramel Tart</option>
+                <option>Lava Cake</option>
+                <option>Malva Pudding</option>
+                <option>Cheesecake</option>
+                <option>Carrot Cake</option>
+              </optgroup>
+            </select>
+            <span class="form-error" role="alert"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="qty">Quantity</label>
+            <input class="form-input" type="number" id="qty" name="qty" min="1" max="50" value="1">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="extra_food">Additional Item</label>
+            <select class="form-input form-select" id="extra_food" name="extra_food">
+              <option value="">None</option>
+              <optgroup label="— Mains —">
+                <option>Grilled Chicken</option>
+                <option>Pita Wrap</option>
+                <option>Alfredo Pasta</option>
+              </optgroup>
+              <optgroup label="— Desserts —">
+                <option>Malva Pudding</option>
+                <option>Lava Cake</option>
+                <option>Cheesecake</option>
+              </optgroup>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="extra_qty">Extra Qty</label>
+            <input class="form-input" type="number" id="extra_qty" name="extra_qty" min="1" max="50" value="1">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="address">Delivery Address <span class="req" aria-hidden="true">*</span></label>
+          <input class="form-input" type="text" id="address" name="address" required autocomplete="street-address" placeholder="Street, suburb, city">
+          <span class="form-error" role="alert"></span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="special">Special Instructions</label>
+          <textarea class="form-input form-textarea" id="special" name="special" placeholder="Allergies, substitutions, extra sauce…"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn--ghost">Clear</button>
+          <button type="submit" class="btn btn--primary btn--wide" id="submit-btn">
+            Place com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order&nbsp;<i class="fas fa-arrow-right" aria-hidden="true"></i>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+  <div class="footer__grid">
+    <div>
+      <a href="#home" class="footer__logo" aria-label="Back to top">
+        <i class="fas fa-utensils" aria-hidden="true"></i>
+        Saylor<em>.Eats</em>
+      </a>
+      <p class="footer__brand p">Handcrafted food made with locally sourced Gauteng ingredients. Delivered to your door, still hot.</p>
+      <div class="footer__social" aria-label="Follow us">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook" aria-hidden="true"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok" aria-hidden="true"></i></a>
+        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="footer__col-title">Quick Links</h3>
+      <nav class="footer__links" aria-label="Footer navigation">
+        <a href="#home">Home</a>
+        <a href="#dishes">Dishes</a>
+        <a href="#about">About</a>
+        <a href="#menu">Desserts</a>
+        <a href="#order">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order Now</a>
+      </nav>
+    </div>
+
+    <div>
+      <h3 class="footer__col-title">Locations</h3>
+      <div class="footer__links">
+        <a href="#">Johannesburg</a>
+        <a href="#">Pretoria</a>
+        <a href="#">Midrand</a>
+        <a href="#">Sandton</a>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="footer__col-title">Contact</h3>
+      <div class="footer__links">
+        <a href="mailto:hello@sayloreats.co.za">hello@sayloreats.co.za</a>
+        <a href="tel:+27800000000">0800 000 000</a>
+        <a href="#order">com.plateable.model.com.plateable.model.MenuItem.MenuItem.Order Online</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <p class="footer__copyright">&copy; <span id="yr"></span> Saylor.Eats. All rights reserved. Made with ❤️ in South Africa.</p>
+    <p class="footer__copyright">Serving Gauteng — Jozi, PTA &amp; beyond 🇿🇦</p>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+  <i class="fas fa-check-circle" aria-hidden="true"></i>
+  <span id="toast-msg">Added to your order</span>
+</div>
+
+<!-- ─────────────────────────────────────────────── -->
+<script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ── LOADER ── */
+  const loader = document.getElementById('loader');
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      loader.classList.add('out');
+      loader.addEventListener('transitionend', () => loader.remove(), { once: true });
+    }, 900);
+  });
+
+  /* ── HEADER SCROLL ── */
+  const header = document.getElementById('header');
+  const navLinks = document.querySelectorAll('.nav-link:not(.nav-link--cta)');
+  const sections = document.querySelectorAll('section[id]');
+
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 130) cur = s.id; });
+    navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + cur));
+  }, { passive: true });
+
+  /* ── MOBILE NAV ── */
+  const menuToggle = document.getElementById('menu-toggle');
+  const mainNav    = document.getElementById('main-nav');
+
+  menuToggle.addEventListener('click', () => {
+    const open = mainNav.classList.toggle('open');
+    menuToggle.classList.toggle('open', open);
+    menuToggle.setAttribute('aria-expanded', open);
+  });
+  mainNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    mainNav.classList.remove('open');
+    menuToggle.classList.remove('open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+  }));
+  document.addEventListener('click', e => {
+    if (!mainNav.contains(e.target) && !menuToggle.contains(e.target)) {
+      mainNav.classList.remove('open');
+      menuToggle.classList.remove('open');
+    }
+  });
+
+  /* ── SEARCH ── */
+  const searchOverlay = document.getElementById('search-overlay');
+  const searchToggle  = document.getElementById('search-toggle');
+  const searchClose   = document.getElementById('search-close');
+  const searchInput   = document.getElementById('search-input');
+  const searchResults = document.getElementById('search-results');
+
+  const MENU = [
+    'Pizza','Butternut Bisque','Beef Pot Pie','Alfredo Pasta',
+    'Chicken & Waffles','Grilled Chicken','Assorted Board',
+    'Meatballs & Pasta','Pita Wrap','French Toast Stuffing',
+    'Fluffy Pancakes','Cinnamon Rolls','Chocolate Cake',
+    'Caramel Tart','Lava Cake','Malva Pudding','Cheesecake','Carrot Cake'
+  ];
+
+  searchToggle.addEventListener('click', () => {
+    searchOverlay.classList.add('open');
+    searchToggle.setAttribute('aria-expanded', 'true');
+    setTimeout(() => searchInput.focus(), 80);
+  });
+  const closeSearch = () => {
+    searchOverlay.classList.remove('open');
+    searchToggle.setAttribute('aria-expanded', 'false');
+    searchInput.value = '';
+    searchResults.innerHTML = '';
+  };
+  searchClose.addEventListener('click', closeSearch);
+  searchOverlay.addEventListener('click', e => { if (e.target === searchOverlay) closeSearch(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSearch(); });
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim().toLowerCase();
+    if (!q) { searchResults.innerHTML = ''; return; }
+    const hits = MENU.filter(m => m.toLowerCase().includes(q));
+    searchResults.innerHTML = hits.length
+      ? hits.map(h => `<a class="search-result-item" href="#order">${h} <i class="fas fa-arrow-right" style="font-size:1.2rem;opacity:.5"></i></a>`).join('')
+      : `<p style="text-align:center;color:rgba(255,255,255,.4);font-size:1.5rem;padding:1.6rem 0">No results for "${q}"</p>`;
+    searchResults.querySelectorAll('a').forEach(a => a.addEventListener('click', closeSearch));
+  });
+
+  /* ── HERO SWIPER ── */
+  new Swiper('.hero-swiper', {
+    loop: true,
+    speed: 900,
+    effect: 'fade',
+    fadeEffect: { crossFade: true },
+    autoplay: { delay: 6500, disableOnInteraction: false, pauseOnMouseEnter: true },
+    pagination: { el: '.hero-pagination', clickable: true },
+    a11y: { prevSlideMessage: 'Previous', nextSlideMessage: 'Next' }
+  });
+
+  /* ── DISH FILTER ── */
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const dishCards  = document.querySelectorAll('.dish-card');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      dishCards.forEach(c => c.classList.toggle('hidden', f !== 'all' && c.dataset.category !== f));
+    });
+  });
+
+  /* ── TOAST ── */
+  const toast    = document.getElementById('toast');
+  const toastMsg = document.getElementById('toast-msg');
+  let toastTimer;
+
+  function showToast(msg) {
+    clearTimeout(toastTimer);
+    toastMsg.textContent = msg;
+    toast.classList.add('show');
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+
+  /* ── ADD BUTTONS ── */
+  document.querySelectorAll('.add-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('[class*="card"]');
+      const name = card?.querySelector('h3')?.textContent?.trim() || 'Item';
+      showToast(`${name} added to your order ✓`);
+      btn.classList.add('added');
+      setTimeout(() => btn.classList.remove('added'), 600);
+    });
+  });
+
+  /* ── FORM VALIDATION ── */
+  const form = document.getElementById('order-form');
+  const RULES = {
+    name:    v => v.trim().length >= 2      ? null : 'Please enter your full name',
+    contact: v => /^[\d\s+\-()]{7,15}$/.test(v.trim()) ? null : 'Enter a valid phone number',
+    food:    v => v                          ? null : 'Please select a dish',
+    address: v => v.trim().length >= 8      ? null : 'Please enter a delivery address',
+  };
+
+  function validateField(field) {
+    const rule = RULES[field.name];
+    if (!rule) return true;
+    const err = rule(field.value);
+    const errEl = field.closest('.form-group')?.querySelector('.form-error');
+    field.classList.toggle('error', !!err);
+    field.classList.toggle('ok', !err);
+    if (errEl) errEl.textContent = err || '';
+    return !err;
+  }
+
+  Object.keys(RULES).forEach(name => {
+    const f = form?.elements[name];
+    if (!f) return;
+    f.addEventListener('blur', () => validateField(f));
+    f.addEventListener('input', () => { if (f.classList.contains('error')) validateField(f); });
+  });
+
+  form?.addEventListener('submit', e => {
+    const allOk = Object.keys(RULES).every(n => {
+      const f = form.elements[n];
+      return f ? validateField(f) : true;
+    });
+    if (!allOk) {
+      e.preventDefault();
+      form.querySelector('.form-input.error')?.focus();
+    } else {
+      const btn = document.getElementById('submit-btn');
+      if (btn) { btn.textContent = 'Placing order…'; btn.disabled = true; }
+    }
+  });
+
+  /* ── SCROLL REVEAL ── */
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('in'), i * 60);
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('[data-sr]').forEach(el => observer.observe(el));
+
+    // Stagger sibling cards
+    document.querySelectorAll('.dish-card[data-sr], .dessert-card[data-sr], .pillar[data-sr]').forEach((el, i) => {
+      el.style.transitionDelay = `${(i % 4) * 80}ms`;
+    });
+  } else {
+    document.querySelectorAll('[data-sr]').forEach(el => el.classList.add('in'));
+  }
+
+  /* ── COPYRIGHT YEAR ── */
+  const yr = document.getElementById('yr');
+  if (yr) yr.textContent = new Date().getFullYear();
+
+})();
+</script>
+
+</body>
+</html>
