@@ -1,37 +1,37 @@
 package com.plateable.controller;
 
-import com.plateable.model.Reservation;
-import com.plateable.service.RestaurantService;
+import com.plateable.dto.request.CreateReservationRequest;
+import com.plateable.dto.response.ReservationResponse;
+import com.plateable.service.ReservationService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.time.LocalDateTime;
+
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reservations")
 public class ReservationController {
-    private final RestaurantService service;
+    private final ReservationService reservationService;
 
-    public ReservationController(RestaurantService service) {
-        this.service = service;
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
     }
 
     @GetMapping
-    public List<Reservation> getAllReservations() {
-        return service.getReservations();
+    public ResponseEntity<List<ReservationResponse>> getAllReservations() {
+        return ResponseEntity.ok(reservationService.getAllReservations());
     }
 
     @PostMapping
-    public Reservation createReservation(@RequestBody Map<String, Object> payload) {
-        String customerName = (String) payload.get("customerName");
-        String tableId = (String) payload.get("tableId");
-        int partySize = (Integer) payload.get("partySize");
-        LocalDateTime time = payload.containsKey("time") ? LocalDateTime.parse(payload.get("time").toString()) : LocalDateTime.now();
-        return service.createReservation(customerName, tableId, time, partySize);
+    public ResponseEntity<ReservationResponse> createReservation(@Valid @RequestBody CreateReservationRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.createReservation(request));
     }
 
     @DeleteMapping("/{id}")
-    public boolean cancelReservation(@PathVariable String id) {
-        return service.cancelReservation(id);
+    public ResponseEntity<Void> deleteReservation(@PathVariable String id) {
+        reservationService.deleteReservation(id);
+        return ResponseEntity.ok().build();
     }
 }

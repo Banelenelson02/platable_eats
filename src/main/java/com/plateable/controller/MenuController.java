@@ -1,40 +1,37 @@
 package com.plateable.controller;
 
-import com.plateable.model.MenuItem;
-import com.plateable.service.RestaurantService;
+import com.plateable.dto.request.UpdateMenuItemRequest;
+import com.plateable.dto.response.MenuItemResponse;
+import com.plateable.service.MenuService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/menu")
 public class MenuController {
-    private final RestaurantService service;
+    private final MenuService menuService;
 
-    public MenuController(RestaurantService service) {
-        this.service = service;
+    public MenuController(MenuService menuService) {
+        this.menuService = menuService;
     }
 
     @GetMapping
-    public List<MenuItem> getMenu() {
-        return service.getMenu();
+    public ResponseEntity<List<MenuItemResponse>> getMenu() {
+        return ResponseEntity.ok(menuService.getMenu());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<MenuItem> getMenuItem(@PathVariable String id) {
-        return service.getMenuItemById(id)
-                .map(item -> ResponseEntity.ok(item))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<MenuItemResponse> getMenuItem(@PathVariable String id) {
+        return ResponseEntity.ok(menuService.getMenuItem(id));
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> modifyMenuItem(
-            @PathVariable String id,
-            @RequestBody Map<String, Object> payload) {
-        Double price = payload.containsKey("price") ? Double.valueOf(payload.get("price").toString()) : null;
-        Boolean available = payload.containsKey("available") ? (Boolean) payload.get("available") : null;
-        service.modifyMenuItem(id, price, available);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<MenuItemResponse> updateMenuItem(
+            @PathVariable String id, 
+            @Valid @RequestBody UpdateMenuItemRequest request) {
+        return ResponseEntity.ok(menuService.update(id, request));
     }
 }

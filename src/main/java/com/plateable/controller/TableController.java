@@ -1,34 +1,36 @@
 package com.plateable.controller;
 
-import com.plateable.model.Table;
-import com.plateable.service.RestaurantService;
+import com.plateable.dto.request.CreateTableRequest;
+import com.plateable.dto.response.TableResponse;
+import com.plateable.service.TableService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/tables")
 public class TableController {
-    private final RestaurantService service;
+    private final TableService tableService;
 
-    public TableController(RestaurantService service) {
-        this.service = service;
+    public TableController(TableService tableService) {
+        this.tableService = tableService;
     }
 
     @GetMapping
-    public List<Table> getAllTables() {
-        return service.getTables();
+    public ResponseEntity<List<TableResponse>> getAllTables() {
+        return ResponseEntity.ok(tableService.getAllTables());
     }
 
     @GetMapping("/available")
-    public List<Table> getAvailableTables(@RequestParam(defaultValue = "1") int minCapacity) {
-        return service.getAvailableTables(minCapacity);
+    public ResponseEntity<List<TableResponse>> getAvailableTables(@RequestParam(defaultValue = "1") int minCapacity) {
+        return ResponseEntity.ok(tableService.getAvailableTables(minCapacity));
     }
 
     @PostMapping
-    public Table addTable(@RequestBody Map<String, Object> payload) {
-        String id = (String) payload.get("tableId");
-        int capacity = (Integer) payload.get("capacity");
-        return service.addTable(id, capacity);
+    public ResponseEntity<TableResponse> createTable(@Valid @RequestBody CreateTableRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(tableService.createTable(request));
     }
 }

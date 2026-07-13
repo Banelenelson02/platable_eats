@@ -1,11 +1,18 @@
 package com.plateable.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity
 public class MenuItem {
+    @Id
     private String id;
     private String name;
     private double price;
     private String category;
     private boolean available;
+
+    protected MenuItem() {} // required by JPA
 
     public MenuItem(String id, String name, double price, String category) {
         this.id        = id;
