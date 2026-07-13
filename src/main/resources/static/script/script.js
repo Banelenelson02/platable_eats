@@ -169,21 +169,29 @@ const SearchOverlay = {
 
     const matches = this.menuData.filter(item => item.name.toLowerCase().includes(q));
 
+    this.suggestions.innerHTML = '';
     if (matches.length === 0) {
-      this.suggestions.innerHTML = `<p>No results for "${q}"</p>`;
+      const empty = document.createElement('p');
+      empty.textContent = `No results for "${q}"`;
+      this.suggestions.appendChild(empty);
       return;
     }
 
-    this.suggestions.innerHTML = matches
-        .map(m => `
-        <a href="#order" style="display:flex; justify-content: space-between; padding:.8rem 0; color:#fff; font-size:1.6rem; border-bottom:1px solid rgba(255,255,255,.08); text-decoration: none;">
-            <span>${m.name}</span>
-            <span style="color: #c8a97e; font-weight: 600;">R${m.price.toFixed(2)}</span>
-        </a>`)
-        .join('');
+    matches.forEach(m => {
+      const a = document.createElement('a');
+      a.href = '#order';
+      a.style.cssText = 'display:flex; justify-content:space-between; padding:.8rem 0; color:#fff; font-size:1.6rem; border-bottom:1px solid rgba(255,255,255,.08); text-decoration:none;';
 
-    this.suggestions.querySelectorAll('a').forEach(a => {
+      const name = document.createElement('span');
+      name.textContent = m.name; // textContent, not innerHTML — no injection possible
+
+      const price = document.createElement('span');
+      price.style.cssText = 'color:#c8a97e; font-weight:600;';
+      price.textContent = `R${m.price.toFixed(2)}`;
+
+      a.append(name, price);
       a.addEventListener('click', () => this.close());
+      this.suggestions.appendChild(a);
     });
   }
 };
@@ -536,7 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
   MobileNav.init();
   SearchOverlay.init();
   DishFilter.init();
-  ShoppingBasket.init(); // Mount basket array tracking logic controls
+  ShoppingBasket.init();
   HeroSlider.init();
   OrderForm.init();
   ScrollReveal.init();
