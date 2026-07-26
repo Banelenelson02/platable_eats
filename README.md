@@ -312,9 +312,9 @@ The frontend is intentionally dependency-free. It demonstrates that a production
 ---
 ## AI Workflow
 I use AI as a collaborative engineering partner to speed up development while keeping full control over the architecture:
-System Design: Brainstorming database schemas and planning N Tier layer boundaries.
-Code Generation: Drafting boilerplate for Spring Boot controllers and repetitive CRUD tasks.
-Debugging: Analyzing stack traces and refining complex queries for quick resolution.
+-System Design: Brainstorming database schemas and planning N Tier layer boundaries.
+-Code Generation: Drafting boilerplate for Spring Boot controllers and repetitive CRUD tasks.
+-Debugging: Analyzing stack traces and refining complex queries for quick resolution.
 All AI generated outputs are strictly reviewed and tested before merging.
 
 
