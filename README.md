@@ -1,356 +1,318 @@
 # Plateable Eats
 
-A Spring Boot + vanilla JS restaurant ordering system: live menu, table management,
-order lifecycle (kitchen queue), and reservations, localized for the South African
-market (ZAR pricing).
+> A full-stack casual dining platform — handcrafted frontend meets enterprise Spring Boot backend.
 
-## Status
-
-Early-stage portfolio project. Currently **in-memory persistence** (data resets on
-restart) with an **H2 file-backed option** available — see Configuration below.
-Write endpoints require basic auth (see Security). Not deployed yet.
-
-## Prerequisites
-
-- JDK 17+
-- Maven 3.9+ (or use the bundled `./mvnw`)
-
-## Running locally
-
-`git clone https://github.com/Banelenelson02/platable_eats.git`
-`cd platable_eats`
-`./mvnw spring-boot:run`
-
-App starts on `http://localhost:8080`. Menu UI is served at `/`.
-
-Run tests:
-
-`./mvnw test`
-
-## Configuration
-
-`src/main/resources/application.properties`:
-
-| Property | Default | Description |
-|---|---|---|
-| `server.port` | `8080` | HTTP port |
-| `spring.datasource.url` | `jdbc:h2:mem:plateable` | In-memory H2. Swap to a file path or Postgres URL for persistence across restarts |
-| `spring.h2.console.enabled` | `true` | H2 web console at `/h2-console` (dev only — disable in prod) |
-| `spring.jpa.hibernate.ddl-auto` | `update` | Schema strategy; use `validate` in production with real migrations |
-
-## API Reference
-
-Interactive docs (Swagger UI): `http://localhost:8080/swagger-ui.html`
-
-### Menu — `/api/menu`
-
-| Method | Path | Body | Response |
-|---|---|---|---|
-| GET | `/api/menu` | — | `200` `MenuItemResponse[]` |
-| GET | `/api/menu/{id}` | — | `200` `MenuItemResponse` / `404` |
-| PATCH | `/api/menu/{id}` | `{ "price": 130.00, "available": false }` | `200` `MenuItemResponse` / `404` — **auth required** |
-
-### Tables — `/api/tables`
-
-| Method | Path | Body | Response |
-|---|---|---|---|
-| GET | `/api/tables` | — | `200` `TableResponse[]` |
-| GET | `/api/tables/available?minCapacity=4` | — | `200` `TableResponse[]` |
-| POST | `/api/tables` | `{ "tableId": "T5", "capacity": 4 }` | `201` `TableResponse` — **auth required** |
-
-### Orders — `/api/orders`
-
-| Method | Path | Body | Response |
-|---|---|---|---|
-| GET | `/api/orders` | — | `200` `OrderResponse[]` |
-| GET | `/api/orders?status=IN_KITCHEN` | — | `200` `OrderResponse[]` |
-| GET | `/api/orders/{id}` | — | `200` `OrderResponse` / `404` |
-| POST | `/api/orders` | `{ "tableId": "T2", "waiterId": "W001" }` | `201` `OrderResponse` — **auth required** |
-| POST | `/api/orders/{id}/items` | `{ "menuItemId": "M001", "quantity": 2, "instructions": "extra cheese" }` | `200` `OrderResponse` / `404` — **auth required** |
-| DELETE | `/api/orders/{id}/items/{menuItemId}` | — | `200` `OrderResponse` / `404` — **auth required** |
-| PATCH | `/api/orders/{id}/status?status=READY` | — | `200` `OrderResponse` / `404` — **auth required** |
-
-### Reservations — `/api/reservations`
-
-| Method | Path | Body | Response |
-|---|---|---|---|
-| GET | `/api/reservations` | — | `200` `ReservationResponse[]` |
-| POST | `/api/reservations` | `{ "customerName": "T. Mokoena", "tableId": "T3", "partySize": 4, "time": "2026-08-01T19:00:00" }` | `201` `ReservationResponse` — **auth required** |
-| DELETE | `/api/reservations/{id}` | — | `200` / `404` — **auth required** |
-
-### Error format
-
-All errors return a consistent shape:
-
-```json
-{
-  "status": 404,
-  "error": "Not Found",
-  "message": "Order ORD999 not found",
-  "path": "/api/orders/ORD999",
-  "timestamp": "2026-07-13T10:22:00"
-}
-
-# Plateable Eats — Full-Stack Restaurant System
-
-Plateable Eats is a high-performance, full-stack casual dining web application. This project demonstrates the architectural evolution of an in-memory vanilla Java Object-Oriented Design (OOD) into a decoupled, enterprise-ready N-Tier RESTful system powered by Spring Boot.
-
-The system is fully localized for the South African casual dining market, featuring local menu formatting in South African Rands (ZAR).
+[![Java](https://img.shields.io/badge/Java-17-orange?style=flat-square)](https://openjdk.org/projects/jdk/17/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-green?style=flat-square)](https://spring.io/projects/spring-boot)
+[![Spring Security](https://img.shields.io/badge/Spring_Security-BCrypt-green?style=flat-square)](https://spring.io/projects/spring-security)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-blue?style=flat-square)](https://supabase.com)
+[![Swagger](https://img.shields.io/badge/API_Docs-Swagger_UI-85EA2D?style=flat-square)](http://localhost:8080/swagger-ui/index.html)
+[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
 ---
 
-## 🛠 Tech Stack & Architecture
+## Live Demo
 
-The application is built using a decoupled, highly scannable structural tier system designed to ensure separate concerns across layers:
-
-### 1. Frontend (Presentation Layer)
-* **Languages:** Semantic HTML5, CSS3 utilizing **BEM (Block Element Modifier)** layout methodologies.
-* **Logic:** Vanilla ES6+ JavaScript designed via the Module Pattern to run completely dependency-free.
-* **Integrations:** Swiper.js for hardware-accelerated animated hero displays.
-
-### 2. Backend (Application Layer)
-* **Framework:** Spring Boot 3.x (Spring Web).
-* **Build Automation:** Maven.
-* **Language:** Java 17+.
+| | Link |
+|---|---|
+| 🌐 Frontend | *Deploying soon* |
+| 📡 API Docs (Swagger UI) | `http://localhost:8080/swagger-ui/index.html` |
+| ❤️ Health Check | `http://localhost:8080/actuator/health` |
 
 ---
 
-## 🏗 System Architecture Diagram
+## The Project
 
-```text
-  [ Web Browser UI ] 
-          │
-      (Fetch API / JSON payload)
-          │
-          ▼
-  [ Controllers (Web Layer) ]      <-- com.plateable.controller
-          │
-          ▼
-  [ RestaurantService (Logic) ]    <-- com.plateable.service (Spring @Service Bean)
-          │
-          ▼
-  [ Domain Models (Data Core) ]    <-- com.plateable.model (Order, Table, MenuItem)
+Plateable Eats is a full-stack restaurant ordering and reservation system built in two phases:
 
+**Phase 1 — OOD Design:** The system started as a vanilla Java in-memory application using pure Object-Oriented Design principles — no framework, no database, just clean domain modelling.
 
-platable_eats/
-├── src/
-│   └── main/
-│       ├── java/com/plateable/
-│       │   ├── PlateableEatsApplication.java   # Spring Boot Application Root
-│       │   ├── controller/                     # REST Web Endpoints
-│       │   ├── model/                          # Domain Entities & Enums
-│       │   └── service/                        # System Business Engine
-│       └── resources/
-│           ├── application.properties          # Framework Server Properties
-│           └── static/                         # UI Web Assets Location
-│               ├── index.html                  # Main Restaurant View
-│               ├── css/style.css               # Production Stylesheet
-│               └── script/script.js            # Front-to-Back Network Transport Script
-└── pom.xml                                     # Dependency Descriptor Configuration
-# Plateable Eats
+**Phase 2 — N-Tier Architecture:** The system was then deliberately refactored into a decoupled, enterprise-ready N-Tier RESTful architecture powered by Spring Boot — separating concerns across controller, service, repository, and domain layers.
 
-A Spring Boot + vanilla JS restaurant ordering system: live menu, table management,
-order lifecycle (kitchen queue), and reservations, localized for the South African
-market (ZAR pricing).
+This architectural evolution is the core story of the project: recognising when a design has outgrown its foundation, and rebuilding it properly.
 
-## Status
+The system is fully localized for the South African casual dining market, with menu pricing in ZAR.
 
-Early-stage portfolio project. Currently **in-memory persistence** (data resets on
-restart) with an **H2 file-backed option** available — see Configuration below.
-Write endpoints require basic auth (see Security). Not deployed yet.
+---
 
-## Prerequisites
+## Screenshots
 
-- JDK 17+
-- Maven 3.9+ (or use the bundled `./mvnw`)
+> *Screenshots coming once deployed — run locally to see the full UI.*
 
-## Running locally
+The frontend features:
+- Swiper.js hero slider with floating dish animations
+- Live menu search powered by `GET /api/menu`
+- Filterable dish grid (All / Mains / Pasta / Wraps)
+- Shopping basket drawer with real-time subtotal
+- Order form that posts directly to `POST /api/orders`
+- Scroll reveal animations with `IntersectionObserver`
+- Fully responsive — mobile, tablet, desktop
 
-`git clone [https://github.com/Banelenelson02/platable_eats.git](https://github.com/Banelenelson02/platable_eats.git)`
-`cd platable_eats`
-`./mvnw spring-boot:run`
+---
 
-App starts on `http://localhost:8080`. Menu UI is served at `/`.
+## Architecture
 
-Run tests:
+```
+┌──────────────────────────────────────────────────────┐
+│              FRONTEND (Presentation Layer)            │
+│  HTML5 (semantic) + CSS3 (BEM) + Vanilla ES6+        │
+│  Swiper.js hero · Cart drawer · Fetch API to backend  │
+└──────────────────────────┬───────────────────────────┘
+                           │ HTTP / JSON
+                           ▼
+┌──────────────────────────────────────────────────────┐
+│           SPRING BOOT APPLICATION LAYER               │
+│                                                       │
+│  Controllers (REST endpoints + @Valid)                │
+│       ↓                                               │
+│  Services (business logic + findOrThrow pattern)      │
+│       ↓                                               │
+│  Repositories (Spring Data JPA + custom queries)      │
+│       ↓                                               │
+│  Domain Models (@Entity + JPA relationships)          │
+└──────────────────────────┬───────────────────────────┘
+                           │ JPA / Hibernate
+                           ▼
+┌──────────────────────────────────────────────────────┐
+│              PostgreSQL (Supabase)                    │
+│  menu_items · orders · order_items                   │
+│  restaurant_tables · reservations · employees         │
+└──────────────────────────────────────────────────────┘
+```
 
-`./mvnw test`
+---
 
-## Configuration
+## Tech Stack
 
-`src/main/resources/application.properties`:
-
-| Property | Default | Description |
+| Layer | Technology | Purpose |
 |---|---|---|
-| `server.port` | `8080` | HTTP port |
-| `spring.datasource.url` | `jdbc:h2:mem:plateable` | In-memory H2. Swap to a file path or Postgres URL for persistence across restarts |
-| `spring.h2.console.enabled` | `true` | H2 web console at `/h2-console` (dev only — disable in prod) |
-| `spring.jpa.hibernate.ddl-auto` | `update` | Schema strategy; use `validate` in production with real migrations |
+| Language | Java 17 | Backend runtime |
+| Framework | Spring Boot 3.3 | Application framework |
+| Web | Spring MVC | REST controllers |
+| Persistence | Spring Data JPA + Hibernate | ORM + repositories |
+| Database | PostgreSQL (Supabase) | Persistent storage |
+| Security | Spring Security + BCrypt | Authentication + password hashing |
+| Validation | Jakarta Bean Validation | `@Valid` request validation |
+| API Docs | SpringDoc OpenAPI (Swagger UI) | Interactive API documentation |
+| Monitoring | Spring Actuator | Health checks |
+| Build | Maven | Dependency management |
+| Frontend | HTML5 + CSS3 (BEM) + Vanilla ES6+ | UI — zero framework dependencies |
+| Animation | Swiper.js | Hero slider |
 
-## API Reference
+---
 
-Interactive docs (Swagger UI): `http://localhost:8080/swagger-ui.html`
+## Project Structure
 
-### Menu — `/api/menu`
+```
+src/main/java/com/plateable/
+├── controller/               # REST endpoints — HTTP layer only
+│   ├── MenuController.java
+│   ├── OrderController.java
+│   ├── ReservationController.java
+│   └── TableController.java
+├── service/                  # Business logic — no HTTP concerns
+│   ├── MenuService.java
+│   ├── OrderService.java
+│   ├── ReservationService.java
+│   └── TableService.java
+├── repository/               # Spring Data JPA — data access only
+│   ├── MenuItemRepository.java
+│   ├── OrderRepository.java
+│   ├── ReservationRepository.java
+│   └── TableRepository.java
+├── model/                    # JPA entities + enums
+│   ├── MenuItem.java
+│   ├── Order.java            # @OneToMany with OrderItems
+│   ├── OrderItem.java
+│   ├── OrderStatus.java      # PENDING, PREPARING, READY, DELIVERED
+│   ├── Reservation.java
+│   ├── ReservationStatus.java
+│   ├── Table.java            # @Table(name="restaurant_tables")
+│   ├── TableStatus.java
+│   └── Employee.java
+├── dto/
+│   ├── request/              # Validated inbound request bodies
+│   └── response/             # Outbound response shapes
+├── exception/
+│   └── ResourceNotFoundException.java
+├── config/
+│   ├── SecurityConfig.java   # BCrypt + role-based access control
+│   └── DataSeeder.java       # Idempotent seed on startup
+└── PlateableEatsApplication.java
 
-| Method | Path | Body | Response |
+src/main/resources/static/    # Frontend (served by Spring Boot)
+├── index.html
+├── css/style.css             # 18-section BEM design system
+└── script/script.js          # 12-module vanilla ES6+ architecture
+```
+
+---
+
+## API Endpoints
+
+All endpoints are documented interactively at `/swagger-ui/index.html` when running locally.
+
+### Menu
+| Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| GET | `/api/menu` | — | `200` `MenuItemResponse[]` |
-| GET | `/api/menu/{id}` | — | `200` `MenuItemResponse` / `404` |
-| PATCH | `/api/menu/{id}` | `{ "price": 130.00, "available": false }` | `200` `MenuItemResponse` / `404` — **auth required** |
+| `GET` | `/api/menu` | Public | Get full menu |
+| `GET` | `/api/menu/{id}` | Public | Get single item |
+| `PUT` | `/api/menu/{id}` | Staff | Update price or availability |
 
-### Tables — `/api/tables`
-
-| Method | Path | Body | Response |
+### Orders
+| Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| GET | `/api/tables` | — | `200` `TableResponse[]` |
-| GET | `/api/tables/available?minCapacity=4` | — | `200` `TableResponse[]` |
-| POST | `/api/tables` | `{ "tableId": "T5", "capacity": 4 }` | `201` `TableResponse` — **auth required** |
+| `GET` | `/api/orders` | Staff | Get all orders (optional `?status=PENDING`) |
+| `GET` | `/api/orders/{id}` | Staff | Get single order |
+| `POST` | `/api/orders` | Staff | Create new order |
+| `POST` | `/api/orders/{id}/items` | Staff | Add item to order |
+| `DELETE` | `/api/orders/{id}/items/{menuItemId}` | Staff | Remove item |
+| `PATCH` | `/api/orders/{id}/status` | Staff | Update order status |
 
-### Orders — `/api/orders`
-
-| Method | Path | Body | Response |
+### Tables
+| Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| GET | `/api/orders` | — | `200` `OrderResponse[]` |
-| GET | `/api/orders?status=IN_KITCHEN` | — | `200` `OrderResponse[]` |
-| GET | `/api/orders/{id}` | — | `200` `OrderResponse` / `404` |
-| POST | `/api/orders` | `{ "tableId": "T2", "waiterId": "W001" }` | `201` `OrderResponse` — **auth required** |
-| POST | `/api/orders/{id}/items` | `{ "menuItemId": "M001", "quantity": 2, "instructions": "extra cheese" }` | `200` `OrderResponse` / `404` — **auth required** |
-| DELETE | `/api/orders/{id}/items/{menuItemId}` | — | `200` `OrderResponse` / `404` — **auth required** |
-| PATCH | `/api/orders/{id}/status?status=READY` | — | `200` `OrderResponse` / `404` — **auth required** |
+| `GET` | `/api/tables` | Public | Get all tables |
+| `GET` | `/api/tables/available?minCapacity=2` | Public | Find available tables |
+| `POST` | `/api/tables` | Staff | Create table |
 
-### Reservations — `/api/reservations`
-
-| Method | Path | Body | Response |
+### Reservations
+| Method | Endpoint | Auth | Description |
 |---|---|---|---|
-| GET | `/api/reservations` | — | `200` `ReservationResponse[]` |
-| POST | `/api/reservations` | `{ "customerName": "T. Mokoena", "tableId": "T3", "partySize": 4, "time": "2026-08-01T19:00:00" }` | `201` `ReservationResponse` — **auth required** |
-| DELETE | `/api/reservations/{id}` | — | `200` / `404` — **auth required** |
+| `GET` | `/api/reservations` | Staff | Get all reservations |
+| `POST` | `/api/reservations` | Staff | Create reservation |
+| `DELETE` | `/api/reservations/{id}` | Staff | Cancel reservation |
 
-### Error format
+---
 
-All errors return a consistent shape:
+## Security Model
 
-```json
-{
-  "status": 404,
-  "error": "Not Found",
-  "message": "Order ORD999 not found",
-  "path": "/api/orders/ORD999",
-  "timestamp": "2026-07-13T10:22:00"
-}
-x
+```
+Public (no auth required):
+  GET /api/menu/**
+  GET /api/tables/**
+  GET /, /*.html, /css/**, /script/**, /images/**
+  GET /swagger-ui/**, /v3/api-docs/**
+  GET /actuator/health
 
+Staff (Basic Auth required):
+  All POST, PUT, PATCH, DELETE endpoints
+```
 
+**Credentials (local dev):**
+```
+Username: staff
+Password: changeme
+```
 
+Passwords are hashed with BCrypt. In production, replace the in-memory user store with a database-backed `UserDetailsService`.
 
+---
 
+## Running Locally
 
+### Prerequisites
+- Java 17+
+- Maven 3.8+
+- A PostgreSQL database (Supabase free tier recommended)
 
+### 1. Clone the repo
+```bash
+git clone https://github.com/Banelenelson02/platable_eats.git
+cd platable_eats
+```
 
+### 2. Set up your database
 
+Sign up at [supabase.com](https://supabase.com) → New Project → Settings → Database → Connection string → **JDBC**.
 
+It looks like:
+```
+jdbc:postgresql://db.[ref].supabase.co:5432/postgres
+```
 
+### 3. Configure environment variables
+```bash
+export DATABASE_URL=jdbc:postgresql://db.[ref].supabase.co:5432/postgres
+export DB_USERNAME=postgres
+export DB_PASSWORD=your-supabase-password
+```
 
+Or create a `.env` file (never commit this):
+```env
+DATABASE_URL=jdbc:postgresql://db.[ref].supabase.co:5432/postgres
+DB_USERNAME=postgres
+DB_PASSWORD=your-supabase-password
+```
 
+### 4. Run
+```bash
+mvn spring-boot:run
+```
 
+On first startup, Hibernate automatically creates all tables and the `DataSeeder` populates:
+- 5 menu items (Wood-fired Pizza, Butternut Bisque, Beef Pot Pie, Malva Pudding, Caramel Tart)
+- 4 restaurant tables (T1–T4, capacities 2–6)
 
+### 5. Open the app
+```
+Frontend:    http://localhost:8080
+Swagger UI:  http://localhost:8080/swagger-ui/index.html
+Health:      http://localhost:8080/actuator/health
+```
 
+---
 
+## Running the Tests
 
+```bash
+mvn test
+```
 
+The integration test (`OrderLifecycleIntegrationTest`) spins up the full Spring Boot context and runs a complete order lifecycle:
+1. Authenticates as `staff`
+2. Creates an order for Table T2
+3. Adds 2 Wood-fired Pizzas (M001)
+4. Asserts the total is R240.00 (2 × R120.00)
 
+---
 
+## Key Design Decisions
 
-# Plateable Eats
+**Why N-Tier architecture?**
+The project started as a vanilla Java in-memory system. As the domain grew (orders → order items → tables → reservations), the lack of layer separation made the codebase hard to test and extend. Refactoring to a proper N-Tier architecture meant controllers never touch repositories, services never know about HTTP, and domain models never know about either.
 
-A Spring Boot + vanilla JS restaurant ordering system: live menu, table management,
-order lifecycle (kitchen queue), and reservations, localized for the South African
-market (ZAR pricing).
+**Why `findOrThrow` in services?**
+Every service method that fetches by ID uses a private `findOrThrow()` helper that throws `ResourceNotFoundException` on miss. This keeps controllers clean — no null checks, no `Optional.get()` — and produces consistent 404 responses via the exception handler.
 
-## Status
+**Why vanilla JS (no React/Vue)?**
+The frontend is intentionally dependency-free. It demonstrates that a production-quality UI — module pattern, live API integration, accessibility, cart state management, form validation — doesn't require a framework. Every feature uses browser-native APIs.
 
-Early-stage portfolio project. Currently **in-memory persistence** (data resets on
-restart) with an **H2 file-backed option** available — see Configuration below.
-Write endpoints require basic auth (see Security). Not deployed yet.
+**Why idempotent seeding?**
+`DataSeeder` checks `menuRepo.count() == 0` before inserting. This means the seed runs safely on every startup without duplicating data — important when connecting to a persistent PostgreSQL database rather than H2.
 
-## Prerequisites
+---
 
-- JDK 17+
-- Maven 3.9+ (or use the bundled `./mvnw`)
+## Roadmap
 
-## Running locally
+- [x] In-memory OOD Java system (Phase 1)
+- [x] N-Tier Spring Boot REST architecture (Phase 2)
+- [x] Spring Security with BCrypt
+- [x] Spring Data JPA with custom queries
+- [x] Swagger UI / OpenAPI documentation
+- [x] Spring Actuator health endpoint
+- [x] Integration tests
+- [x] Idempotent data seeder
+- [ ] PostgreSQL via Supabase (replacing H2)
+- [ ] Deploy to Railway
+- [ ] JWT authentication (replacing Basic Auth)
+- [ ] More test coverage (@WebMvcTest per controller)
+- [ ] Admin dashboard for staff
 
-`git clone https://github.com/Banelenelson02/platable_eats.git`
-`cd platable_eats`
-`./mvnw spring-boot:run`
+---
 
-App starts on `http://localhost:8080`. Menu UI is served at `/`.
+## Background
 
-Run tests:
+Built as part of my software development studies at WeThinkCode_, Pretoria. The architectural evolution from OOD to N-Tier is intentional — it mirrors the kind of refactoring decisions real teams make when a system outgrows its initial design.
 
-`./mvnw test`
-
-## Configuration
-
-`src/main/resources/application.properties`:
-
-| Property | Default | Description |
-|---|---|---|
-| `server.port` | `8080` | HTTP port |
-| `spring.datasource.url` | `jdbc:h2:mem:plateable` | In-memory H2. Swap to a file path or Postgres URL for persistence across restarts |
-| `spring.h2.console.enabled` | `true` | H2 web console at `/h2-console` (dev only — disable in prod) |
-| `spring.jpa.hibernate.ddl-auto` | `update` | Schema strategy; use `validate` in production with real migrations |
-
-## API Reference
-
-Interactive docs (Swagger UI): `http://localhost:8080/swagger-ui.html`
-
-### Menu — `/api/menu`
-
-| Method | Path | Body | Response |
-|---|---|---|---|
-| GET | `/api/menu` | — | `200` `MenuItemResponse[]` |
-| GET | `/api/menu/{id}` | — | `200` `MenuItemResponse` / `404` |
-| PATCH | `/api/menu/{id}` | `{ "price": 130.00, "available": false }` | `200` `MenuItemResponse` / `404` — **auth required** |
-
-### Tables — `/api/tables`
-
-| Method | Path | Body | Response |
-|---|---|---|---|
-| GET | `/api/tables` | — | `200` `TableResponse[]` |
-| GET | `/api/tables/available?minCapacity=4` | — | `200` `TableResponse[]` |
-| POST | `/api/tables` | `{ "tableId": "T5", "capacity": 4 }` | `201` `TableResponse` — **auth required** |
-
-### Orders — `/api/orders`
-
-| Method | Path | Body | Response |
-|---|---|---|---|
-| GET | `/api/orders` | — | `200` `OrderResponse[]` |
-| GET | `/api/orders?status=IN_KITCHEN` | — | `200` `OrderResponse[]` |
-| GET | `/api/orders/{id}` | — | `200` `OrderResponse` / `404` |
-| POST | `/api/orders` | `{ "tableId": "T2", "waiterId": "W001" }` | `201` `OrderResponse` — **auth required** |
-| POST | `/api/orders/{id}/items` | `{ "menuItemId": "M001", "quantity": 2, "instructions": "extra cheese" }` | `200` `OrderResponse` / `404` — **auth required** |
-| DELETE | `/api/orders/{id}/items/{menuItemId}` | — | `200` `OrderResponse` / `404` — **auth required** |
-| PATCH | `/api/orders/{id}/status?status=READY` | — | `200` `OrderResponse` / `404` — **auth required** |
-
-### Reservations — `/api/reservations`
-
-| Method | Path | Body | Response |
-|---|---|---|---|
-| GET | `/api/reservations` | — | `200` `ReservationResponse[]` |
-| POST | `/api/reservations` | `{ "customerName": "T. Mokoena", "tableId": "T3", "partySize": 4, "time": "2026-08-01T19:00:00" }` | `201` `ReservationResponse` — **auth required** |
-| DELETE | `/api/reservations/{id}` | — | `200` / `404` — **auth required** |
-
-### Error format
-
-All errors return a consistent shape:
-
-```json
-{
-  "status": 404,
-  "error": "Not Found",
-  "message": "Order ORD999 not found",
-  "path": "/api/orders/ORD999",
-  "timestamp": "2026-07-13T10:22:00"
-}
+**Banele Ntuli** — Software development student, WeThinkCode_ · [GitHub](https://github.com/Banelenelson02)
