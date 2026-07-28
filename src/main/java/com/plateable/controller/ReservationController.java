@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/reservations")
 public class ReservationController {
+
     private final ReservationService reservationService;
 
     public ReservationController(ReservationService reservationService) {
@@ -25,13 +26,15 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationResponse> createReservation(@Valid @RequestBody CreateReservationRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(reservationService.createReservation(request));
+    public ResponseEntity<ReservationResponse> createReservation(
+            @Valid @RequestBody CreateReservationRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(reservationService.createReservation(request));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable String id) {
         reservationService.deleteReservation(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

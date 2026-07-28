@@ -1,24 +1,21 @@
-# Maven
+# Build output — never commit compiled code
 target/
-!.mvn/wrapper/maven-wrapper.jar
 
-# IDE
+# IDE files
 .idea/
 *.iml
+*.iws
+*.ipr
 .vscode/
+
+# Environment — secrets never go in version control
+.env
+*.env
+application-local.properties
 
 # OS
 .DS_Store
 Thumbs.db
 
-# Logs
-*.log
-
-# Env
-.env
-application-local.properties
-target/
-.idea/
-*.iml
-.env
-*.env
+# Maven wrapper (optional — keep if you want others to build without installing Maven)
+# !.mvn/wrapper/maven-wrapper.jar
