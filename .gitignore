@@ -17,3 +17,8 @@ Thumbs.db
 # Env
 .env
 application-local.properties
+target/
+.idea/
+*.iml
+.env
+*.env
