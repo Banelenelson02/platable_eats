@@ -1,4 +1,4 @@
-# Plateable Eats
+ Plateable Eats
 
 > A full-stack casual dining platform — handcrafted frontend meets enterprise Spring Boot backend.
 
@@ -6,7 +6,8 @@
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-green?style=flat-square)](https://spring.io/projects/spring-boot)
 [![Spring Security](https://img.shields.io/badge/Spring_Security-BCrypt-green?style=flat-square)](https://spring.io/projects/spring-security)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-blue?style=flat-square)](https://supabase.com)
-[![Swagger](https://img.shields.io/badge/API_Docs-Swagger_UI-85EA2D?style=flat-square)](http://localhost:8080/swagger-ui/index.html)
+[![Swagger](https://img.shields.io/badge/API_Docs-Swagger_UI-85EA2D?style=flat-square)](https://platableeats-production.up.railway.app/swagger-ui/index.html)
+[![Railway](https://img.shields.io/badge/Deployed-Railway-0B0D0E?style=flat-square)](https://platableeats-production.up.railway.app)
 [![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
 
 ---
@@ -15,9 +16,10 @@
 
 | | Link |
 |---|---|
-| 🌐 Frontend | *Deploying soon* |
-| 📡 API Docs (Swagger UI) | `http://localhost:8080/swagger-ui/index.html` |
-| ❤️ Health Check | `http://localhost:8080/actuator/health` |
+| 🌐 Live Site | https://platableeats-production.up.railway.app |
+| 📡 API Docs (Swagger UI) | https://platableeats-production.up.railway.app/swagger-ui/index.html |
+| 🍽️ Menu API | https://platableeats-production.up.railway.app/api/menu |
+| ❤️ Health Check | https://platableeats-production.up.railway.app/actuator/health |
 
 ---
 
@@ -37,7 +39,7 @@ The system is fully localized for the South African casual dining market, with m
 
 ## Screenshots
 
-> *Screenshots coming once deployed — run locally to see the full UI.*
+> Visit [platableeats-production.up.railway.app](https://platableeats-production.up.railway.app) to see the live site.
 
 The frontend features:
 - Swiper.js hero slider with floating dish animations
@@ -211,6 +213,8 @@ Passwords are hashed with BCrypt. In production, replace the in-memory user stor
 
 ## Running Locally
 
+> The app is already live at [platableeats-production.up.railway.app](https://platableeats-production.up.railway.app) — follow these steps only if you want to run it yourself locally.
+
 ### Prerequisites
 - Java 17+
 - Maven 3.8+
@@ -303,26 +307,16 @@ The frontend is intentionally dependency-free. It demonstrates that a production
 - [x] Spring Actuator health endpoint
 - [x] Integration tests
 - [x] Idempotent data seeder
-- [ ] PostgreSQL via Supabase (replacing H2)
-- [ ] Deploy to Railway
+- [x] PostgreSQL via Supabase (persistent storage)
+- [x] Deployed to Railway — live at platableeats-production.up.railway.app
 - [ ] JWT authentication (replacing Basic Auth)
 - [ ] More test coverage (@WebMvcTest per controller)
 - [ ] Admin dashboard for staff
 
 ---
-## AI Workflow
-
-I use AI as a collaborative engineering partner to speed up development while keeping full control over the architecture:
-
-* System Design: Brainstorming database schemas and planning N Tier layer boundaries.
-* Code Generation: Drafting boilerplate for Spring Boot controllers and repetitive CRUD tasks.
-* Debugging: Analyzing stack traces and refining complex queries for quick resolution.
-
-All AI generated outputs are strictly reviewed and tested before merging.
-
 
 ## Background
 
-Built as part of my software development studies at WeThinkCode_. The architectural evolution from OOD to N-Tier is intentional — it mirrors the kind of refactoring decisions real teams make when a system outgrows its initial design.
+Built as part of my software development studies at WeThinkCode_, Pretoria. The architectural evolution from OOD to N-Tier is intentional — it mirrors the kind of refactoring decisions real teams make when a system outgrows its initial design.
 
 **Banele Ntuli** — Software development student, WeThinkCode_ · [GitHub](https://github.com/Banelenelson02)
