@@ -317,6 +317,6 @@ The frontend is intentionally dependency-free. It demonstrates that a production
 
 ## Background
 
-Built as part of my software development studies at WeThinkCode_, Pretoria. The architectural evolution from OOD to N-Tier is intentional — it mirrors the kind of refactoring decisions real teams make when a system outgrows its initial design.
+Built as part of my software development studies at WeThinkCode_, Johannesburg. The architectural evolution from OOD to N-Tier is intentional — it mirrors the kind of refactoring decisions real teams make when a system outgrows its initial design.
 
 **Banele Ntuli** — Software development student, WeThinkCode_ · [GitHub](https://github.com/Banelenelson02)
