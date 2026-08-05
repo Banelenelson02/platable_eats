@@ -15,7 +15,7 @@ public class MenuItem {
     private String category;
     private boolean available;
 
-    protected MenuItem() {} // required by JPA
+    protected MenuItem() {} // required by JPAA
 
     public MenuItem(String id, String name, double price, String category) {
         this.id        = id;
