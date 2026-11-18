@@ -7,32 +7,6 @@
 'use strict';
 
 /* =====================================================
-   1. LOADER
-===================================================== */
-const Loader = {
-  el: document.getElementById('loader'),
-
-  hide() {
-    if (!this.el) return;
-
-    const performHide = () => {
-      setTimeout(() => {
-        this.el.classList.add('hidden');
-        this.el.addEventListener('transitionend', () => {
-          this.el.remove();
-        }, { once: true });
-      }, 800);
-    };
-
-    if (document.readyState === 'complete') {
-      performHide();
-    } else {
-      window.addEventListener('load', performHide);
-    }
-  }
-};
-
-/* =====================================================
    2. HEADER — scroll shadow + active link tracking
 ===================================================== */
 const Header = {
@@ -599,7 +573,6 @@ function escapeHtml(value) {
 
 document.addEventListener('DOMContentLoaded', () => {
   MenuSync.init();
-  Loader.hide();
   Header.init();
   MobileNav.init();
   SearchOverlay.init();

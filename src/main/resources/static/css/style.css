@@ -4,7 +4,6 @@
    ===================================================== */
 
 /* ---- 1. DESIGN TOKENS ---- */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap');
 
 :root {
   /* Palette */
@@ -173,48 +172,6 @@ ul, ol { list-style: none; }
 }
 .btn--featured:hover {
   background: #1e5e40;
-}
-
-/* ---- 5. LOADER ---- */
-.loader {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: #ffffff; /* Matches the white canvas background of loader.gif */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-  visibility 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.loader.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-
-.loader__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-}
-
-.loader__gif {
-  object-fit: contain;
-}
-
-.loader__wordmark {
-  font-family: var(--font-display);
-  font-size: 3rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: #0d0d0d;
-}
-.loader__wordmark em {
-  color: var(--clr-gold-dark);
-  font-style: normal;
 }
 
 /* ---- 6. HEADER ---- */
