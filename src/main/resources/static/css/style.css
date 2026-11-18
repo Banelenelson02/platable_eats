@@ -459,19 +459,6 @@ ul, ol { list-style: none; }
   z-index: 10;
 }
 
-.swiper-pagination-bullet {
-  width: 0.8rem;
-  height: 0.8rem;
-  background: var(--clr-muted);
-  opacity: 0.4;
-  transition: width var(--t-base), opacity var(--t-base);
-  border-radius: var(--r-full);
-}
-.swiper-pagination-bullet-active {
-  width: 2.4rem;
-  opacity: 1;
-  background: var(--clr-gold-dark);
-}
 
 .hero__scroll-hint {
   position: absolute;
@@ -491,6 +478,40 @@ ul, ol { list-style: none; }
   0%, 100% { transform: translateY(0); opacity: .7; }
   50%       { transform: translateY(6px); opacity: 1; }
 }
+
+
+/* The hero must render without an external carousel script or network request. */
+.hero__slider {
+  flex: 1;
+  width: 100%;
+  position: relative;
+  min-width: 0;
+}
+.hero__slides { width: 100%; }
+.hero__slide:not(.is-active) { display: none; }
+.hero__slide.is-active { display: grid; }
+.hero__pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.hero__dot {
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 99px;
+  padding: 0;
+  border: 0;
+  background: var(--clr-muted);
+  opacity: 0.45;
+  cursor: pointer;
+  transition: width var(--t-base), opacity var(--t-base);
+}
+.hero__dot.is-active {
+  width: 2.4rem;
+  background: var(--clr-gold-dark);
+  opacity: 1;
+}
+.hero__dot:focus-visible { outline: 2px solid var(--clr-ink); outline-offset: 4px; }
 
 /* ---- 9. DISHES ---- */
 .dishes {

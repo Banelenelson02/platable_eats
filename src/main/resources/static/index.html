@@ -13,7 +13,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -62,10 +61,10 @@
 </div>
 
 <section class="hero" id="home" aria-label="Featured dishes">
-  <div class="swiper hero__slider">
-    <div class="swiper-wrapper">
+  <div class="hero__slider">
+    <div class="hero__slides">
 
-      <div class="swiper-slide hero__slide">
+      <div class="hero__slide is-active" role="group" aria-label="Featured dish 1 of 3">
         <div class="hero__content">
           <span class="hero__tag">Chef's Special</span>
           <h1 class="hero__title">Wood-fired<br><em>Pizza</em></h1>
@@ -80,7 +79,7 @@
         </div>
       </div>
 
-      <div class="swiper-slide hero__slide">
+      <div class="hero__slide" role="group" aria-label="Featured dish 2 of 3" aria-hidden="true">
         <div class="hero__content">
           <span class="hero__tag">Chef's Special</span>
           <h1 class="hero__title">Butternut<br><em>Bisque</em></h1>
@@ -95,7 +94,7 @@
         </div>
       </div>
 
-      <div class="swiper-slide hero__slide">
+      <div class="hero__slide" role="group" aria-label="Featured dish 3 of 3" aria-hidden="true">
         <div class="hero__content">
           <span class="hero__tag">Chef's Special</span>
           <h1 class="hero__title">Beef<br><em>Pot Pie</em></h1>
@@ -111,7 +110,11 @@
       </div>
 
     </div>
-    <div class="swiper-pagination hero__pagination"></div>
+    <div class="hero__pagination" role="group" aria-label="Select featured dish">
+      <button type="button" class="hero__dot is-active" aria-label="Show featured pizza" aria-current="true"></button>
+      <button type="button" class="hero__dot" aria-label="Show featured bisque"></button>
+      <button type="button" class="hero__dot" aria-label="Show featured pot pie"></button>
+    </div>
   </div>
 
   <div class="hero__scroll-hint" aria-hidden="true">
@@ -590,7 +593,6 @@
   </div>
 </div>
 
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="script/script.js"></script>
 </body>
 </html>

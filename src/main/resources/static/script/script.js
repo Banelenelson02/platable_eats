@@ -348,26 +348,46 @@ const ShoppingBasket = {
 ===================================================== */
 const HeroSlider = {
   init() {
-    if (typeof Swiper === 'undefined') return;
-    new Swiper('.hero__slider', {
-      loop: true,
-      speed: 800,
-      autoplay: {
-        delay: 6000,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-      },
-      pagination: {
-        el: '.hero__pagination',
-        clickable: true,
-      },
-      a11y: {
-        prevSlideMessage: 'Previous slide',
-        nextSlideMessage: 'Next slide',
-      },
-      effect: 'fade',
-      fadeEffect: { crossFade: true },
-    });
+    const slides = [...document.querySelectorAll('.hero__slide')];
+    const dots = [...document.querySelectorAll('.hero__dot')];
+    const root = document.querySelector('.hero__slider');
+    if (!root || slides.length === 0) return;
+
+    let current = 0;
+    let timer;
+    const show = (index) => {
+      current = (index + slides.length) % slides.length;
+      slides.forEach((slide, i) => {
+        const active = i === current;
+        slide.classList.toggle('is-active', active);
+        if (active) slide.removeAttribute('aria-hidden');
+        else slide.setAttribute('aria-hidden', 'true');
+      });
+      dots.forEach((dot, i) => {
+        dot.classList.toggle('is-active', i === current);
+        if (i === current) dot.setAttribute('aria-current', 'true');
+        else dot.removeAttribute('aria-current');
+      });
+    };
+
+    const stop = () => { if (timer) clearInterval(timer); timer = undefined; };
+    const play = () => {
+      stop();
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches
+          && !document.hidden) timer = setInterval(() => show(current + 1), 6000);
+    };
+
+    dots.forEach((dot, i) => dot.addEventListener('click', () => {
+      show(i);
+      play();
+    }));
+    root.addEventListener('mouseenter', stop);
+    root.addEventListener('mouseleave', play);
+    root.addEventListener('focusin', stop);
+    root.addEventListener('focusout', play);
+    document.addEventListener('visibilitychange', play);
+    show(0);
+    play();
   }
 };
 
