@@ -41,7 +41,7 @@ The test suite runs against an isolated H2 database through `application-test.pr
 Docker is used for the Vercel deployment:
 
 ```bash
-docker build -f Dockerfile.vercel -t plateable-eats .
+docker build -f Dockerfile -t plateable-eats .
 docker run --rm -p 8080:8080 -e DATABASE_URL=jdbc:postgresql://host:5432/db -e DB_USERNAME=your_username -e DB_PASSWORD=your_new_password -e STAFF_PASSWORD=your_new_staff_password plateable-eats
 ```
 
@@ -51,7 +51,7 @@ Do not paste secrets into shared terminal screenshots or shell history.
 
 1. In Vercel, import `Banelenelson02/platable_eats` from GitHub.
 2. Set the project's root directory to the repository root.
-3. Use the Container framework preset. `Dockerfile.vercel` and `vercel.json` are already included.
+3. Use the Container framework preset. `Dockerfile` and `vercel.json` are already included.
 4. Configure environment variables for the appropriate Preview and Production environments, including `PORT=8080`.
 5. Trigger a preview deployment and verify `/actuator/health`, `/api/menu`, and a complete checkout using **dummy test data only**.
 6. Confirm staff routes reject requests without authentication.
