@@ -7,8 +7,12 @@ import com.plateable.repository.TableRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
+// Seed demo data only for tests or explicit local development.
+// Vercel starts multiple instances; startup writes must not race in production.
 @Configuration
+@Profile({"test", "dev"})
 public class DataSeeder {
     @Bean
     CommandLineRunner seed(MenuItemRepository menuRepo, TableRepository tableRepo) {
