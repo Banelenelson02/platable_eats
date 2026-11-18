@@ -20,6 +20,12 @@ public class Order {
     private String orderId;
     private String tableId;
     private String waiterId;
+    private String customerName;
+    private String contactNumber;
+    @jakarta.persistence.Column(length = 400)
+    private String deliveryAddress;
+    @jakarta.persistence.Column(length = 500)
+    private String specialInstructions;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id")
@@ -44,6 +50,16 @@ public class Order {
     public String getOrderId()              { return orderId; }
     public String getTableId()              { return tableId; }
     public String getWaiterId()             { return waiterId; }
+    public String getCustomerName()         { return customerName; }
+    public String getContactNumber()        { return contactNumber; }
+    public String getDeliveryAddress()      { return deliveryAddress; }
+    public String getSpecialInstructions()  { return specialInstructions; }
+    public void setDeliveryDetails(String name, String contact, String address, String instructions) {
+        this.customerName = name;
+        this.contactNumber = contact;
+        this.deliveryAddress = address;
+        this.specialInstructions = instructions;
+    }
     public List<OrderItem> getItems()       { return items; }
     public OrderStatus getStatus()          { return status; }
     public void setStatus(OrderStatus s)    { this.status = s; }

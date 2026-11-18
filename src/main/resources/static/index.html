@@ -13,18 +13,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-
-<div class="loader" id="loader" aria-hidden="true">
-  <div class="loader__inner">
-    <img src="images/loader.gif" alt="Loading Plateable Eats..." class="loader__gif" width="150" height="150">
-    <span class="loader__wordmark" style="color: #0d0d0d;">Plateable<em> Eats</em></span>
-  </div>
-</div>
 
 <header class="header" id="header" role="banner">
   <a href="#home" class="header__logo" aria-label="Plateable Eats homepage">
@@ -69,10 +61,10 @@
 </div>
 
 <section class="hero" id="home" aria-label="Featured dishes">
-  <div class="swiper hero__slider">
-    <div class="swiper-wrapper">
+  <div class="hero__slider">
+    <div class="hero__slides">
 
-      <div class="swiper-slide hero__slide">
+      <div class="hero__slide is-active" role="group" aria-label="Featured dish 1 of 3">
         <div class="hero__content">
           <span class="hero__tag">Chef's Special</span>
           <h1 class="hero__title">Wood-fired<br><em>Pizza</em></h1>
@@ -87,7 +79,7 @@
         </div>
       </div>
 
-      <div class="swiper-slide hero__slide">
+      <div class="hero__slide" role="group" aria-label="Featured dish 2 of 3" aria-hidden="true">
         <div class="hero__content">
           <span class="hero__tag">Chef's Special</span>
           <h1 class="hero__title">Butternut<br><em>Bisque</em></h1>
@@ -102,7 +94,7 @@
         </div>
       </div>
 
-      <div class="swiper-slide hero__slide">
+      <div class="hero__slide" role="group" aria-label="Featured dish 3 of 3" aria-hidden="true">
         <div class="hero__content">
           <span class="hero__tag">Chef's Special</span>
           <h1 class="hero__title">Beef<br><em>Pot Pie</em></h1>
@@ -118,7 +110,11 @@
       </div>
 
     </div>
-    <div class="swiper-pagination hero__pagination"></div>
+    <div class="hero__pagination" role="group" aria-label="Select featured dish">
+      <button type="button" class="hero__dot is-active" aria-label="Show featured pizza" aria-current="true"></button>
+      <button type="button" class="hero__dot" aria-label="Show featured bisque"></button>
+      <button type="button" class="hero__dot" aria-label="Show featured pot pie"></button>
+    </div>
   </div>
 
   <div class="hero__scroll-hint" aria-hidden="true">
@@ -476,6 +472,7 @@
     <div class="order__info">
       <span class="section-tag">Direct Kitchen Dispatch</span>
       <h2 class="section-title" id="order-heading">Complete Details</h2>
+      <p class="order__demo-note">Portfolio demonstration only. No real restaurant orders or payments are processed.</p>
       <p>Confirm delivery credentials below to checkout items currently active in your floating shopping basket.</p>
       <ul class="order__perks" aria-label="Order benefits">
         <li><i class="fas fa-check-circle" aria-hidden="true"></i> Automated multi-tier verification</li>
@@ -485,7 +482,8 @@
     </div>
 
     <div class="order__form-wrap">
-      <form class="order__form" id="order-form" action="results.html" method="GET" novalidate aria-label="Order form">
+      <form class="order__form" id="order-form" method="POST" novalidate aria-label="Order form">
+        <noscript>Please enable JavaScript to place a demonstration order.</noscript>
 
         <div class="form-row form-row--half">
           <div class="form-group">
@@ -595,7 +593,6 @@
   </div>
 </div>
 
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script src="script/script.js"></script>
 </body>
 </html>

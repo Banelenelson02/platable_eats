@@ -12,6 +12,10 @@
 
 ---
 
+## Deployment status
+
+The original Railway demo links below refer to the legacy deployment. The secured checkout and Vercel container migration are being prepared on a separate branch. See [DEPLOYMENT.md](DEPLOYMENT.md) before deploying. The demonstration accepts no real payments.
+
 ## Live Demo
 
 | | Link |
@@ -46,7 +50,7 @@ The frontend features:
 - Live menu search powered by `GET /api/menu`
 - Filterable dish grid (All / Mains / Pasta / Wraps)
 - Shopping basket drawer with real-time subtotal
-- Order form that posts directly to `POST /api/orders`
+- Order form that posts a complete basket to `POST /api/checkout`
 - Scroll reveal animations with `IntersectionObserver`
 - Fully responsive — mobile, tablet, desktop
 
@@ -167,6 +171,7 @@ All endpoints are documented interactively at `/swagger-ui/index.html` when runn
 | `GET` | `/api/orders` | Staff | Get all orders (optional `?status=PENDING`) |
 | `GET` | `/api/orders/{id}` | Staff | Get single order |
 | `POST` | `/api/orders` | Staff | Create new order |
+| `POST` | `/api/checkout` | Public | Create a delivery order containing validated basket items |
 | `POST` | `/api/orders/{id}/items` | Staff | Add item to order |
 | `DELETE` | `/api/orders/{id}/items/{menuItemId}` | Staff | Remove item |
 | `PATCH` | `/api/orders/{id}/status` | Staff | Update order status |

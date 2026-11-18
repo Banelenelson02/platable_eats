@@ -1,0 +1,9 @@
+.git
+.github
+target
+.env
+.env.*
+*.log
+.idea
+.vscode
+README.md
