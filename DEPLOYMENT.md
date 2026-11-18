@@ -23,7 +23,7 @@ Configure these as Vercel project environment variables. None belong in Git.
 | `DB_PASSWORD` | Newly rotated database password |
 | `STAFF_USERNAME` | Optional staff username, defaults to `staff` |
 | `STAFF_PASSWORD` | Strong staff password; staff login is disabled when absent |
-| `PORT` | Optional, defaults to `8080` |
+| `PORT` | Set to `8080` in Vercel because the container listens on port 8080 |
 
 For local development, use a local PostgreSQL database or a separately configured development database.
 
@@ -52,7 +52,7 @@ Do not paste secrets into shared terminal screenshots or shell history.
 1. In Vercel, import `Banelenelson02/platable_eats` from GitHub.
 2. Set the project's root directory to the repository root.
 3. Use the Container framework preset. `Dockerfile.vercel` and `vercel.json` are already included.
-4. Configure environment variables for the appropriate Preview and Production environments.
+4. Configure environment variables for the appropriate Preview and Production environments, including `PORT=8080`.
 5. Trigger a preview deployment and verify `/actuator/health`, `/api/menu`, and a complete checkout using **dummy test data only**.
 6. Confirm staff routes reject requests without authentication.
 7. Only when the preview is verified, promote/merge to production and retire the Railway deployment.
