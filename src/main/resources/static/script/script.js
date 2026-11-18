@@ -7,6 +7,31 @@
 'use strict';
 
 /* =====================================================
+   1. INTRO ANIMATION
+===================================================== */
+const Loader = {
+  el: document.getElementById('loader'),
+
+  start() {
+    if (!this.el) return;
+    const hasAnchor = Boolean(window.location.hash);
+    if (!hasAnchor) window.scrollTo(0, 0);
+
+    const reveal = () => {
+      if (!hasAnchor) window.scrollTo(0, 0);
+      this.el.classList.add('hidden');
+      document.body.classList.remove('intro-active');
+      // Unblock interaction even when reduced-motion removes the transition.
+      window.setTimeout(() => this.el?.remove(), 700);
+    };
+
+    // Let the original animated GIF play, but don't wait for every menu image.
+    window.setTimeout(reveal, 1700);
+  }
+};
+
+
+/* =====================================================
    2. HEADER — scroll shadow + active link tracking
 ===================================================== */
 const Header = {
@@ -592,6 +617,7 @@ function escapeHtml(value) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  Loader.start();
   MenuSync.init();
   Header.init();
   MobileNav.init();
