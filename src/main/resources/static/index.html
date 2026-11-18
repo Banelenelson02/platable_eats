@@ -476,6 +476,7 @@
     <div class="order__info">
       <span class="section-tag">Direct Kitchen Dispatch</span>
       <h2 class="section-title" id="order-heading">Complete Details</h2>
+      <p class="order__demo-note">Portfolio demonstration only. No real restaurant orders or payments are processed.</p>
       <p>Confirm delivery credentials below to checkout items currently active in your floating shopping basket.</p>
       <ul class="order__perks" aria-label="Order benefits">
         <li><i class="fas fa-check-circle" aria-hidden="true"></i> Automated multi-tier verification</li>
@@ -485,7 +486,8 @@
     </div>
 
     <div class="order__form-wrap">
-      <form class="order__form" id="order-form" action="results.html" method="GET" novalidate aria-label="Order form">
+      <form class="order__form" id="order-form" method="POST" novalidate aria-label="Order form">
+        <noscript>Please enable JavaScript to place a demonstration order.</noscript>
 
         <div class="form-row form-row--half">
           <div class="form-group">

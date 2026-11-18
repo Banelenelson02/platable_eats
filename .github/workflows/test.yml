@@ -22,3 +22,11 @@ jobs:
           cache: maven
       - name: Run unit and integration tests
         run: mvn --batch-mode clean verify
+      - name: Run credential hygiene scan
+        shell: bash
+        run: |
+          if grep -R -n -E 'spring[.]datasource[.]password=[^$
+]' src/main/resources; then
+            echo "Hardcoded datasource password detected" >&2
+            exit 1
+          fi

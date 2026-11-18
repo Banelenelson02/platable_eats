@@ -271,7 +271,12 @@ const ShoppingBasket = {
         const priceText = card.querySelector('.dish-card__price, .price').textContent;
         const price = parseFloat(priceText.replace('R', '')) || 0;
 
-        this.addItem(name, price);
+        const id = card.dataset.menuId;
+        if (!id) {
+          CartToast.show('Menu is loading. Please try again.');
+          return;
+        }
+        this.addItem(id, name, price);
 
         btn.style.transform = 'scale(0.85)';
         setTimeout(() => (btn.style.transform = ''), 200);
@@ -285,24 +290,24 @@ const ShoppingBasket = {
     this.checkoutBtn?.addEventListener('click', () => (this.drawer.hidden = true));
   },
 
-  addItem(name, price) {
-    const existing = this.items.find(item => item.name === name);
+  addItem(id, name, price) {
+    const existing = this.items.find(item => item.id === id);
     if (existing) {
       existing.quantity += 1;
     } else {
-      this.items.push({ name, price, quantity: 1 });
+      this.items.push({ id, name, price, quantity: 1 });
     }
     CartToast.show(`${name} added to basket`);
     this.render();
   },
 
-  changeQuantity(name, amount) {
-    const item = this.items.find(item => item.name === name);
+  changeQuantity(id, amount) {
+    const item = this.items.find(item => item.id === id);
     if (!item) return;
 
     item.quantity += amount;
     if (item.quantity <= 0) {
-      this.items = this.items.filter(i => i.name !== name);
+      this.items = this.items.filter(i => i.id !== id);
     }
     this.render();
   },
@@ -333,23 +338,23 @@ const ShoppingBasket = {
         .map(item => `
         <div class="cart-drawer-item">
           <div class="cart-drawer-item-details">
-            <span class="cart-drawer-item-name">${item.name}</span>
+            <span class="cart-drawer-item-name">${escapeHtml(item.name)}</span>
             <span class="cart-drawer-item-price">R${(item.price * item.quantity).toFixed(2)}</span>
           </div>
           <div class="cart-drawer-item-controls">
-            <button class="cart-qty-adjust-btn minus" data-name="${item.name}">&minus;</button>
+            <button class="cart-qty-adjust-btn minus" data-id="${escapeHtml(item.id)}">&minus;</button>
             <span class="cart-qty-value">${item.quantity}</span>
-            <button class="cart-qty-adjust-btn plus" data-name="${item.name}">&plus;</button>
+            <button class="cart-qty-adjust-btn plus" data-id="${escapeHtml(item.id)}">&plus;</button>
           </div>
         </div>
       `).join('');
 
     // Attach listeners to active controls inside container panel
     this.container.querySelectorAll('.cart-qty-adjust-btn.plus').forEach(btn => {
-      btn.addEventListener('click', () => this.changeQuantity(btn.dataset.name, 1));
+      btn.addEventListener('click', () => this.changeQuantity(btn.dataset.id, 1));
     });
     this.container.querySelectorAll('.cart-qty-adjust-btn.minus').forEach(btn => {
-      btn.addEventListener('click', () => this.changeQuantity(btn.dataset.name, -1));
+      btn.addEventListener('click', () => this.changeQuantity(btn.dataset.id, -1));
     });
 
     // Compute live prices subtotal tracking metrics
@@ -453,42 +458,55 @@ const OrderForm = {
       return;
     }
 
-    const customerName = this.form.elements['name'].value;
-    // Map items list names string cleanly to pass parameters summary
-    const dishSummary = ShoppingBasket.items.map(i => `${i.name} (x${i.quantity})`).join(', ');
-
-    if (this.submitBtn) {
-      const btnText = this.submitBtn.querySelector('.btn__text');
-      if (btnText) btnText.textContent = 'Transmitting Transaction…';
-      this.submitBtn.disabled = true;
-    }
+    const btnText = this.submitBtn?.querySelector('.btn__text');
+    if (btnText) btnText.textContent = 'Placing your order…';
+    if (this.submitBtn) this.submitBtn.disabled = true;
 
     try {
-      // POST structural request down to running Spring container mappings context
-      const orderResponse = await fetch('/api/orders', {
+      const payload = {
+        customerName: this.form.elements['name'].value.trim(),
+        contactNumber: this.form.elements['contact'].value.trim(),
+        deliveryAddress: this.form.elements['address'].value.trim(),
+        specialInstructions: this.form.elements['special'].value.trim(),
+        items: ShoppingBasket.items.map(item => ({
+          menuItemId: item.id,
+          quantity: item.quantity
+        }))
+      };
+
+      const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tableId: "T2", waiterId: "WEB_ORDER" })
+        body: JSON.stringify(payload)
       });
 
-      if (!orderResponse.ok) throw new Error('Server transaction registration rejected');
-      const orderData = await orderResponse.json();
-
-      CartToast.show('Fulfillment synchronized successfully!');
-
-      setTimeout(() => {
-        window.location.href = `/results.html?name=${encodeURIComponent(customerName)}&orderId=${orderData.orderId}&dish=${encodeURIComponent(dishSummary)}`;
-      }, 1500);
-
-    } catch (error) {
-      console.error('Network Pipeline Error:', error);
-      CartToast.show('Could not connect to the restaurant. Please try again.');
-
-      if (this.submitBtn) {
-        const btnText = this.submitBtn.querySelector('.btn__text');
-        if (btnText) btnText.textContent = 'Confirm Order Fulfillment';
-        this.submitBtn.disabled = false;
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.message || 'We could not place your order.');
       }
+      const order = await response.json();
+      ShoppingBasket.items = [];
+      ShoppingBasket.render();
+
+      const confirmation = document.createElement('div');
+      confirmation.className = 'order-confirmation';
+      confirmation.setAttribute('role', 'status');
+      const heading = document.createElement('h3');
+      heading.textContent = 'Order received!';
+      const description = document.createElement('p');
+      description.textContent = 'Your order has been saved. This is a demonstration restaurant. No payment has been taken.';
+      const reference = document.createElement('p');
+      reference.textContent = 'Reference: ' + order.orderId;
+      const total = document.createElement('p');
+      total.textContent = 'Total: R' + Number(order.total).toFixed(2);
+      confirmation.append(heading, description, reference, total);
+      this.form.replaceWith(confirmation);
+      CartToast.show('Order placed successfully');
+    } catch (error) {
+      console.error('Checkout failed:', error);
+      CartToast.show(error.message || 'Could not place your order. Please try again.');
+      if (btnText) btnText.textContent = 'Confirm Order Fulfillment';
+      if (this.submitBtn) this.submitBtn.disabled = false;
     }
   }
 };
@@ -538,7 +556,49 @@ if (yearEl) yearEl.textContent = new Date().getFullYear();
 /* =====================================================
    12. INIT APPLICATION CONTEXT EXECUTION
 ===================================================== */
+
+// Use PostgreSQL as the authoritative source of menu IDs, prices and availability.
+const MenuSync = {
+  async init() {
+    const cards = document.querySelectorAll('.dish-card, .dessert-card');
+    cards.forEach(card => {
+      const button = card.querySelector('.dish-card__add, .btn--sm');
+      if (button) button.disabled = true;
+    });
+
+    try {
+      const response = await fetch('/api/menu');
+      if (!response.ok) throw new Error('Menu API unavailable');
+      const menu = await response.json();
+      const byName = new Map(menu.map(item => [item.name.trim().toLowerCase(), item]));
+      cards.forEach(card => {
+        const name = card.querySelector('h3')?.textContent.trim().toLowerCase();
+        const item = byName.get(name);
+        const button = card.querySelector('.dish-card__add, .btn--sm');
+        const price = card.querySelector('.dish-card__price, .price');
+        if (item && item.available) {
+          card.dataset.menuId = item.id;
+          if (price) price.textContent = 'R' + Number(item.price).toFixed(2);
+          if (button) button.disabled = false;
+        } else {
+          if (price) price.textContent = 'Unavailable';
+        }
+      });
+    } catch (err) {
+      console.error('Unable to load menu:', err);
+      CartToast.show('Menu temporarily unavailable. Please try again later.');
+    }
+  }
+};
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[char]));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  MenuSync.init();
   Loader.hide();
   Header.init();
   MobileNav.init();
