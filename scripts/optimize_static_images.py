@@ -1,56 +1,70 @@
-"""Optimise photographs without changing the Plateable Eats animated GIF.
+"""Pixel-perfect lossless WebP optimisation for referenced Plateable Eats photos.
 
-Converts only PNGs referenced by the HTML page to WebP when that output is
-smaller. Runs once on an isolated GitHub Actions branch and commits results.
-The original PNGs are retained for rollback.
+Every converted image is byte-for-byte equivalent in decoded RGBA pixels to its
+original PNG. When lossless WebP is not smaller, retain the original PNG.
+Original PNGs always remain in Git. Never modify the intro animation GIF.
 """
 import json
 import re
 from pathlib import Path
-from PIL import Image, ImageOps
+from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 HTML = ROOT / "src/main/resources/static/index.html"
 IMAGES = ROOT / "src/main/resources/static/images"
 markup = HTML.read_text(encoding="utf-8")
-paths = list(dict.fromkeys(re.findall(r'src="images/([^"]+\.png)"', markup)))
+paths = list(dict.fromkeys(re.findall(r'src="images/([^"]+)\.(?:png|webp)"', markup)))
 if not paths:
-    existing = re.findall(r'src="images/([^"]+\.webp)"', markup)
-    if not existing:
-        raise RuntimeError("No PNG or WebP food images found; check the source")
-    print("IMAGE_OPTIMIZATION_ALREADY_DONE " + json.dumps({"webpReferences": len(existing)}), flush=True)
-    raise SystemExit(0)
+    raise RuntimeError("No PNG/WebP image references found in the HTML.")
 
-before = after = converted = 0
-for name in paths:
-    source = IMAGES / name
+original_bytes = optimized_bytes = converted = retained_png = 0
+for stem in paths:
+    source = IMAGES / (stem + ".png")
+    target = IMAGES / (stem + ".webp")
     if not source.is_file():
-        raise FileNotFoundError(source)
-    target = source.with_suffix(".webp")
-    with Image.open(source) as raw:
-        img = ImageOps.exif_transpose(raw)
-        if img.mode not in ("RGB", "RGBA"):
-            img = img.convert("RGBA" if "A" in img.getbands() else "RGB")
-        img.save(target, "WEBP", quality=78, method=6)
-    initial = source.stat().st_size
-    optimized = target.stat().st_size
-    before += initial
-    if optimized >= initial:
-        target.unlink()
-        after += initial
-        continue
-    after += optimized
-    markup = markup.replace('images/' + name + '"', 'images/' + target.name + '"')
-    converted += 1
+        raise FileNotFoundError(f"Original PNG missing: {source}")
 
+    with Image.open(source) as raw:
+        # Do not resize, change orientation, or alter any colour channels.
+        has_alpha = "A" in raw.getbands() or "transparency" in raw.info
+        pixels = raw.convert("RGBA" if has_alpha else "RGB")
+        save_options = {"format": "WEBP", "lossless": True, "method": 6, "exact": True}
+        if raw.info.get("icc_profile"):
+            save_options["icc_profile"] = raw.info["icc_profile"]
+        pixels.save(target, **save_options)
+        reference_pixels = raw.convert("RGBA").tobytes()
+        reference_size = raw.size
+        reference_icc = raw.info.get("icc_profile")
+
+    with Image.open(target) as decoded:
+        if decoded.size != reference_size or decoded.convert("RGBA").tobytes() != reference_pixels:
+            raise AssertionError(f"Pixel mismatch in lossless WebP: {stem}")
+        if reference_icc and decoded.info.get("icc_profile") != reference_icc:
+            raise AssertionError(f"Colour profile changed: {stem}")
+
+    original_bytes += source.stat().st_size
+    use_webp = target.stat().st_size < source.stat().st_size
+    if use_webp:
+        optimized_bytes += target.stat().st_size
+        converted += 1
+        chosen = stem + ".webp"
+    else:
+        optimized_bytes += source.stat().st_size
+        retained_png += 1
+        target.unlink()
+        chosen = stem + ".png"
+
+    for extension in (".png", ".webp"):
+        markup = markup.replace('images/' + stem + extension + '"', 'images/' + chosen + '"')
+
+if 'images/loader.gif' not in markup:
+    raise AssertionError("Original loader GIF must not be altered or removed.")
 HTML.write_text(markup, encoding="utf-8")
-summary = {
-    "converted": converted,
-    "considered": len(paths),
-    "beforeKB": round(before/1024,1),
-    "afterKB": round(after/1024,1),
-    "savedPercent": round(100*(before-after)/before,1) if before else 0
-}
-print("IMAGE_OPTIMIZATION_SUMMARY " + json.dumps(summary), flush=True)
-assert 'images/loader.gif' in markup, "Original loader GIF missing"
-assert converted > 0, "No images were converted"
+print("LOSSLESS_IMAGE_SUMMARY " + json.dumps({
+    "photos": len(paths),
+    "losslessWebP": converted,
+    "originalPNG": retained_png,
+    "originalKB": round(original_bytes / 1024, 1),
+    "resultKB": round(optimized_bytes / 1024, 1),
+    "savedPercent": round(100 * (original_bytes - optimized_bytes) / original_bytes, 1)
+}), flush=True)

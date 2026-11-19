@@ -1,4 +1,4 @@
-name: One-time WebP conversion
+name: Verify pixel-identical food photos
 on:
   push:
     branches: [fix/dessert-plus-and-static-assets]
@@ -17,16 +17,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install Pillow
+      - name: Install Pillow for lossless conversion and pixel verification
         run: python -m pip install --disable-pip-version-check "Pillow>=11,<13"
-      - name: Convert referenced PNGs when WebP is smaller
+      - name: Convert to lossless WebP only when smaller and assert exact pixels
         run: python scripts/optimize_static_images.py
-      - name: Commit converted WebP photos to the feature branch
+      - name: Commit verified files to the feature branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/main/resources/static/index.html src/main/resources/static/images/
+          git add -A src/main/resources/static/index.html src/main/resources/static/images/
           if ! git diff --cached --quiet; then
-            git commit -m "perf: replace large food photos with smaller WebP files"
+            git commit -m "perf: replace lossy photos with pixel-identical lossless assets"
             git push origin HEAD:fix/dessert-plus-and-static-assets
           fi
