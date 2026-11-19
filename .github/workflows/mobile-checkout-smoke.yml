@@ -1,0 +1,20 @@
+name: Mobile browser checkout smoke test
+on:
+  push:
+    branches: [test/mobile-checkout-verification]
+permissions:
+  contents: read
+jobs:
+  mobile-checkout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Simulate iPhone checkout in Chromium
+        env:
+          TEST_BASE_URL: https://platable-eats.vercel.app
+        run: node scripts/mobile_checkout_smoke.cjs
