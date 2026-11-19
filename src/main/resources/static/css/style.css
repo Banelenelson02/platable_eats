@@ -1058,13 +1058,14 @@ body.intro-active { overflow: hidden; }
   transition: opacity var(--t-base), transform var(--t-base);
   z-index: 2000;
 }
+.cart-toast { pointer-events: none; } /* Notifications must not block checkout taps. */
 .cart-toast i { color: var(--clr-gold); }
 
 .cart-toast:not([hidden]) {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
-.cart-toast[hidden] { display: flex !important; }
+.cart-toast[hidden] { display: none !important; }
 
 /* ---- 15. SCROLL REVEAL ---- */
 [data-reveal] {
@@ -1131,6 +1132,8 @@ body.intro-active { overflow: hidden; }
 
 @media (max-width: 480px) {
   html { font-size: 56.25%; }
+  .form-actions { flex-direction: column; }
+  .form-actions .btn { width: 100%; justify-content: center; min-height: 48px; }
   .dishes__grid, .desserts__grid { grid-template-columns: 1fr; }
 }
 
