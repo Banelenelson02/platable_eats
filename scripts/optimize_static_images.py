@@ -15,7 +15,11 @@ IMAGES = ROOT / "src/main/resources/static/images"
 markup = HTML.read_text(encoding="utf-8")
 paths = list(dict.fromkeys(re.findall(r'src="images/([^"]+\.png)"', markup)))
 if not paths:
-    raise RuntimeError("No PNG references found in the HTML; check the source before continuing")
+    existing = re.findall(r'src="images/([^"]+\.webp)"', markup)
+    if not existing:
+        raise RuntimeError("No PNG or WebP food images found; check the source")
+    print("IMAGE_OPTIMIZATION_ALREADY_DONE " + json.dumps({"webpReferences": len(existing)}), flush=True)
+    raise SystemExit(0)
 
 before = after = converted = 0
 for name in paths:
