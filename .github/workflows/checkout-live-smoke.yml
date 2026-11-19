@@ -1,0 +1,16 @@
+name: One-time live checkout smoke test
+on:
+  push:
+    branches: [fix/checkout-live-smoke-20261119]
+permissions:
+  contents: read
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test live HTTP checkout with dummy order
+        env:
+          CHECKOUT_BASE_URL: https://platable-eats.vercel.app
+        run: python3 scripts/checkout_live_smoke.py
