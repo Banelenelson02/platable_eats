@@ -49,10 +49,20 @@ const { chromium } = require('playwright');
     await page.goto(base, {waitUntil:'domcontentloaded', timeout:180000});
     await page.locator('#loader').waitFor({state:'hidden',timeout:20000});
     await page.locator('.hero__slide.is-active h1').waitFor({state:'visible',timeout:20000});
+    await page.waitForFunction(() => {
+      const image = document.querySelector('.hero__slide.is-active img');
+      return image?.complete && image.naturalWidth > 0;
+    }, { timeout: 25000 });
+    console.log('HERO_PHOTO_LOADED');
     console.log('MOBILE_HERO_VISIBLE');
     // Verify desserts use exactly the same circular + button and basket logic.
     const dessert=page.locator('.dessert-card[data-menu-id]').first();
     await dessert.waitFor({state:'visible',timeout:20000});
+    await page.waitForFunction(() => {
+      const image = document.querySelector('.dessert-card img');
+      return image?.complete && image.naturalWidth > 0;
+    }, { timeout: 25000 });
+    console.log('DESSERT_PHOTO_LOADED');
     const dessertButton=dessert.locator('.dish-card__add');
     if(await dessertButton.textContent() !== '') throw new Error('Dessert control still contains visible Add text');
     await dessertButton.click();
