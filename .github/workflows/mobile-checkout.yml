@@ -1,0 +1,28 @@
+name: Mobile checkout interface regression
+on:
+  push:
+    branches: [main, fix/mobile-checkout-reliability]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  mobile-checkout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Serve frontend in a test HTTP server
+        run: |
+          python3 -m http.server 8000 --bind 127.0.0.1 --directory src/main/resources/static >/tmp/plateable-frontend.log 2>&1 &
+          sleep 2
+          curl -fsS http://127.0.0.1:8000/ >/dev/null
+      - name: Simulate phone basket and checkout with mocked APIs
+        env:
+          TEST_BASE_URL: http://127.0.0.1:8000
+          MOCK_API: "1"
+        run: node scripts/mobile_checkout_smoke.cjs
