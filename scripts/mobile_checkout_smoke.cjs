@@ -27,7 +27,8 @@ const { chromium } = require('playwright');
   if (process.env.MOCK_API === '1') {
     const fixture = [
       {id:'WEB001',name:'Alfredo Pasta',price:100,category:'Mains',available:true},
-      {id:'WEB002',name:'Chicken & Waffles',price:95,category:'Mains',available:true}
+      {id:'WEB002',name:'Chicken & Waffles',price:95,category:'Mains',available:true},
+      {id:'WEB007',name:'French Toast Stuffing',price:100,category:'Desserts',available:true}
     ];
     await page.route('**/api/menu', route => route.fulfill({
       status:200,contentType:'application/json',body:JSON.stringify(fixture)
@@ -48,7 +49,32 @@ const { chromium } = require('playwright');
     await page.goto(base, {waitUntil:'domcontentloaded', timeout:180000});
     await page.locator('#loader').waitFor({state:'hidden',timeout:20000});
     await page.locator('.hero__slide.is-active h1').waitFor({state:'visible',timeout:20000});
+    await page.waitForFunction(() => {
+      const image = document.querySelector('.hero__slide.is-active img');
+      return image?.complete && image.naturalWidth > 0;
+    }, null, { timeout: 25000 });
+    console.log('HERO_PHOTO_LOADED');
     console.log('MOBILE_HERO_VISIBLE');
+    // Verify desserts use exactly the same circular + button and basket logic.
+    const dessert=page.locator('.dessert-card[data-menu-id]').first();
+    await dessert.waitFor({state:'visible',timeout:20000});
+    await dessert.scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => {
+      const image = document.querySelector('.dessert-card img');
+      return image?.complete && image.naturalWidth > 0;
+    }, null, { timeout: 25000 });
+    console.log('DESSERT_PHOTO_LOADED');
+    const dessertButton=dessert.locator('.dish-card__add');
+    if(await dessertButton.textContent() !== '') throw new Error('Dessert control still contains visible Add text');
+    await dessertButton.click();
+    await page.locator('#cart-toggle-btn').click();
+    if((await page.locator('#cart-badge').textContent()).trim() !== '1')
+      throw new Error('Dessert plus button did not add an item');
+    await page.locator('.cart-qty-adjust-btn.minus').first().click();
+    if((await page.locator('#cart-badge').textContent()).trim() !== '0')
+      throw new Error('Dessert could not be removed from basket');
+    await page.locator('#cart-drawer-close-btn').click();
+    console.log('DESSERT_PLUS_PASS');
     const cards=page.locator('.dish-card[data-menu-id]');
     await cards.first().waitFor({state:'visible',timeout:180000});
     const first=cards.first();
