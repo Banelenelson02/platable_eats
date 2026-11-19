@@ -1,327 +1,217 @@
- Plateable Eats
+<div align="center">
 
-> A full-stack casual dining platform — handcrafted frontend meets enterprise Spring Boot backend.
+# 🍽️ Plateable Eats
 
-[![Java](https://img.shields.io/badge/Java-17-orange?style=flat-square)](https://openjdk.org/projects/jdk/17/)
-[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.3-green?style=flat-square)](https://spring.io/projects/spring-boot)
-[![Spring Security](https://img.shields.io/badge/Spring_Security-BCrypt-green?style=flat-square)](https://spring.io/projects/spring-security)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-blue?style=flat-square)](https://supabase.com)
-[![Swagger](https://img.shields.io/badge/API_Docs-Swagger_UI-85EA2D?style=flat-square)](https://platableeats-production.up.railway.app/swagger-ui/index.html)
-[![Railway](https://img.shields.io/badge/Deployed-Railway-0B0D0E?style=flat-square)](https://platableeats-production.up.railway.app)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](LICENSE)
+**A full-stack restaurant ordering demo built with Java, Spring Boot, PostgreSQL and vanilla JavaScript.**
 
----
+Browse the menu, build a basket and place a demo order through a real REST API.
 
-## Deployment status
+[**View the website**](https://platable-eats.vercel.app) · [**Explore the code**](https://github.com/Banelenelson02/platable_eats) · [**API documentation**](https://platable-eats.vercel.app/swagger-ui/index.html)
 
-The original Railway demo links below refer to the legacy deployment. The secured checkout and Vercel container migration are being prepared on a separate branch. See [DEPLOYMENT.md](DEPLOYMENT.md) before deploying. The demonstration accepts no real payments.
+![Java 17](https://img.shields.io/badge/Java-17-ED8B00?logo=openjdk&logoColor=white)
+![Spring Boot 3.3](https://img.shields.io/badge/Spring_Boot-3.3-6DB33F?logo=springboot&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Supabase-4169E1?logo=postgresql&logoColor=white)
+![Frontend](https://img.shields.io/badge/Frontend-HTML%20%7C%20CSS%20%7C%20JavaScript-F7DF1E?logo=javascript&logoColor=black)
+![Deployment](https://img.shields.io/badge/Deployment-Vercel-000000?logo=vercel&logoColor=white)
+[![CI](https://github.com/Banelenelson02/platable_eats/actions/workflows/test.yml/badge.svg)](https://github.com/Banelenelson02/platable_eats/actions/workflows/test.yml)
+[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## Live Demo
+</div>
 
-| | Link |
-|---|---|
-| 🌐 Live Site | https://platableeats-production.up.railway.app |
-| 📡 API Docs (Swagger UI) | https://platableeats-production.up.railway.app/swagger-ui/index.html |
-| 🍽️ Menu API | https://platableeats-production.up.railway.app/api/menu |
-| ❤️ Health Check | https://platableeats-production.up.railway.app/actuator/health |
+> [!IMPORTANT]
+> **Portfolio demonstration, not a real restaurant service.** The checkout endpoint saves demo orders and returns an order reference. No payments are collected, and orders are not fulfilled. Please do not submit genuine customer information.
 
----
+## Why I built this
 
-## The Project
+Plateable Eats began as a Java object oriented design exercise with menu items, orders, tables and reservations held in memory. As the requirements grew, I rebuilt it as a layered Spring Boot application backed by PostgreSQL.
 
-Plateable Eats is a full-stack restaurant ordering and reservation system built in two phases:
+The goal was to understand the journey from domain modelling to a working web application: REST endpoints, validation, persistence, access control, automated testing and deployment. The frontend deliberately uses browser-native JavaScript instead of a framework.
 
-**Phase 1 — OOD Design:** The system started as a vanilla Java in-memory application using pure Object-Oriented Design principles — no framework, no database, just clean domain modelling.
+## What it does
 
-**Phase 2 — N-Tier Architecture:** The system was then deliberately refactored into a decoupled, enterprise-ready N-Tier RESTful architecture powered by Spring Boot — separating concerns across controller, service, repository, and domain layers.
+### Customer experience
 
-This architectural evolution is the core story of the project: recognising when a design has outgrown its foundation, and rebuilding it properly.
+- **Explore the menu:** Browse featured dishes, filter by category and search the menu.
+- **Build a basket:** Add food, adjust quantities and see a running total in South African rand.
+- **Place a demo order:** Enter delivery details and submit the basket to `POST /api/checkout`.
+- **Get confirmation:** Receive an order reference and a total calculated by the server.
+- **Use it on a phone:** Responsive layouts, accessible controls and a mobile-friendly basket and checkout.
+- **Enjoy the details:** Animated intro, rotating featured dishes and image optimisations.
 
-The system is fully localized for the South African casual dining market, with menu pricing in ZAR.
+### Backend capabilities
 
----
+- REST APIs for menu items, orders, restaurant tables and reservations.
+- PostgreSQL persistence using Spring Data JPA and Hibernate.
+- Input validation with Jakarta Bean Validation.
+- Staff-only management routes protected by Spring Security HTTP Basic authentication.
+- Interactive OpenAPI documentation through Swagger UI.
+- Health endpoint through Spring Boot Actuator.
+- Automated Java integration tests and a Playwright mobile checkout regression test.
 
-## Screenshots
+**Checkout behaviour:** The browser sends menu item IDs and quantities. The server fetches current prices and availability from the database, validates the request and saves the order. It does not trust prices sent by the browser.
 
-> Visit [platableeats-production.up.railway.app](https://platableeats-production.up.railway.app) to see the live site.
+## Tech stack
 
-The frontend features:
-- Swiper.js hero slider with floating dish animations
-- Live menu search powered by `GET /api/menu`
-- Filterable dish grid (All / Mains / Pasta / Wraps)
-- Shopping basket drawer with real-time subtotal
-- Order form that posts a complete basket to `POST /api/checkout`
-- Scroll reveal animations with `IntersectionObserver`
-- Fully responsive — mobile, tablet, desktop
-
----
+| Part | Technologies |
+| --- | --- |
+| Frontend | HTML5, CSS3, vanilla JavaScript, Fetch API |
+| Backend | Java 17, Spring Boot 3.3, Spring MVC |
+| Persistence | PostgreSQL (Supabase), Spring Data JPA, Hibernate |
+| Security and validation | Spring Security, BCrypt, Jakarta Bean Validation |
+| Documentation and health | SpringDoc OpenAPI, Swagger UI, Spring Boot Actuator |
+| Testing | JUnit 5, Spring Boot Test, H2, Playwright |
+| Build and deployment | Maven, Docker, GitHub Actions, Vercel Containers |
 
 ## Architecture
 
-```
-┌──────────────────────────────────────────────────────┐
-│              FRONTEND (Presentation Layer)            │
-│  HTML5 (semantic) + CSS3 (BEM) + Vanilla ES6+        │
-│  Swiper.js hero · Cart drawer · Fetch API to backend  │
-└──────────────────────────┬───────────────────────────┘
-                           │ HTTP / JSON
-                           ▼
-┌──────────────────────────────────────────────────────┐
-│           SPRING BOOT APPLICATION LAYER               │
-│                                                       │
-│  Controllers (REST endpoints + @Valid)                │
-│       ↓                                               │
-│  Services (business logic + findOrThrow pattern)      │
-│       ↓                                               │
-│  Repositories (Spring Data JPA + custom queries)      │
-│       ↓                                               │
-│  Domain Models (@Entity + JPA relationships)          │
-└──────────────────────────┬───────────────────────────┘
-                           │ JPA / Hibernate
-                           ▼
-┌──────────────────────────────────────────────────────┐
-│              PostgreSQL (Supabase)                    │
-│  menu_items · orders · order_items                   │
-│  restaurant_tables · reservations · employees         │
-└──────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    A[Customer browser<br/>HTML, CSS, JavaScript] -->|JSON over HTTP| B[Spring Boot REST controllers]
+    B --> C[Services<br/>validation and business rules]
+    C --> D[Spring Data JPA repositories]
+    D --> E[(PostgreSQL on Supabase)]
+    F[Staff client<br/>HTTP Basic auth] --> B
 ```
 
----
+The backend separates HTTP handling, business rules, data access and domain models. The same application also serves the frontend from `src/main/resources/static`.
 
-## Tech Stack
+### Checkout flow
 
-| Layer | Technology | Purpose |
-|---|---|---|
-| Language | Java 17 | Backend runtime |
-| Framework | Spring Boot 3.3 | Application framework |
-| Web | Spring MVC | REST controllers |
-| Persistence | Spring Data JPA + Hibernate | ORM + repositories |
-| Database | PostgreSQL (Supabase) | Persistent storage |
-| Security | Spring Security + BCrypt | Authentication + password hashing |
-| Validation | Jakarta Bean Validation | `@Valid` request validation |
-| API Docs | SpringDoc OpenAPI (Swagger UI) | Interactive API documentation |
-| Monitoring | Spring Actuator | Health checks |
-| Build | Maven | Dependency management |
-| Frontend | HTML5 + CSS3 (BEM) + Vanilla ES6+ | UI — zero framework dependencies |
-| Animation | Swiper.js | Hero slider |
+1. The frontend loads menu IDs, prices and availability from `GET /api/menu`.
+2. A customer adds items to the basket and fills in the demo checkout form.
+3. `POST /api/checkout` validates the request and checks the selected items against PostgreSQL.
+4. The backend saves the order and returns an ID, status, item count and total.
+5. The page displays a confirmation without charging the customer.
 
----
+## API overview
 
-## Project Structure
-
-```
-src/main/java/com/plateable/
-├── controller/               # REST endpoints — HTTP layer only
-│   ├── MenuController.java
-│   ├── OrderController.java
-│   ├── ReservationController.java
-│   └── TableController.java
-├── service/                  # Business logic — no HTTP concerns
-│   ├── MenuService.java
-│   ├── OrderService.java
-│   ├── ReservationService.java
-│   └── TableService.java
-├── repository/               # Spring Data JPA — data access only
-│   ├── MenuItemRepository.java
-│   ├── OrderRepository.java
-│   ├── ReservationRepository.java
-│   └── TableRepository.java
-├── model/                    # JPA entities + enums
-│   ├── MenuItem.java
-│   ├── Order.java            # @OneToMany with OrderItems
-│   ├── OrderItem.java
-│   ├── OrderStatus.java      # PENDING, PREPARING, READY, DELIVERED
-│   ├── Reservation.java
-│   ├── ReservationStatus.java
-│   ├── Table.java            # @Table(name="restaurant_tables")
-│   ├── TableStatus.java
-│   └── Employee.java
-├── dto/
-│   ├── request/              # Validated inbound request bodies
-│   └── response/             # Outbound response shapes
-├── exception/
-│   └── ResourceNotFoundException.java
-├── config/
-│   ├── SecurityConfig.java   # BCrypt + role-based access control
-│   └── DataSeeder.java       # Idempotent seed on startup
-└── PlateableEatsApplication.java
-
-src/main/resources/static/    # Frontend (served by Spring Boot)
-├── index.html
-├── css/style.css             # 18-section BEM design system
-└── script/script.js          # 12-module vanilla ES6+ architecture
-```
-
----
-
-## API Endpoints
-
-All endpoints are documented interactively at `/swagger-ui/index.html` when running locally.
-
-### Menu
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/api/menu` | Public | Get full menu |
-| `GET` | `/api/menu/{id}` | Public | Get single item |
-| `PUT` | `/api/menu/{id}` | Staff | Update price or availability |
-
-### Orders
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/api/orders` | Staff | Get all orders (optional `?status=PENDING`) |
-| `GET` | `/api/orders/{id}` | Staff | Get single order |
-| `POST` | `/api/orders` | Staff | Create new order |
-| `POST` | `/api/checkout` | Public | Create a delivery order containing validated basket items |
-| `POST` | `/api/orders/{id}/items` | Staff | Add item to order |
-| `DELETE` | `/api/orders/{id}/items/{menuItemId}` | Staff | Remove item |
+| Method | Route | Access | Purpose |
+| --- | --- | --- | --- |
+| `GET` | `/api/menu` | Public | List menu items |
+| `GET` | `/api/menu/{id}` | Public | Fetch one menu item |
+| `POST` | `/api/checkout` | Public | Create a demo delivery order |
+| `GET` | `/api/tables` | Public | List restaurant tables |
+| `GET` | `/api/tables/available?minCapacity=2` | Public | Find tables by capacity |
+| `PUT` | `/api/menu/{id}` | Staff | Update a menu item |
+| `GET` | `/api/orders` | Staff | List or filter orders |
+| `GET` | `/api/orders/{id}` | Staff | Fetch one order |
+| `POST` | `/api/orders` | Staff | Create a table order |
+| `POST` | `/api/orders/{id}/items` | Staff | Add an item to an order |
+| `DELETE` | `/api/orders/{id}/items/{menuItemId}` | Staff | Remove an order item |
 | `PATCH` | `/api/orders/{id}/status` | Staff | Update order status |
+| `POST` | `/api/tables` | Staff | Create a restaurant table |
+| `GET` | `/api/reservations` | Staff | List reservations |
+| `POST` | `/api/reservations` | Staff | Create a reservation |
+| `DELETE` | `/api/reservations/{id}` | Staff | Cancel a reservation |
 
-### Tables
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/api/tables` | Public | Get all tables |
-| `GET` | `/api/tables/available?minCapacity=2` | Public | Find available tables |
-| `POST` | `/api/tables` | Staff | Create table |
+When the application is running, Swagger UI is available at `/swagger-ui/index.html`.
 
-### Reservations
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/api/reservations` | Staff | Get all reservations |
-| `POST` | `/api/reservations` | Staff | Create reservation |
-| `DELETE` | `/api/reservations/{id}` | Staff | Cancel reservation |
+## Run locally
 
----
+### Requirements
 
-## Security Model
+- Java 17 or newer
+- PostgreSQL with a local or separate development database
+- Maven, or use the included Maven wrapper (`./mvnw`)
 
-```
-Public (no auth required):
-  GET /api/menu/**
-  GET /api/tables/**
-  GET /, /*.html, /css/**, /script/**, /images/**
-  GET /swagger-ui/**, /v3/api-docs/**
-  GET /actuator/health
+### Setup
 
-Staff (Basic Auth required):
-  All POST, PUT, PATCH, DELETE endpoints
-```
-
-**Credentials (local dev):**
-```
-Username: staff
-Password: changeme
-```
-
-Passwords are hashed with BCrypt. In production, replace the in-memory user store with a database-backed `UserDetailsService`.
-
----
-
-## Running Locally
-
-> The app is already live at [platableeats-production.up.railway.app](https://platableeats-production.up.railway.app) — follow these steps only if you want to run it yourself locally.
-
-### Prerequisites
-- Java 17+
-- Maven 3.8+
-- A PostgreSQL database (Supabase free tier recommended)
-
-### 1. Clone the repo
 ```bash
 git clone https://github.com/Banelenelson02/platable_eats.git
 cd platable_eats
 ```
 
-### 2. Set up your database
-
-Sign up at [supabase.com](https://supabase.com) → New Project → Settings → Database → Connection string → **JDBC**.
-
-It looks like:
-```
-jdbc:postgresql://db.[ref].supabase.co:5432/postgres
-```
-
-### 3. Configure environment variables
-```bash
-export DATABASE_URL=jdbc:postgresql://db.[ref].supabase.co:5432/postgres
-export DB_USERNAME=postgres
-export DB_PASSWORD=your-supabase-password
-```
-
-Or create a `.env` file (never commit this):
-```env
-DATABASE_URL=jdbc:postgresql://db.[ref].supabase.co:5432/postgres
-DB_USERNAME=postgres
-DB_PASSWORD=your-supabase-password
-```
-
-### 4. Run
-```bash
-mvn spring-boot:run
-```
-
-On first startup, Hibernate automatically creates all tables and the `DataSeeder` populates:
-- 5 menu items (Wood-fired Pizza, Butternut Bisque, Beef Pot Pie, Malva Pudding, Caramel Tart)
-- 4 restaurant tables (T1–T4, capacities 2–6)
-
-### 5. Open the app
-```
-Frontend:    http://localhost:8080
-Swagger UI:  http://localhost:8080/swagger-ui/index.html
-Health:      http://localhost:8080/actuator/health
-```
-
----
-
-## Running the Tests
+Create a PostgreSQL database named `plateable_eats`. Set the following environment variables in your local shell or development environment. Use your own credentials and **never commit them**.
 
 ```bash
-mvn test
+export DATABASE_URL='jdbc:postgresql://localhost:5432/plateable_eats'
+export DB_USERNAME='postgres'
+export DB_PASSWORD='your-local-db-password'
+export STAFF_PASSWORD='your-local-staff-password'
+export SPRING_PROFILES_ACTIVE='dev'
+
+./mvnw spring-boot:run
 ```
 
-The integration test (`OrderLifecycleIntegrationTest`) spins up the full Spring Boot context and runs a complete order lifecycle:
-1. Authenticates as `staff`
-2. Creates an order for Table T2
-3. Adds 2 Wood-fired Pizzas (M001)
-4. Asserts the total is R240.00 (2 × R120.00)
+On Windows PowerShell, use `$env:NAME = 'value'` for each variable and run `./mvnw.cmd spring-boot:run`.
 
----
+The `dev` profile seeds sample menu items and restaurant tables if they do not already exist. **Do not enable the `dev` profile against a production database.** Without a configured `STAFF_PASSWORD`, staff authentication is disabled.
 
-## Key Design Decisions
+Once running:
 
-**Why N-Tier architecture?**
-The project started as a vanilla Java in-memory system. As the domain grew (orders → order items → tables → reservations), the lack of layer separation made the codebase hard to test and extend. Refactoring to a proper N-Tier architecture meant controllers never touch repositories, services never know about HTTP, and domain models never know about either.
+| Page or endpoint | Local address |
+| --- | --- |
+| Website | `http://localhost:8080` |
+| Menu API | `http://localhost:8080/api/menu` |
+| Swagger UI | `http://localhost:8080/swagger-ui/index.html` |
+| Health check | `http://localhost:8080/actuator/health` |
 
-**Why `findOrThrow` in services?**
-Every service method that fetches by ID uses a private `findOrThrow()` helper that throws `ResourceNotFoundException` on miss. This keeps controllers clean — no null checks, no `Optional.get()` — and produces consistent 404 responses via the exception handler.
+### Run tests
 
-**Why vanilla JS (no React/Vue)?**
-The frontend is intentionally dependency-free. It demonstrates that a production-quality UI — module pattern, live API integration, accessibility, cart state management, form validation — doesn't require a framework. Every feature uses browser-native APIs.
+```bash
+./mvnw clean verify
+```
 
-**Why idempotent seeding?**
-`DataSeeder` checks `menuRepo.count() == 0` before inserting. This means the seed runs safely on every startup without duplicating data — important when connecting to a persistent PostgreSQL database rather than H2.
+Java integration tests use a separate in-memory H2 database through the `test` profile. GitHub Actions also runs a phone-sized Playwright regression that mocks menu and checkout API responses, so it does not create real orders.
 
----
+## Project structure
 
-## Roadmap
+```text
+.
+├── src/main/java/com/plateable/
+│   ├── config/          # Security and development demo data
+│   ├── controller/      # Menu, checkout, order, table and reservation APIs
+│   ├── dto/             # Request and response models
+│   ├── exception/       # API error handling
+│   ├── model/           # JPA entities and enums
+│   ├── repository/      # Database access
+│   └── service/         # Business logic
+├── src/main/resources/
+│   ├── static/          # HTML, CSS, JavaScript and images
+│   └── application.properties
+├── src/test/            # Integration tests and H2 test configuration
+├── scripts/             # Browser test and image tooling
+├── .github/workflows/   # CI and mobile regression workflows
+├── Dockerfile
+├── vercel.json
+└── pom.xml
+```
 
-- [x] In-memory OOD Java system (Phase 1)
-- [x] N-Tier Spring Boot REST architecture (Phase 2)
-- [x] Spring Security with BCrypt
-- [x] Spring Data JPA with custom queries
-- [x] Swagger UI / OpenAPI documentation
-- [x] Spring Actuator health endpoint
-- [x] Integration tests
-- [x] Idempotent data seeder
-- [x] PostgreSQL via Supabase (persistent storage)
-- [x] Deployed to Railway — live at platableeats-production.up.railway.app
-- [ ] JWT authentication (replacing Basic Auth)
-- [ ] More test coverage (@WebMvcTest per controller)
-- [ ] Admin dashboard for staff
+## Engineering decisions
 
----
+**Keep checkout prices on the server.** The checkout request includes item IDs and quantities, not trusted prices. The service calculates totals from persisted menu data.
 
-## Background
+**Separate the layers.** Controllers deal with HTTP, services implement rules and repositories handle storage. This made the original in-memory design easier to extend and test.
 
-Built as part of my software development studies at WeThinkCode_, Johannesburg. The architectural evolution from OOD to N-Tier is intentional — it mirrors the kind of refactoring decisions real teams make when a system outgrows its initial design.
+**Use vanilla JavaScript.** The interface demonstrates state management, DOM updates, API calls and validation without React or another frontend framework.
 
-**Banele Ntuli** — Software development student, WeThinkCode_ · [GitHub](https://github.com/Banelenelson02)
+**Test without production data.** Backend integration tests use H2. The mobile checkout test mocks the API and checks the interaction at a phone-sized viewport.
+
+**Tune cold starts carefully.** The Vercel container uses JVM startup settings and a small database connection pool. These are experiments for a low-traffic demo, not a claim of guaranteed performance improvements.
+
+## Current status and next steps
+
+The project has a Vercel production deployment and a connected `platable-eats.vercel.app` domain. The deployment is marked **READY** in Vercel, but public page access and end-to-end live functionality should be checked separately.
+
+Planned improvements:
+
+- [ ] Capture real desktop and mobile screenshots for this README.
+- [ ] Measure and improve cold-start and image-loading performance.
+- [ ] Add rate limiting and abuse protection to public checkout.
+- [ ] Introduce database migrations for safer schema changes.
+- [ ] Build a staff-facing dashboard.
+- [ ] Extend integration, accessibility and end-to-end tests.
+
+### Security note
+
+This is a learning and portfolio project. Previous repository history contained a database credential; removing the value from the current source does **not** remove it from history. The affected credential must be rotated and access reviewed. Before any real use, checkout needs abuse protection and an appropriate privacy and operational review. No payment gateway is integrated.
+
+## Author
+
+Built by **Banele Ntuli**, a software development student at WeThinkCode_.
+
+[GitHub profile](https://github.com/Banelenelson02)
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
