@@ -13,10 +13,10 @@ ROOT = Path(__file__).resolve().parents[1]
 HTML = ROOT / "src/main/resources/static/index.html"
 IMAGES = ROOT / "src/main/resources/static/images"
 markup = HTML.read_text(encoding="utf-8")
-paths = list(dict.fromkeys(re.findall(r'src="images/([^"]+\\.png)"', markup)))
-# Compensate for how escaped regex is written in Python raw strings.
+paths = list(dict.fromkeys(re.findall(r'src="images/([^"]+\.png)"', markup)))
 if not paths:
-    paths = list(dict.fromkeys(re.findall('src="images/([^"]+\\.png)"', markup)))
+    raise RuntimeError("No PNG references found in the HTML; check the source before continuing")
+
 before = after = converted = 0
 for name in paths:
     source = IMAGES / name
@@ -49,4 +49,4 @@ summary = {
 }
 print("IMAGE_OPTIMIZATION_SUMMARY " + json.dumps(summary), flush=True)
 assert 'images/loader.gif' in markup, "Original loader GIF missing"
-assert converted > 0 or not paths, "No images were converted"
+assert converted > 0, "No images were converted"
