@@ -24,7 +24,7 @@
 
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader__inner">
-    <img src="images/loader.gif" alt="Loading Plateable Eats..." class="loader__gif" width="150" height="150">
+    <img src="images/loader.gif" alt="Loading Plateable Eats..." class="loader__gif" width="150" height="150" fetchpriority="high">
     <span class="loader__wordmark" style="color: #0d0d0d;">Plateable<em> Eats</em></span>
   </div>
 </div>
@@ -86,7 +86,7 @@
           </div>
         </div>
         <div class="hero__image">
-          <img src="images/Pizza.png" alt="Wood-fired pizza with fresh toppings" width="520" height="560" loading="eager">
+          <img src="images/Pizza.png" alt="Wood-fired pizza with fresh toppings" width="520" height="560" loading="eager" fetchpriority="high">
         </div>
       </div>
 
@@ -101,7 +101,7 @@
           </div>
         </div>
         <div class="hero__image">
-          <img src="images/Soup.png" alt="Roasted red pepper and butternut soup" width="520" height="560" loading="lazy">
+          <img src="images/Soup.png" alt="Roasted red pepper and butternut soup" width="520" height="560" loading="lazy" decoding="async">
         </div>
       </div>
 
@@ -116,7 +116,7 @@
           </div>
         </div>
         <div class="hero__image">
-          <img src="images/Pie.png" alt="Golden beef pot pie" width="520" height="560" loading="lazy">
+          <img src="images/Pie.png" alt="Golden beef pot pie" width="520" height="560" loading="lazy" decoding="async">
         </div>
       </div>
 
@@ -150,7 +150,7 @@
   <ul class="dishes__grid" role="list">
     <li class="dish-card" data-category="mains" role="listitem">
       <div class="dish-card__img-wrap">
-        <img src="images/Alfredo.png" alt="Creamy Alfredo pasta" width="300" height="200" loading="lazy">
+        <img src="images/Alfredo.png" alt="Creamy Alfredo pasta" width="300" height="200" loading="lazy" decoding="async">
         <span class="dish-card__badge">Popular</span>
       </div>
       <div class="dish-card__body">
@@ -171,7 +171,7 @@
 
     <li class="dish-card" data-category="mains" role="listitem">
       <div class="dish-card__img-wrap">
-        <img src="images/Chicken and Waffles.png" alt="Crispy chicken and waffles" width="300" height="200" loading="lazy">
+        <img src="images/Chicken and Waffles.png" alt="Crispy chicken and waffles" width="300" height="200" loading="lazy" decoding="async">
       </div>
       <div class="dish-card__body">
         <h3 class="dish-card__name">Chicken & Waffles</h3>
@@ -191,7 +191,7 @@
 
     <li class="dish-card" data-category="mains" role="listitem">
       <div class="dish-card__img-wrap">
-        <img src="images/Chicken.png" alt="Grilled chicken breast" width="300" height="200" loading="lazy">
+        <img src="images/Chicken.png" alt="Grilled chicken breast" width="300" height="200" loading="lazy" decoding="async">
         <span class="dish-card__badge dish-card__badge--green">Healthy</span>
       </div>
       <div class="dish-card__body">
@@ -212,7 +212,7 @@
 
     <li class="dish-card" data-category="mains" role="listitem">
       <div class="dish-card__img-wrap">
-        <img src="images/CrumbledBoard.png" alt="Assorted charcuterie board" width="300" height="200" loading="lazy">
+        <img src="images/CrumbledBoard.png" alt="Assorted charcuterie board" width="300" height="200" loading="lazy" decoding="async">
       </div>
       <div class="dish-card__body">
         <h3 class="dish-card__name">Assorted Board</h3>
@@ -232,7 +232,7 @@
 
     <li class="dish-card" data-category="pasta" role="listitem">
       <div class="dish-card__img-wrap">
-        <img src="images/Meatballs.png" alt="Meatballs with pasta and tomato sauce" width="300" height="200" loading="lazy">
+        <img src="images/Meatballs.png" alt="Meatballs with pasta and tomato sauce" width="300" height="200" loading="lazy" decoding="async">
       </div>
       <div class="dish-card__body">
         <h3 class="dish-card__name">Meatballs & Pasta</h3>
@@ -252,7 +252,7 @@
 
     <li class="dish-card" data-category="wraps" role="listitem">
       <div class="dish-card__img-wrap">
-        <img src="images/Pita.png" alt="Pita wrap with fresh filling" width="300" height="200" loading="lazy">
+        <img src="images/Pita.png" alt="Pita wrap with fresh filling" width="300" height="200" loading="lazy" decoding="async">
       </div>
       <div class="dish-card__body">
         <h3 class="dish-card__name">Pita Wrap</h3>
@@ -280,7 +280,7 @@
 
   <div class="about__row">
     <div class="about__image">
-      <img src="images/Pita.png" alt="Chef preparing a fresh pita wrap" width="580" height="480" loading="lazy">
+      <img src="images/Pita.png" alt="Chef preparing a fresh pita wrap" width="580" height="480" loading="lazy" decoding="async">
       <div class="about__image-tag">
         <strong>12+</strong>
         <span>Years of craft</span>
@@ -350,126 +350,126 @@
 
     <article class="dessert-card">
       <div class="dessert-card__img">
-        <img src="images/FrenchToast.png" alt="French toast with cream and berries" width="380" height="260" loading="lazy">
+        <img src="images/FrenchToast.png" alt="French toast with cream and berries" width="380" height="260" loading="lazy" decoding="async">
       </div>
       <div class="dessert-card__body">
         <h3>French Toast Stuffing</h3>
         <p>Brioche french toast filled with mascarpone and seasonal berry compote</p>
         <div class="dessert-card__footer">
           <span class="price">R100</span>
-          <button class="btn btn--sm" aria-label="Add French Toast Stuffing to order">Add</button>
+          <button type="button" class="dish-card__add" aria-label="Add French Toast Stuffing to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
     </article>
 
     <article class="dessert-card">
       <div class="dessert-card__img">
-        <img src="images/PanCakes.png" alt="Stack of fluffy pancakes" width="380" height="260" loading="lazy">
+        <img src="images/PanCakes.png" alt="Stack of fluffy pancakes" width="380" height="260" loading="lazy" decoding="async">
       </div>
       <div class="dessert-card__body">
         <h3>Fluffy Pancakes</h3>
         <p>Buttermilk pancakes stacked high with maple syrup and whipped butter</p>
         <div class="dessert-card__footer">
           <span class="price">R100</span>
-          <button class="btn btn--sm" aria-label="Add Pancakes to order">Add</button>
+          <button type="button" class="dish-card__add" aria-label="Add Pancakes to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
     </article>
 
     <article class="dessert-card">
       <div class="dessert-card__img">
-        <img src="images/CinnaRolls.png" alt="Caramelized cinnamon rolls with glaze" width="380" height="260" loading="lazy">
+        <img src="images/CinnaRolls.png" alt="Caramelized cinnamon rolls with glaze" width="380" height="260" loading="lazy" decoding="async">
       </div>
       <div class="dessert-card__body">
         <h3>Caramelized Cinnamon Rolls</h3>
         <p>Slow-proved rolls baked in brown butter caramel with cream cheese glaze</p>
         <div class="dessert-card__footer">
           <span class="price">R100</span>
-          <button class="btn btn--sm" aria-label="Add Cinnamon Rolls to order">Add</button>
+          <button type="button" class="dish-card__add" aria-label="Add Cinnamon Rolls to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
     </article>
 
     <article class="dessert-card">
       <div class="dessert-card__img">
-        <img src="images/ChocolateCake.png" alt="Rich dark chocolate cake" width="380" height="260" loading="lazy">
+        <img src="images/ChocolateCake.png" alt="Rich dark chocolate cake" width="380" height="260" loading="lazy" decoding="async">
       </div>
       <div class="dessert-card__body">
         <h3>Chocolate Cake</h3>
         <p>Three-layer dark chocolate sponge with ganache and chocolate shards</p>
         <div class="dessert-card__footer">
           <span class="price">R100</span>
-          <button class="btn btn--sm" aria-label="Add Chocolate Cake to order">Add</button>
+          <button type="button" class="dish-card__add" aria-label="Add Chocolate Cake to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
     </article>
 
     <article class="dessert-card">
       <div class="dessert-card__img">
-        <img src="images/CaramelTart.png" alt="Caramel tart with sea salt" width="380" height="260" loading="lazy">
+        <img src="images/CaramelTart.png" alt="Caramel tart with sea salt" width="380" height="260" loading="lazy" decoding="async">
       </div>
       <div class="dessert-card__body">
         <h3>Caramel Tart</h3>
         <p>Buttery shortcrust filled with silky salted caramel custard, topped with fleur de sel crystals</p>
         <div class="dessert-card__footer">
           <span class="price">R100</span>
-          <button class="btn btn--sm" aria-label="Add Caramel Tart to order">Add</button>
+          <button type="button" class="dish-card__add" aria-label="Add Caramel Tart to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
     </article>
 
     <article class="dessert-card">
       <div class="dessert-card__img">
-        <img src="images/LavaCake.png" alt="Chocolate lava cake with molten center" width="380" height="260" loading="lazy">
+        <img src="images/LavaCake.png" alt="Chocolate lava cake with molten center" width="380" height="260" loading="lazy" decoding="async">
       </div>
       <div class="dessert-card__body">
         <h3>Lava Cake</h3>
         <p>Warm chocolate fondant with a flowing molten center, served with vanilla ice cream</p>
         <div class="dessert-card__footer">
           <span class="price">R100</span>
-          <button class="btn btn--sm" aria-label="Add Lava Cake to order">Add</button>
+          <button type="button" class="dish-card__add" aria-label="Add Lava Cake to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
     </article>
 
     <article class="dessert-card">
       <div class="dessert-card__img">
-        <img src="images/Malva.png" alt="Traditional South African Malva pudding" width="380" height="260" loading="lazy">
+        <img src="images/Malva.png" alt="Traditional South African Malva pudding" width="380" height="260" loading="lazy" decoding="async">
       </div>
       <div class="dessert-card__body">
         <h3>Malva Pudding</h3>
         <p>The South African classic — sticky apricot sponge soaked in warm cream sauce</p>
         <div class="dessert-card__footer">
           <span class="price">R100</span>
-          <button class="btn btn--sm btn--featured" aria-label="Add Malva Pudding to order">Add</button>
+          <button type="button" class="dish-card__add" aria-label="Add Malva Pudding to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
     </article>
 
     <article class="dessert-card">
       <div class="dessert-card__img">
-        <img src="images/CheeseCake.png" alt="New York style cheesecake" width="380" height="260" loading="lazy">
+        <img src="images/CheeseCake.png" alt="New York style cheesecake" width="380" height="260" loading="lazy" decoding="async">
       </div>
       <div class="dessert-card__body">
         <h3>Cheesecake</h3>
         <p>New York-style baked cheesecake on a buttery digestive base with berry coulis</p>
         <div class="dessert-card__footer">
           <span class="price">R100</span>
-          <button class="btn btn--sm" aria-label="Add Cheesecake to order">Add</button>
+          <button type="button" class="dish-card__add" aria-label="Add Cheesecake to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
     </article>
 
     <article class="dessert-card">
       <div class="dessert-card__img">
-        <img src="images/CarrotCake.png" alt="Spiced carrot cake with cream cheese frosting" width="380" height="260" loading="lazy">
+        <img src="images/CarrotCake.png" alt="Spiced carrot cake with cream cheese frosting" width="380" height="260" loading="lazy" decoding="async">
       </div>
       <div class="dessert-card__body">
         <h3>Carrot Cake</h3>
         <p>Spiced with cinnamon and nutmeg, finished with a whipped cream cheese frosting</p>
         <div class="dessert-card__footer">
           <span class="price">R100</span>
-          <button class="btn btn--sm" aria-label="Add Carrot Cake to order">Add</button>
+          <button type="button" class="dish-card__add" aria-label="Add Carrot Cake to order"><i class="fas fa-plus" aria-hidden="true"></i></button>
         </div>
       </div>
     </article>
